@@ -3,8 +3,20 @@ import { Route, Switch } from "react-router-dom";
 import Map from "./Map";
 import Status from "./Status";
 import Scan from "./Scan";
+import { connect } from "react-redux";
+import { newToken } from "./actions";
 
-function App() {
+function App({ getToken, hash, token }) {
+  if (!hash) {
+    return <div>devicing...</div>;
+  }
+  if (!token) {
+    return (
+      <div>
+        <button onClick={getToken}>new token?</button>
+      </div>
+    );
+  }
   return (
     <>
       <Switch>
@@ -16,4 +28,8 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = state => state.device;
+const mapDispatchToProps = dispatch => ({
+  getToken: () => dispatch(newToken())
+});
+export default connect(mapStateToProps, mapDispatchToProps)(App);
