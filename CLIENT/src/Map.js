@@ -5,6 +5,9 @@ import { connect } from "react-redux";
 import { connectSocket } from "./actions";
 import Raptor from "./markers/Raptor";
 import whiteMap from "./whiteMap.json";
+
+// when the map socket connects it needs to update it's marker map
+
 const Map = ({ connectToSocket, markers, places }) => {
   console.log("map render");
 
