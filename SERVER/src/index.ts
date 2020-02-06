@@ -17,7 +17,25 @@ import io from "socket.io";
 
 import jwt from "jsonwebtoken";
 import bycrypt from "bcryptjs";
+/*
+ORDER OF CHECKING,
+CHECK DEVICE
+  NO DEVICE, NO NOTHING
+CHECK TOKEN
+  NO TOKEN, NO DATA
+WEB SOCKET - DEVICE & TOKEN
+  OR NOTHING
 
+OTHER USER CENTRIC STUFF
+:: CONNECT DEVICE TO GAME OBJECTS
+:: GAME OBJECTS DEFINE WHAT A USER HAS FOUND
+:: GAME OBJECTS DEFINE GAME STATE FOR A GIVEN HUNT
+
+EVENTS
+:: USER FINDS OBJECT
+:: USER FINDS ALL OBJECTS
+:: USER GETS THEIR OBJECTS - E.G. UPDATE VS LOAD STATE
+*/
 const app = express();
 const server = http.createServer(app);
 const ws = io(server);
@@ -47,32 +65,34 @@ app.use(cors({ origin: process.env.CLIENT, credentials: true }));
       return res.status(404).send();
     }
   };
-
+  ws.use((socket, next) => {
+    try {
+      jwt.verify(socket.handshake.query.token, process.env.SACRET);
+      return next();
+    } catch {
+      return next(new Error("authentication error"));
+    }
+  });
   ws.on("connection", socket => {
-    console.log("a user is connected");
-    socket.on("auth", token => {
-      try {
-        jwt.verify(token, process.env.SACRET);
-      } catch (error) {
-        socket.disconnect();
-        console.log("disconnected");
-      }
-    });
+    socket.join(socket.handshake.query.device);
     socket.on("disconnect", () => console.log("a user has disconnected"));
-    socket.emit("ping", "pong");
-
-    socket.on("device_hash", async hash => {
-      const deviceRepo = getRepository(Devices);
-      const device = await deviceRepo.findOne({ where: { hash } });
-      if (!device) {
-        const newDevice = new Devices();
-        newDevice.hash = hash;
-        deviceRepo.save(newDevice);
-        console.log("new usdeviceer");
-      } else {
-        console.log("user already exists");
-      }
+    socket.on("code", code => {
+      console.log(code);
+      console.log(socket.handshake.query.device);
+      socket.to(socket.handshake.query.device).emit("found", code);
     });
+    // socket.on("device_hash", async hash => {
+    //   const deviceRepo = getRepository(Devices);
+    //   const device = await deviceRepo.findOne({ where: { hash } });
+    //   if (!device) {
+    //     const newDevice = new Devices();
+    //     newDevice.hash = hash;
+    //     deviceRepo.save(newDevice);
+    //     console.log("new usdeviceer");
+    //   } else {
+    //     console.log("user already exists");
+    //   }
+    // });
   });
 
   app.post("/", check, async (req, res) => {
@@ -102,7 +122,11 @@ app.use(cors({ origin: process.env.CLIENT, credentials: true }));
     } else {
       const token = req.headers.authorization.split(" ")[1];
       if (token) {
-        const verify = jwt.verify(token, process.env.SACRET);
+        try {
+          const verify = jwt.verify(token, process.env.SACRET);
+        } catch {
+          return res.status(401).send({ error: "waht the fuc?" });
+        }
         return res.send({ message: "verified" });
       }
       return res.send({ message: "device already exists" });

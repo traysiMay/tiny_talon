@@ -27,7 +27,7 @@ const greatPlaceStyleHover = {
   //   color: "#f44336"
 };
 
-const Raptor = () => (
+const Raptor = ({ found }) => (
   <div style={greatPlaceStyleHover}>
     <svg x="0px" y="0px" viewBox="0 0 864 864">
       <path
@@ -37,7 +37,7 @@ const Raptor = () => (
 
       <path
         stroke="#FFFFFF"
-        fill="#FFFFFF"
+        fill={`${found ? "#FF0000" : "#FFFFFF"}`}
         strokeWidth="10"
         strokeMiterlimit="10"
         d="M623.373,394.194v-34.077l-120.796-34.103l-22.437,66.463

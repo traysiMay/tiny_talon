@@ -1,23 +1,29 @@
 import React from "react";
+import { connect } from "react-redux";
+import { emit } from "./actions";
 
-const Scan = ({ match }) => {
+const Scan = ({ match, sendCode }) => {
   const myRe = new RegExp(process.env.REACT_APP_REG);
   const meepo = myRe.exec(match.params.code);
-  //   console.log({ code: match.params.code });
-  //   console.log(localStorage.getItem("token"));
-  //   fetch(process.env.REACT_APP_SERVER, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${localStorage.getItem("token")}`
-  //     },
-  //     body: JSON.stringify({ code: match.params.code })
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       localStorage.setItem("token", data.token);
-  //     });
-  return <div>{meepo ? <div>Scan</div> : <div>nomeepo</div>}</div>;
+  if (!meepo) {
+    const {
+      params: { code }
+    } = match;
+    sendCode(code);
+  }
+  return (
+    <div>
+      {meepo ? (
+        <div>Scan</div>
+      ) : (
+        <div>This is not a valid request for reasons I cannot explain :)</div>
+      )}
+    </div>
+  );
 };
 
-export default Scan;
+const mapDispatchToProps = dispatch => ({
+  sendCode: code => dispatch(emit("code", code))
+});
+
+export default connect(null, mapDispatchToProps)(Scan);

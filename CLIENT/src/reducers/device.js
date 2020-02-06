@@ -1,4 +1,4 @@
-import { DEVICE_INIT, SET_TOKEN } from "../actions";
+import { DEVICE_INIT, SET_TOKEN, ERROR } from "../actions";
 
 const deviceState = {
   hash: 0x0,
@@ -13,6 +13,9 @@ const device = (state = deviceState, action) => {
     case SET_TOKEN:
       const { token } = action;
       return { ...state, token };
+    case ERROR:
+      const { error } = action;
+      return { ...state, error };
     default:
       return state;
   }

@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { connectSocket } from "./actions";
 import Raptor from "./markers/Raptor";
 import whiteMap from "./whiteMap.json";
-const Map = ({ connectToSocket, places }) => {
+const Map = ({ connectToSocket, markers, places }) => {
   console.log("map render");
 
   useEffect(() => {
@@ -17,16 +17,21 @@ const Map = ({ connectToSocket, places }) => {
       <GoogleMapReact
         defaultCenter={places.ppark}
         defaultZoom={17}
-        bootstrapURLKeys={{ key: process.env.REACT_APP_MAP_KEY }}
+        // bootstrapURLKeys={{ key: process.env.REACT_APP_MAP_KEY }}
         options={{ styles: whiteMap }}
         onChildClick={(e, p) => console.log(p)}
       >
-        <Raptor
-          name="raptor"
-          lat={places.ppark.lat + 0.001}
-          lng={places.ppark.lng}
-        />
-        <Raptor lat={places.ppark.lat} lng={places.ppark.lng} />
+        {markers.map((m, i) => {
+          return (
+            <Raptor
+              key={m.name}
+              id={m.name}
+              found={m.found}
+              lat={places.ppark.lat + i * 0.001}
+              lng={places.ppark.lng}
+            />
+          );
+        })}
       </GoogleMapReact>
     </MapContainer>
   );

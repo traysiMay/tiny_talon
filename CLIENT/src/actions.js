@@ -10,6 +10,10 @@ export const MAP_INIT = "MAP_INIT";
 export const CONNECTING = "CONNECTING";
 export const CONNECTED = "CONNECTED";
 
+export const ERROR = "ERROR";
+
+export const SEND_CODE = "SEND_CODE";
+
 export const deviceInit = () => {
   return async dispatch => {
     if (window.requestIdleCallback) {
@@ -47,10 +51,48 @@ export const newToken = () => {
   };
 };
 
+function socketWrap(hash) {
+  return io(
+    `${process.env.REACT_APP_SOCKET_SERVER}?token=${localStorage.getItem(
+      "token"
+    )}&device=${hash}`
+  );
+}
+
 export const connectSocket = () => {
-  return dispatch => {
-    const socket = io(process.env.REACT_APP_SOCKET_SERVER);
-    socket.emit("auth", localStorage.getItem("token"));
+  return async (dispatch, getState) => {
+    const {
+      device: { hash }
+    } = getState();
+    const socket = socketWrap(hash);
+    socket.on("error", error => dispatch({ type: ERROR, error }));
+    socket.on("found", found => dispatch({ type: "FOUND", name: found }));
     dispatch({ type: CONNECTED, socket });
+  };
+};
+
+export const connectSocketThenEmit = (emit, value) => {
+  return async (dispatch, getState) => {
+    const {
+      device: { hash }
+    } = getState();
+    const socket = socketWrap(hash);
+    socket.on("error", error => dispatch({ type: ERROR, error }));
+    dispatch({ type: CONNECTED, socket });
+    if (socket) {
+      socket.emit(emit, value);
+    }
+  };
+};
+
+// should probably be refactored into just thunk action
+export const emit = (emit, value) => {
+  return async (dispatch, getState) => {
+    const { socket } = getState();
+    if (!socket.socket) {
+      dispatch(connectSocketThenEmit(emit, value));
+    } else {
+      socket.socket.emit(emit, value);
+    }
   };
 };

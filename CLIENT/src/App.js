@@ -6,7 +6,7 @@ import Scan from "./Scan";
 import { connect } from "react-redux";
 import { newToken } from "./actions";
 
-function App({ getToken, hash, token }) {
+function App({ error, getToken, hash, token }) {
   if (!hash) {
     return <div>devicing...</div>;
   }
@@ -19,6 +19,7 @@ function App({ getToken, hash, token }) {
   }
   return (
     <>
+      {error && <div>{error}</div>}
       <Switch>
         <Route exact path="/" component={Map} />
         <Route path="/status" component={Status} />
