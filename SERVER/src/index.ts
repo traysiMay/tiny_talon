@@ -41,7 +41,12 @@ const server = http.createServer(app);
 const ws = io(server);
 
 app.use(bodyParser.json());
-app.use(cors({ origin: process.env.CLIENT, credentials: true }));
+app.use(
+  cors({
+    origin: process.env.CLIENT,
+    credentials: true
+  })
+);
 
 (async () => {
   await createConnection();
@@ -111,6 +116,7 @@ app.use(cors({ origin: process.env.CLIENT, credentials: true }));
   });
 
   app.post("/auth_device", async (req, res) => {
+    console.log("hi");
     const { device } = req.body;
     const deviceRepo = getRepository(Devices);
     const devices = await deviceRepo.findOne({ where: { hash: device } });
