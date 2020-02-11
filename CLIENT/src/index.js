@@ -6,8 +6,7 @@ import store from "./store";
 import { Provider } from "react-redux";
 
 import { BrowserRouter } from "react-router-dom";
-import { deviceInit, connectSocket } from "./actions";
-import { getRequest } from "./services";
+import { deviceInit } from "./actions";
 
 store.dispatch(deviceInit());
 ReactDOM.render(

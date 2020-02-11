@@ -1,4 +1,7 @@
-import { SET_TOKEN } from "../actions";
+import { SET_TOKEN, ERROR, RESPONSE } from "../actions";
+
+// ERROR SERVICE COULD RUN OFF A MIDDLWARE FUNCTION AND BASICALLY PICKS OFF THE MESSAGE
+// AND DOES A PARTICULAR ACTION
 
 export const tRequest = (endPoint, headerData, dispatch) => {
   const token = localStorage.getItem("token");
@@ -21,16 +24,20 @@ export const tRequest = (endPoint, headerData, dispatch) => {
     })
     .then(data => {
       if (data.message === "verified" && token) {
-        console.log(token, "TOKEN");
         dispatch({
           type: SET_TOKEN,
           token
         });
       }
-      console.log(data);
+      dispatch({
+        type: RESPONSE,
+        response: data.message
+      });
     })
     .catch(error => {
+      const { message } = error;
       console.log(error);
+      dispatch({ type: ERROR, message });
     });
 };
 
@@ -58,7 +65,8 @@ export const getToken = (dispatch, hash) => {
       dispatch({ type: SET_TOKEN, token });
     })
     .catch(error => {
-      console.log(error);
+      const { message } = error;
+      dispatch({ type: ERROR, message });
     });
 };
 

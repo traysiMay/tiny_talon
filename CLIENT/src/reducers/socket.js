@@ -1,4 +1,4 @@
-import { CONNECTING, CONNECTED } from "../actions";
+import { CONNECTING, CONNECTED, GET_MARKERS } from "../actions";
 
 const socketState = {
   socket: null,
@@ -13,6 +13,10 @@ const socket = (state = socketState, action) => {
     case CONNECTED:
       const { socket } = action;
       return { ...state, status: "connected", connected: true, socket };
+    case GET_MARKERS:
+      console.log(state);
+      state.socket.emit("get_markers");
+      return state;
     default:
       return state;
   }

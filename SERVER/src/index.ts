@@ -70,6 +70,16 @@ app.use(
       return res.status(404).send();
     }
   };
+
+  const markers = [
+    {
+      name: "frogass",
+      found: false
+    },
+    { name: "meepo", found: false },
+    { name: "teemo", found: false }
+  ];
+
   ws.use((socket, next) => {
     try {
       jwt.verify(socket.handshake.query.token, process.env.SACRET);
@@ -78,14 +88,27 @@ app.use(
       return next(new Error("authentication error"));
     }
   });
+
   ws.on("connection", socket => {
+    console.log("a user has connected");
     socket.join(socket.handshake.query.device);
     socket.on("disconnect", () => console.log("a user has disconnected"));
     socket.on("code", code => {
-      console.log(code);
-      console.log(socket.handshake.query.device);
-      socket.to(socket.handshake.query.device).emit("found", code);
+      console.log("SENDING CODE");
+      const newMarkers = markers.map(m => {
+        if (m.name === code) {
+          m.found = true;
+        }
+        return m;
+      });
+      socket.to(socket.handshake.query.device).emit("markers", newMarkers);
     });
+
+    socket.on("get_markers", () => {
+      console.log("SENDING MARKERS");
+      socket.emit("markers", markers);
+    });
+
     // socket.on("device_hash", async hash => {
     //   const deviceRepo = getRepository(Devices);
     //   const device = await deviceRepo.findOne({ where: { hash } });
@@ -116,27 +139,37 @@ app.use(
   });
 
   app.post("/auth_device", async (req, res) => {
-    console.log("hi");
     const { device } = req.body;
     const deviceRepo = getRepository(Devices);
     const devices = await deviceRepo.findOne({ where: { hash: device } });
+    console.log(devices);
     if (!devices) {
-      const newDevice = new Devices();
-      newDevice.hash = device;
-      deviceRepo.save(newDevice);
-      return res.send({ message: "new device created" });
+      // const newDevice = new Devices();
+      // newDevice.hash = device;
+      // deviceRepo.save(newDevice);
+      // return res.send({ message: "new device created" });
+      return res.status(401).send({ error: "device_not_registered" });
     } else {
       const token = req.headers.authorization.split(" ")[1];
       if (token) {
         try {
-          const verify = jwt.verify(token, process.env.SACRET);
+          jwt.verify(token, process.env.SACRET);
         } catch {
-          return res.status(401).send({ error: "waht the fuc?" });
+          return res.status(401).send({ error: "BAD_TOKEN" });
         }
         return res.send({ message: "verified" });
       }
-      return res.send({ message: "device already exists" });
+      return res.send({ message: "device_exists" });
     }
+  });
+
+  app.post("/register_device", async (req, res) => {
+    const { hash } = req.body;
+    const deviceRepo = getRepository(Devices);
+    const newDevice = new Devices();
+    newDevice.hash = hash;
+    deviceRepo.save(newDevice);
+    return res.send({ message: "new device created" });
   });
 
   app.post("/new_token", async (req, res) => {

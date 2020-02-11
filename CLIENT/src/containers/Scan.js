@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { emit } from "./actions";
+import { emit } from "../actions";
 
 const Scan = ({ match, sendCode }) => {
   const myRe = new RegExp(process.env.REACT_APP_REG);

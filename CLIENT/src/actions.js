@@ -6,12 +6,17 @@ export const DEVICE_INIT = "DEVICE_INIT";
 export const SET_TOKEN = "SET_TOKEN";
 
 export const MAP_INIT = "MAP_INIT";
+export const GET_MARKERS = "GET_MARKERS";
+export const UPDATE_MAP = "UPDATE_MAP";
 
 export const CONNECTING = "CONNECTING";
 export const CONNECTED = "CONNECTED";
 
 export const ERROR = "ERROR";
+export const BAD_TOKEN = "BAD_TOKEN";
+export const RESPONSE = "RESPONSE";
 
+export const FOUND = "FOUND";
 export const SEND_CODE = "SEND_CODE";
 
 export const deviceInit = () => {
@@ -42,6 +47,15 @@ export const deviceInit = () => {
   };
 };
 
+export const registerDevice = () => {
+  return async (dispatch, getState) => {
+    const {
+      device: { hash }
+    } = getState();
+    tRequest("register_device", { hash }, dispatch);
+  };
+};
+
 export const newToken = () => {
   return async (dispatch, getState) => {
     const {
@@ -66,8 +80,10 @@ export const connectSocket = () => {
     } = getState();
     const socket = socketWrap(hash);
     socket.on("error", error => dispatch({ type: ERROR, error }));
-    socket.on("found", found => dispatch({ type: "FOUND", name: found }));
+    socket.on("found", found => dispatch({ type: FOUND, name: found }));
+    socket.on("markers", markers => dispatch({ type: MAP_INIT, markers }));
     dispatch({ type: CONNECTED, socket });
+    dispatch({ type: GET_MARKERS });
   };
 };
 
