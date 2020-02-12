@@ -1,10 +1,11 @@
-import { DEVICE_INIT, SET_TOKEN, ERROR, BAD_TOKEN, RESPONSE } from "../actions";
+import { DEVICE_INIT, SET_TOKEN, ERROR, RESPONSE } from "../actions";
 
 const deviceState = {
   hash: 0x0,
   token: 0x0,
   error: "",
-  response: ""
+  response: "",
+  status: ""
 };
 
 const device = (state = deviceState, action) => {
@@ -17,13 +18,10 @@ const device = (state = deviceState, action) => {
       return { ...state, token };
     case ERROR:
       const { message } = action;
-      if (message === BAD_TOKEN) localStorage.removeItem("token");
-      console.log(message);
-      return { ...state, error: message };
+      return { ...state, error: message, status: message };
     case RESPONSE:
       const { response } = action;
-      console.log(response);
-      return { ...state, response };
+      return { ...state, response, status: response };
     default:
       return state;
   }

@@ -7,13 +7,21 @@ import { newToken, registerDevice } from "./actions";
 import MainView from "./containers/MainView";
 import { Button } from "./styles/styles";
 
-function App({ error, getToken, hash, registerDevice, token }) {
-  if (error) {
-    if (error === "device_not_registered") {
-      return <Button onClick={registerDevice}>Register Device</Button>;
-    }
-    return <div>{error}</div>;
+function App({
+  error,
+  getToken,
+  hash,
+  registerDevice,
+  response,
+  status,
+  token
+}) {
+  console.log(hash);
+  console.log(status);
+  if (status === "device_not_registered") {
+    return <Button onClick={registerDevice}>Register Device</Button>;
   }
+
   if (!hash) {
     return <div>devicing...</div>;
   }

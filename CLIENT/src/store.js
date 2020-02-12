@@ -1,8 +1,22 @@
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import reducers from "./reducers";
+import { ERROR, BAD_TOKEN } from "./actions";
 
-const store = createStore(reducers, applyMiddleware(thunk));
+const peelError = ({ getState, dispatch }) => {
+  return next => action => {
+    console.log(action);
+    if (action.type === ERROR) {
+      switch (action.message) {
+        case BAD_TOKEN:
+          localStorage.removeItem("token");
+      }
+    }
+    next(action);
+  };
+};
+
+const store = createStore(reducers, applyMiddleware(thunk, peelError));
 
 export default store;
 

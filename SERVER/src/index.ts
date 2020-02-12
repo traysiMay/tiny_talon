@@ -169,7 +169,7 @@ app.use(
     const newDevice = new Devices();
     newDevice.hash = hash;
     deviceRepo.save(newDevice);
-    return res.send({ message: "new device created" });
+    return res.send({ message: "new_device_created" });
   });
 
   app.post("/new_token", async (req, res) => {
