@@ -10,6 +10,8 @@ const peelError = ({ getState, dispatch }) => {
       switch (action.message) {
         case BAD_TOKEN:
           localStorage.removeItem("token");
+          break;
+        default:
       }
     }
     next(action);
@@ -19,6 +21,5 @@ const peelError = ({ getState, dispatch }) => {
 const store = createStore(reducers, applyMiddleware(thunk, peelError));
 
 export default store;
-
 // what is the balance between monotony and bliss
 // what is the need to be differentiated in particular settings and ways
