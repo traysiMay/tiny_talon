@@ -9,23 +9,10 @@ import Registration from "./containers/Registration";
 import { DEVICE_NOT_REGISTERED } from "./statuses";
 
 function App({ error, hash, status, token }) {
-  console.log(hash);
-  console.log(status);
   if (status === DEVICE_NOT_REGISTERED || !hash || !token) {
     return <Registration hash={hash} token={token} status={status} />;
-    // return <Button onClick={registerDevice}>Register Device</Button>;
   }
-
-  // if (!hash) {
-  //   return <div>devicing...</div>;
-  // }
-  // if (!token) {
-  //   return (
-  //     <div>
-  //       <Button onClick={getToken}>Connect</Button>
-  //     </div>
-  //   );
-  // }
+  return <Registration hash={hash} token={token} status={status} />;
   return (
     <>
       {error && <div>{error}</div>}

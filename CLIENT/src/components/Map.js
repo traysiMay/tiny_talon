@@ -1,7 +1,7 @@
 import React from "react";
 import GoogleMapReact from "google-map-react";
 import { MapContainer } from "../styles/styles";
-import Raptor from "../markers/Raptor";
+import RaptorMarker from "../markers/RaptorMarker";
 import whiteMap from "../styles/whiteMap.json";
 
 const Map = ({ markers, places }) => {
@@ -19,9 +19,9 @@ const Map = ({ markers, places }) => {
       >
         {markers.map((m, i) => {
           return (
-            <Raptor
-              key={m.name}
-              id={m.name}
+            <RaptorMarker
+              key={m.hash}
+              id={m.hash}
               found={m.found}
               lat={places.ppark.lat}
               lng={places.ppark.lng + i * 0.001}
