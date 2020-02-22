@@ -2,12 +2,18 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { Emails } from "./Emails";
 
 @Entity()
-export class Devices {
+export class Markers {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   hash: string;
+
+  @Column({ default: false })
+  found: boolean;
+
+  @Column()
+  cat: string;
 
   @ManyToOne(
     type => Emails,

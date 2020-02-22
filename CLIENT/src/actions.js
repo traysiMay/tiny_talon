@@ -47,12 +47,12 @@ export const deviceInit = () => {
   };
 };
 
-export const registerDevice = () => {
+export const registerDevice = email => {
   return async (dispatch, getState) => {
     const {
       device: { hash }
     } = getState();
-    tRequest("register_device", { hash }, dispatch);
+    tRequest("register_device", { email, hash }, dispatch);
   };
 };
 

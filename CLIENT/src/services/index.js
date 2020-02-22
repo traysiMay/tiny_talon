@@ -1,7 +1,8 @@
 import { SET_TOKEN, ERROR, RESPONSE } from "../actions";
 
-// ERROR SERVICE COULD RUN OFF A MIDDLWARE FUNCTION AND BASICALLY PICKS OFF THE MESSAGE
-// AND DOES A PARTICULAR ACTION
+// refactoring
+// handleResponse function
+// body creator, e.g. post with auth then add whatever body vars
 
 export const tRequest = (endPoint, headerData, dispatch) => {
   const token = localStorage.getItem("token");
