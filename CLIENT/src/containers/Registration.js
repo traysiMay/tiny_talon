@@ -3,17 +3,11 @@ import { DEVICE_NOT_REGISTERED } from "../statuses";
 import { Button, Input } from "../styles/styles";
 import { newToken, registerDevice } from "../actions";
 import { connect } from "react-redux";
-import Raptor from "../graphics/Raptor";
+import Loading from "../animations/Loading";
 
 const Registration = ({ getToken, hash, registerDevice, status, token }) => {
   const email = useRef();
-  console.log("registrations", hash, token, status);
-  // if (!hash)
-  return (
-    <div>
-      <Raptor fill={"red"} />
-    </div>
-  );
+  if (!hash) return <Loading />;
 
   if (status === DEVICE_NOT_REGISTERED) {
     const handleChange = e => (email.current = e.target.value);

@@ -6,8 +6,12 @@ import store from "./store";
 import { Provider } from "react-redux";
 
 import { BrowserRouter } from "react-router-dom";
-import { deviceInit } from "./actions";
+import { deviceInit, WELCOME } from "./actions";
 
+const token = localStorage.getItem("token");
+if (!token) {
+  store.dispatch({ type: WELCOME });
+}
 store.dispatch(deviceInit());
 ReactDOM.render(
   <Provider store={store}>

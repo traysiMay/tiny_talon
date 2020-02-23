@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Raptor from "../graphics/Raptor";
 const K_SIZE = 70;
 
@@ -28,10 +28,25 @@ const greatPlaceStyleHover = {
   //   color: "#f44336"
 };
 
-const RaptorMarker = ({ found }) => (
-  <div style={greatPlaceStyleHover}>
-    <Raptor fill={`${found ? "#FF0000" : "#FFFFFF"}`} />
-  </div>
-);
+const RaptorMarker = ({ found }) => {
+  const [bg, setBg] = useState("rgb(200,0,0)");
+  useEffect(() => {
+    const startTime = Date.now();
+    let frame;
+    const animate = () => {
+      const diff = Date.now() - startTime;
+      const r = 200 + 40 * Math.sin(diff * 0.01);
+      setBg(`rgb(${r},0,0)`);
+      frame = requestAnimationFrame(animate);
+    };
+    animate();
+    return () => cancelAnimationFrame(frame);
+  }, []);
+  return (
+    <div style={greatPlaceStyleHover}>
+      <Raptor bg={bg} fill={`${found ? "#FF0000" : "#FFFFFF"}`} />
+    </div>
+  );
+};
 
 export default RaptorMarker;

@@ -2,6 +2,10 @@ import io from "socket.io-client";
 import Fingerprint2 from "fingerprintjs2";
 import { tRequest, getToken } from "./services";
 
+export const WELCOME = "WELCOME";
+export const LOADING = "LOADING";
+export const READY = "READY";
+
 export const DEVICE_INIT = "DEVICE_INIT";
 export const SET_TOKEN = "SET_TOKEN";
 
@@ -21,6 +25,7 @@ export const SEND_CODE = "SEND_CODE";
 
 export const deviceInit = () => {
   return async dispatch => {
+    dispatch({ type: LOADING });
     if (window.requestIdleCallback) {
       requestIdleCallback(function() {
         Fingerprint2.get(async function(components) {
@@ -30,6 +35,7 @@ export const deviceInit = () => {
           const device = Fingerprint2.x64hash128(values.join(""), 31);
           tRequest("auth_device", { device }, dispatch);
           dispatch({ type: DEVICE_INIT, hash: device });
+          dispatch(readyDelay(1));
         });
       });
     } else {
@@ -41,9 +47,16 @@ export const deviceInit = () => {
           const device = Fingerprint2.x64hash128(values.join(""), 31);
           tRequest("auth_device", { device }, dispatch);
           dispatch({ type: DEVICE_INIT, hash: device });
+          dispatch(readyDelay(1));
         });
       }, 500);
     }
+  };
+};
+
+export const readyDelay = delay => {
+  return dispatch => {
+    setTimeout(() => dispatch({ type: READY }), delay);
   };
 };
 
@@ -53,6 +66,8 @@ export const registerDevice = email => {
       device: { hash }
     } = getState();
     tRequest("register_device", { email, hash }, dispatch);
+    dispatch({ type: LOADING });
+    dispatch(readyDelay(2000));
   };
 };
 
@@ -62,6 +77,8 @@ export const newToken = () => {
       device: { hash }
     } = getState();
     getToken(dispatch, hash);
+    dispatch({ type: LOADING });
+    dispatch(readyDelay(2000));
   };
 };
 

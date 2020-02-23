@@ -1,28 +1,12 @@
-import { SET_TOKEN, ERROR, RESPONSE } from "../actions";
+import { SET_TOKEN, RESPONSE } from "../actions";
+import { handleError, handleResponse, fetchOptions } from "./handles";
 
-// refactoring
-// handleResponse function
-// body creator, e.g. post with auth then add whatever body vars
-
+// there could be a request thunk that delegates dispatches based on the response message
 export const tRequest = (endPoint, headerData, dispatch) => {
   const token = localStorage.getItem("token");
-
-  fetch(`${process.env.REACT_APP_SERVER}/${endPoint}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${token && `Bearer ${token}`}`
-    },
-    body: JSON.stringify({ ...headerData })
-  })
-    .then(response => {
-      if (response.status !== 200) {
-        return response.json().then(error => {
-          throw new Error(error.error);
-        });
-      }
-      return response.json();
-    })
+  const options = fetchOptions("POST", token, headerData);
+  fetch(`${process.env.REACT_APP_SERVER}/${endPoint}`, options)
+    .then(handleResponse)
     .then(data => {
       if (data.message === "verified" && token) {
         dispatch({
@@ -35,46 +19,26 @@ export const tRequest = (endPoint, headerData, dispatch) => {
         response: data.message
       });
     })
-    .catch(error => {
-      const { message } = error;
-      console.log(error);
-      dispatch({ type: ERROR, message });
-    });
+    .catch(error => handleError(error, dispatch));
 };
 
 export const getToken = (dispatch, hash) => {
-  console.log({ hash });
   const endPoint = "new_token";
-  fetch(`${process.env.REACT_APP_SERVER}/${endPoint}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ hash })
-  })
-    .then(response => {
-      if (response.status !== 200) {
-        return response.json().then(error => {
-          throw new Error(error.error);
-        });
-      }
-      return response.json();
-    })
+  const options = fetchOptions("POST", null, { hash });
+  fetch(`${process.env.REACT_APP_SERVER}/${endPoint}`, options)
+    .then(handleResponse)
     .then(data => {
       const { token } = data;
       localStorage.setItem("token", token);
       dispatch({ type: SET_TOKEN, token });
     })
-    .catch(error => {
-      const { message } = error;
-      dispatch({ type: ERROR, message });
-    });
+    .catch(error => handleError(error, dispatch));
 };
 
 export const getRequest = () => {
   fetch(`${process.env.REACT_APP_SERVER}`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
   })
-    .then(response => response.json())
+    .then(handleResponse)
     .then(console.log);
 };

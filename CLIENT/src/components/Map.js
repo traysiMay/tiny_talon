@@ -4,7 +4,7 @@ import { MapContainer } from "../styles/styles";
 import RaptorMarker from "../markers/RaptorMarker";
 import whiteMap from "../styles/whiteMap.json";
 
-const Map = ({ markers, places }) => {
+const Map = ({ history, markers, places }) => {
   if (markers.length === 0) {
     return <div>loading markers...</div>;
   }
@@ -13,9 +13,11 @@ const Map = ({ markers, places }) => {
       <GoogleMapReact
         defaultCenter={places.ppark}
         defaultZoom={17}
-        // bootstrapURLKeys={{ key: process.env.REACT_APP_MAP_KEY }}
+        bootstrapURLKeys={{ key: process.env.REACT_APP_MAP_KEY }}
         options={{ styles: whiteMap }}
-        onChildClick={(e, p) => console.log(p)}
+        onChildClick={(e, p) => {
+          history.push(`/pop/${p.id}`);
+        }}
       >
         {markers.map((m, i) => {
           return (
@@ -23,8 +25,8 @@ const Map = ({ markers, places }) => {
               key={m.hash}
               id={m.hash}
               found={m.found}
-              lat={places.ppark.lat}
-              lng={places.ppark.lng + i * 0.001}
+              lat={m.lat}
+              lng={m.lng}
             />
           );
         })}

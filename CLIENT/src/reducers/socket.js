@@ -14,7 +14,6 @@ const socket = (state = socketState, action) => {
       const { socket } = action;
       return { ...state, status: "connected", connected: true, socket };
     case GET_MARKERS:
-      console.log(state);
       state.socket.emit("get_markers");
       return state;
     default:

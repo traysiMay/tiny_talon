@@ -16,7 +16,6 @@ const map = (state = mapState, action) => {
   switch (action.type) {
     case MAP_INIT:
       const { markers } = action;
-      console.log(markers);
       return { ...state, markers };
     // case "FOUND":
     //   const { name } = action;

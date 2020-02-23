@@ -15,6 +15,12 @@ export class Markers {
   @Column()
   cat: string;
 
+  @Column()
+  lat: string;
+
+  @Column()
+  lng: string;
+
   @ManyToOne(
     type => Emails,
     emails => emails.devices
