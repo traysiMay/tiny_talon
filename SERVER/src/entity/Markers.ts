@@ -7,6 +7,9 @@ export class Markers {
   id: number;
 
   @Column()
+  name: string;
+
+  @Column()
   hash: string;
 
   @Column({ default: false })

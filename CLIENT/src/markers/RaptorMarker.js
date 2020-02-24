@@ -37,14 +37,21 @@ const RaptorMarker = ({ found }) => {
       const diff = Date.now() - startTime;
       const r = 200 + 40 * Math.sin(diff * 0.01);
       setBg(`rgb(${r},0,0)`);
-      frame = requestAnimationFrame(animate);
+      if (!found) {
+        frame = requestAnimationFrame(animate);
+      } else {
+        cancelAnimationFrame(frame);
+      }
     };
     animate();
     return () => cancelAnimationFrame(frame);
-  }, []);
+  }, [found]);
   return (
     <div style={greatPlaceStyleHover}>
-      <Raptor bg={bg} fill={`${found ? "#FF0000" : "#FFFFFF"}`} />
+      <Raptor
+        bg={found ? "#7ffdcb" : bg}
+        fill={`${found ? "#FF0000" : "#FFFFFF"}`}
+      />
     </div>
   );
 };

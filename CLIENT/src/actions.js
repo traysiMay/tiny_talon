@@ -100,6 +100,11 @@ export const connectSocket = () => {
     socket.on("found", found => dispatch({ type: FOUND, name: found }));
     socket.on("markers", markers => dispatch({ type: MAP_INIT, markers }));
     dispatch({ type: CONNECTED, socket });
+  };
+};
+
+export const getMarkers = () => {
+  return async dispatch => {
     dispatch({ type: GET_MARKERS });
   };
 };

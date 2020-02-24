@@ -1,7 +1,13 @@
 import React from "react";
 
-const Raptor = ({ bg, fill = "#FFFFFF", opacity = 1, stroke = "#FFFFFF" }) => (
-  <svg x="0px" y="0px" viewBox="0 0 864 864">
+const Raptor = ({
+  bg,
+  fill = "#FFFFFF",
+  opacity = 1,
+  reff,
+  stroke = "#FFFFFF"
+}) => (
+  <svg ref={reff} x="0px" y="0px" viewBox="0 0 864 864">
     <path
       fill={bg}
       d="M704.172,432.004c0-150.322-121.847-272.176-272.167-272.176c-150.313,0-272.177,121.854-272.177,272.176

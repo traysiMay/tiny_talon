@@ -13,7 +13,7 @@ const Map = ({ history, markers, places }) => {
       <GoogleMapReact
         defaultCenter={places.ppark}
         defaultZoom={17}
-        bootstrapURLKeys={{ key: process.env.REACT_APP_MAP_KEY }}
+        // bootstrapURLKeys={{ key: process.env.REACT_APP_MAP_KEY }}
         options={{ styles: whiteMap }}
         onChildClick={(e, p) => {
           history.push(`/pop/${p.id}`);

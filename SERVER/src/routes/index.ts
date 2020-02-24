@@ -62,6 +62,7 @@ const newToken = async (req, res) => {
   }
   return res.status(500).send({ error: "device not found" });
 };
+
 routes.post("/auth_device", authDevice);
 routes.post("/register_device", registerDevice);
 routes.post("/new_token", newToken);

@@ -12,7 +12,7 @@ import Loading from "./animations/Loading";
 function App({ error, hash, status, token, loading, welcome }) {
   console.log("app");
   if (welcome) return <Loading fill={"yellow"} message={"welcome!"} />;
-  if (loading) return <Loading message={"loading markers..."} />;
+  if (loading) return <Loading message={"loading ..."} />;
 
   if (status === DEVICE_NOT_REGISTERED || !hash || !token) {
     return <Registration hash={hash} token={token} status={status} />;
