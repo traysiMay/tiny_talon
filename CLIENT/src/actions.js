@@ -15,6 +15,7 @@ export const UPDATE_MAP = "UPDATE_MAP";
 
 export const CONNECTING = "CONNECTING";
 export const CONNECTED = "CONNECTED";
+export const LISTEN_TO = "LISTEN_TO";
 
 export const ERROR = "ERROR";
 export const BAD_TOKEN = "BAD_TOKEN";
@@ -95,13 +96,31 @@ export const connectSocket = () => {
     const {
       device: { hash }
     } = getState();
-    const socket = socketWrap(hash);
+    const socket = await socketWrap(hash);
     socket.on("error", error => dispatch({ type: ERROR, error }));
     socket.on("found", found => dispatch({ type: FOUND, name: found }));
     socket.on("markers", markers => dispatch({ type: MAP_INIT, markers }));
     dispatch({ type: CONNECTED, socket });
   };
 };
+
+// these two are a little silly-- this could live in the scan or be more general if
+// there is a QR scanner screen
+export const socketMessage = message => {
+  return dispatch => {
+    dispatch({ type: "SOCKET_MESSAGE", message });
+  };
+};
+
+export const listenTo = topic => {
+  return async (dispatch, getState) => {
+    getState().socket.socket.on(topic, message => {
+      dispatch(socketMessage(message));
+    });
+    dispatch({ type: "LISTEN_TO", topic });
+  };
+};
+// ------
 
 export const getMarkers = () => {
   return async dispatch => {
@@ -114,7 +133,7 @@ export const connectSocketThenEmit = (emit, value) => {
     const {
       device: { hash }
     } = getState();
-    const socket = socketWrap(hash);
+    const socket = await socketWrap(hash);
     socket.on("error", error => dispatch({ type: ERROR, error }));
     dispatch({ type: CONNECTED, socket });
     if (socket) {

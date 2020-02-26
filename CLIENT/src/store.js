@@ -6,6 +6,7 @@ import { ERROR, BAD_TOKEN } from "./actions";
 const peelError = ({ getState, dispatch }) => {
   return next => action => {
     console.log(action);
+    console.log(getState());
     if (action.type === ERROR) {
       switch (action.message) {
         case BAD_TOKEN:

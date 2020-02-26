@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { connect } from "react-redux";
-import { emit } from "../actions";
+import { emit, listenTo } from "../actions";
 import styled from "styled-components";
 import chroma from "chroma-js";
 import Raptor from "../graphics/Raptor";
@@ -17,28 +17,58 @@ const ScanContainer = styled.div`
   box-shadow: 13px 16px #ff0909;
 `;
 
-// some sort of socket response for the code
+const Message = styled.div`
+  color: white;
+  font-size: 1.6rem;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  width: 70%;
+  margin: auto;
+`;
+//  1 connects socket
+// listens for the response
+// sends the code
+// shows response
 
-const Scan = ({ match, sendCode }) => {
+const Scan = ({
+  connected,
+  listenToCodeResponse,
+  match,
+  message,
+  sendCode
+}) => {
   const scanTainer = useRef();
   const raptorRef = useRef();
-
   const myRe = new RegExp(process.env.REACT_APP_REG);
   const meepo = myRe.exec(match.params.code);
-  if (!meepo) {
-    const {
-      params: { code }
-    } = match;
-    sendCode(code);
-  }
+
+  useEffect(() => {
+    if (!meepo) {
+      const {
+        params: { code }
+      } = match;
+      sendCode(code);
+    }
+  }, []);
 
   useEffect(() => {
     const text = scanTainer.current;
     const raptor = raptorRef.current;
+    raptor.style.margin = "-41px 0 -14px";
     const startTime = Date.now();
     const scale = chroma.scale(["black", "red"]);
     let frame;
+    let counter = 0;
     const animate = () => {
+      if (message) {
+        counter++;
+        if (counter > 100) {
+          cancelAnimationFrame(frame);
+          raptor.getElementsByTagName("path")[1].style.fill = "#67ff67";
+          return;
+        }
+      }
       const diff = Date.now() - startTime;
       const colorWave = 0.5 * (2 + Math.sin(diff * 0.001));
       const bgWave = 0.5 * (1 + Math.cos(diff * 0.001));
@@ -50,16 +80,24 @@ const Scan = ({ match, sendCode }) => {
       document.body.style.background = scale(bgWave * 0.8);
       frame = requestAnimationFrame(animate);
     };
+
     animate();
 
     return () => cancelAnimationFrame(frame);
-  }, []);
+  }, [message]);
+
+  useEffect(() => {
+    if (!connected) return;
+    listenToCodeResponse();
+  }, [connected]);
+
   return (
     <div>
       {!meepo ? (
         <div>
           <ScanContainer ref={scanTainer}>Scaned...</ScanContainer>
           <Raptor reff={raptorRef} />
+          <Message>{message}</Message>
         </div>
       ) : (
         <ScanContainer ref={scanTainer}>
@@ -70,8 +108,11 @@ const Scan = ({ match, sendCode }) => {
   );
 };
 
+const mapStatToProps = state => state.socket;
+
 const mapDispatchToProps = dispatch => ({
-  sendCode: code => dispatch(emit("code", code))
+  sendCode: code => dispatch(emit("code", code)),
+  listenToCodeResponse: () => dispatch(listenTo("code_response"))
 });
 
-export default connect(null, mapDispatchToProps)(Scan);
+export default connect(mapStatToProps, mapDispatchToProps)(Scan);

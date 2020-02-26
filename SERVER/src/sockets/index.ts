@@ -45,8 +45,14 @@ const sockets = async socket => {
   socket.on("code", async code => {
     console.log("SENDING CODE");
     const markerz = await getRaptorsMarkers(socket.handshake.query.token);
+    let message = "that aint right";
     const newMarkers = markerz.map(m => {
       if (m.hash === code) {
+        if (m.found === true) {
+          message = "you already found this one!";
+        } else {
+          message = "cool find!";
+        }
         m.found = true;
       }
       return m;
@@ -54,6 +60,8 @@ const sockets = async socket => {
 
     const markerRepo = getRepository(Markers);
     markerRepo.save(newMarkers);
+    console.log(message);
+    socket.emit("code_response", message);
     socket.to(decoded.id).emit("markers", newMarkers);
   });
 
