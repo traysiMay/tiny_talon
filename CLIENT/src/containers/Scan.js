@@ -29,13 +29,13 @@ const Scan = ({
       } = match;
       sendCode(code);
     }
-  }, []);
+  }, [meepo, match, sendCode]);
 
   useEffect(() => {
     if (!connected) return;
     listenToCodeResponse();
     listenToWin();
-  }, [connected]);
+  }, [connected, listenToWin, listenToCodeResponse]);
 
   return (
     <div style={{ height: "90%" }}>

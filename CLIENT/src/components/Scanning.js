@@ -12,6 +12,10 @@ const Container = styled.div`
   padding: 1rem;
   display: grid;
   grid-template-rows: 1fr 1fr 1fr;
+  max-width: 700px;
+  @media only screen and (min-width: 700px) {
+    margin: 1rem auto;
+  }
 `;
 
 const Message = styled.div`
@@ -38,7 +42,6 @@ const Scanning = ({ message, scanTainer }) => {
     const raptor = raptorRef.current;
     raptor.getElementsByTagName("path")[0].style.stroke = "red";
     raptor.getElementsByTagName("path")[0].style.strokeWidth = "21px";
-    raptor.style.margin = "-64px 0 -14px";
     const startTime = Date.now();
     const scale = chroma.scale(["black", "red"]);
     let frame;
@@ -87,7 +90,7 @@ const Scanning = ({ message, scanTainer }) => {
     animate();
 
     return () => cancelAnimationFrame(frame);
-  }, [message]);
+  }, [message, scanTainer]);
 
   return (
     <Container>

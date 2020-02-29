@@ -19,8 +19,7 @@ const MapView = ({
   useEffect(() => {
     if (!connected) return;
     getMarkers();
-  }, [connected]);
-  console.log(history);
+  }, [connected, getMarkers]);
   return (
     <div>
       <Map history={history} markers={markers} places={places} />

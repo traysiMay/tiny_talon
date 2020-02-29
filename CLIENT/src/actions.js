@@ -87,7 +87,8 @@ function socketWrap(hash) {
   return io(
     `${process.env.REACT_APP_SOCKET_SERVER}?token=${localStorage.getItem(
       "token"
-    )}&device=${hash}`
+    )}&device=${hash}`,
+    { path: "/socket.io", transport: ["websocket"] }
   );
 }
 

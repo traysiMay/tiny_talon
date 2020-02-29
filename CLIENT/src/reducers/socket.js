@@ -1,10 +1,4 @@
-import {
-  CONNECTING,
-  CONNECTED,
-  GET_MARKERS,
-  LISTEN_TO,
-  socketMessage
-} from "../actions";
+import { CONNECTING, CONNECTED, GET_MARKERS, LISTEN_TO } from "../actions";
 
 const socketState = {
   socket: null,

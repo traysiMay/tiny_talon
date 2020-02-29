@@ -56,7 +56,7 @@ app.use(
 
   ws.on("connection", sockets);
 
-  app.use("/", routes);
+  app.use("/hunt", routes);
 
   server.listen(4000);
 })();

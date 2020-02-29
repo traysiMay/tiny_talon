@@ -54,8 +54,8 @@ const sockets = async socket => {
           message = "you already found this one!";
         } else {
           message = "cool find!";
+          m.found = true;
         }
-        m.found = true;
       }
       if (m.found === false) win = false;
       return m;
