@@ -115,6 +115,7 @@ export const socketMessage = message => {
 export const listenTo = topic => {
   return async (dispatch, getState) => {
     getState().socket.socket.on(topic, message => {
+      console.log(message);
       dispatch(socketMessage(message));
     });
     dispatch({ type: "LISTEN_TO", topic });

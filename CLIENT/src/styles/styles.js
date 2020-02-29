@@ -1,5 +1,18 @@
 import styled from "styled-components";
 
+export const ScanContainer = styled.div`
+  margin: 10% auto;
+  background: white;
+  border: 1px solid black;
+  color: black;
+  padding: 8%;
+  font-family: Arial;
+  font-weight: bold;
+  font-size: 2.4rem;
+  box-shadow: 13px 16px #ff0909;
+  height: 3rem;
+`;
+
 export const Input = styled.input`
   margin: 140px auto 0;
   display: block;

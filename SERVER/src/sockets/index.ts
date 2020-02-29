@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { getRepository } from "typeorm";
 import { Markers } from "../entity/Markers";
+import { ws } from "../index";
 
 const getRaptorsMarkers = async token => {
   const decoded = jwt.verify(token, process.env.SACRET);
@@ -46,6 +47,7 @@ const sockets = async socket => {
     console.log("SENDING CODE");
     const markerz = await getRaptorsMarkers(socket.handshake.query.token);
     let message = "that aint right";
+    let win = true;
     const newMarkers = markerz.map(m => {
       if (m.hash === code) {
         if (m.found === true) {
@@ -55,17 +57,21 @@ const sockets = async socket => {
         }
         m.found = true;
       }
+      if (m.found === false) win = false;
       return m;
     });
-
+    console.log(message);
+    console.log(win);
     const markerRepo = getRepository(Markers);
     markerRepo.save(newMarkers);
-    console.log(message);
     socket.emit("code_response", message);
     socket.to(decoded.id).emit("markers", newMarkers);
+    console.log(decoded.id);
+    if (win === true) ws.in(decoded.id).emit("win", "you_win");
   });
 
   socket.on("get_markers", async () => {
+    console.log(decoded.id);
     console.log("SENDING MARKERS");
     const markerz = await getRaptorsMarkers(socket.handshake.query.token);
     socket.emit("markers", markerz);

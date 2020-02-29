@@ -31,7 +31,7 @@ EVENTS
 */
 const app = express();
 const server = http.createServer(app);
-const ws = io(server);
+export const ws = io(server);
 
 app.use(bodyParser.json());
 app.use(session({ secret: process.env.SSACRET }));

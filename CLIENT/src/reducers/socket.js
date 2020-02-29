@@ -25,10 +25,9 @@ const socket = (state = socketState, action) => {
       return state;
     case LISTEN_TO:
       const { topic } = action;
-      return state;
+      return { ...state, listeners: [...state.listeners, topic] };
     case "SOCKET_MESSAGE":
       const { message } = action;
-      console.log(message, "aa");
       return { ...state, message };
     default:
       return state;
