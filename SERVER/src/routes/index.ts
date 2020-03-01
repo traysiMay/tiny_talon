@@ -3,6 +3,7 @@ import { getRepository } from "typeorm";
 import { Devices } from "../entity/Devices";
 import jwt from "jsonwebtoken";
 import { Emails } from "../entity/Emails";
+import { Markers } from "../entity/Markers";
 
 const routes = Router();
 
@@ -13,6 +14,10 @@ const authDevice = async (req, res) => {
   if (!devices) {
     return res.status(401).send({ error: "device_not_registered" });
   } else {
+    const authHeader = req.header.authorization;
+    if (!authHeader) {
+      return res.status(401).send({ error: "no_token" });
+    }
     const token = req.headers.authorization.split(" ")[1];
     if (token) {
       try {
@@ -26,6 +31,12 @@ const authDevice = async (req, res) => {
   }
 };
 
+const markers = [
+  { name: "frogass", lat: 40.66257, lng: -73.968564, hash: "0xfrogass" },
+  { name: "meepo", lat: 40.66257, lng: -73.969564, hash: "0xmeepo" },
+  { name: "teemo", lat: 40.66357, lng: -73.968564, hash: "0xteemo" }
+];
+
 const registerDevice = async (req, res) => {
   const { email, hash } = req.body;
 
@@ -36,6 +47,18 @@ const registerDevice = async (req, res) => {
     registeredEmail = new Emails();
     registeredEmail.email = email;
     registeredEmail = await emailRepo.save(registeredEmail);
+
+    const markerRepo = getRepository(Markers);
+    markers.map(m => {
+      const marker = new Markers();
+      marker.cat = "meiosis";
+      marker.email = registeredEmail;
+      marker.name = m.name;
+      marker.hash = m.hash;
+      marker.lat = JSON.stringify(m.lat);
+      marker.lng = JSON.stringify(m.lng);
+      markerRepo.save(marker);
+    });
   }
 
   const deviceRepo = getRepository(Devices);

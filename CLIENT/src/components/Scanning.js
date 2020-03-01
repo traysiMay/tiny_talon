@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import chroma from "chroma-js";
@@ -11,7 +12,7 @@ const Container = styled.div`
   background: white;
   padding: 1rem;
   display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 30% 40% 30%;
   max-width: 700px;
   @media only screen and (min-width: 700px) {
     margin: 1rem auto;
@@ -97,7 +98,11 @@ const Scanning = ({ message, scanTainer }) => {
       <ScanContainer ref={scanTainer}>
         {displayMessage === "scanning..." ? "Scanning" : "Scanned"}
       </ScanContainer>
-      <Raptor reff={raptorRef} />
+      <div>
+        <Link to="/">
+          <Raptor reff={raptorRef} />
+        </Link>
+      </div>
       <Message>{displayMessage.toUpperCase()}</Message>
     </Container>
   );

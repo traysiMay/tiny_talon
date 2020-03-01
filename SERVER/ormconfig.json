@@ -7,7 +7,7 @@
   "database": "hunt",
   "synchronize": true,
   "logging": true,
-  "dropSchema": false,
+  "dropSchema": true,
   "entities": ["src/entity/**/*.ts"],
   "migrations": ["src/migration/**/*.ts"],
   "subscribers": ["src/subscriber/**/*.ts"],

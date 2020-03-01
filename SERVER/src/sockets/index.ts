@@ -14,31 +14,10 @@ const getRaptorsMarkers = async token => {
   return markerz;
 };
 
-const markers = [
-  { name: "frogass", lat: 40.66257, lng: -73.968564, hash: "0xfrogass" },
-  { name: "meepo", lat: 40.66257, lng: -73.969564, hash: "0xmeepo" },
-  { name: "teemo", lat: 40.66357, lng: -73.968564, hash: "0xteemo" }
-];
-
 const sockets = async socket => {
   console.log("a user has connected");
   // probably put this in a get request
   const decoded = jwt.verify(socket.handshake.query.token, process.env.SACRET);
-
-  const isMarkers = await getRaptorsMarkers(socket.handshake.query.token);
-  if (isMarkers.length === 0) {
-    const markerRepo = getRepository(Markers);
-    markers.map(m => {
-      const marker = new Markers();
-      marker.cat = "meiosis";
-      marker.email = decoded.id;
-      marker.name = m.name;
-      marker.hash = m.hash;
-      marker.lat = JSON.stringify(m.lat);
-      marker.lng = JSON.stringify(m.lng);
-      markerRepo.save(marker);
-    });
-  }
 
   socket.join(decoded.id);
   socket.on("disconnect", () => console.log("a user has disconnected"));

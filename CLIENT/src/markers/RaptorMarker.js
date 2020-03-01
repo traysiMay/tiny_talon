@@ -36,7 +36,8 @@ const RaptorMarker = ({ found }) => {
     const animate = () => {
       const diff = Date.now() - startTime;
       const r = 200 + 40 * Math.sin(diff * 0.01);
-      setBg(`rgb(${r},0,0)`);
+      const color = `rgb(${Math.floor(r)},0,0)`;
+      setBg(color);
       if (!found) {
         frame = requestAnimationFrame(animate);
       } else {

@@ -113,10 +113,14 @@ export const socketMessage = message => {
   };
 };
 
+const listenDispatcher = (dispatch, topic, payload) => {
+  if (topic === "markers") dispatch({ type: MAP_INIT, markers: payload });
+};
+
 export const listenTo = topic => {
   return async (dispatch, getState) => {
     getState().socket.socket.on(topic, message => {
-      console.log(message);
+      listenDispatcher(dispatch, topic, message);
       dispatch(socketMessage(message));
     });
     dispatch({ type: "LISTEN_TO", topic });

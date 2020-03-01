@@ -17,7 +17,7 @@ const Status = ({ getMarkers, status }) => {
   }, [focus, getMarkers]);
 
   return (
-    <div>
+    <div style={{ display: "none" }}>
       {status}-{focus}
     </div>
   );

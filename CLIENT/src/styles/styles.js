@@ -13,30 +13,38 @@ export const ScanContainer = styled.div`
   height: 3rem;
 `;
 
+export const ButtonContainer = styled.div`
+  margin: 10% auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 900px;
+  * {
+    margin: 7% 0;
+  }
+`;
 export const Input = styled.input`
-  margin: 140px auto 0;
-  display: block;
-  width: 70%;
-  height: 58px;
   text-align: center;
-  font-size: 29px;
+  font-size: 22px;
   font-family: Arial;
-  border: 6px black solid;
+  border: 2px black solid;
+  height: 56px;
   box-shadow: 9px 10px black;
+  width: 79%;
+  max-width: 430px;
 `;
 
 export const Button = styled.button`
-  margin: 10rem auto;
-  display: block;
-  width: 13rem;
-  height: 13rem;
+  width: 8rem;
+  height: 8rem;
   border-radius: 50%;
-  border: 0.3rem solid #000000;
-  font-size: 2rem;
+  border: 2px solid #000000;
+  font-size: 1.6rem;
   cursor: pointer;
   background: white;
-  font-weight: bold;
-  box-shadow: -17px 14px black;
+  box-shadow: -5px 3px black;
+  line-height: 122px;
 `;
 
 export const MapContainer = styled.div`

@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 const Svg = styled.svg`
   margin: 0rem auto 0rem;
-  transform: rotate(146.818deg);
   height: 100%;
   max-width: 360px;
   color: black;

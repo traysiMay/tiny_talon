@@ -13,6 +13,7 @@ import { ScanContainer } from "../styles/styles";
 const Scan = ({
   connected,
   listenToCodeResponse,
+  listenToMarkers,
   listenToWin,
   match,
   message,
@@ -35,6 +36,7 @@ const Scan = ({
     if (!connected) return;
     listenToCodeResponse();
     listenToWin();
+    listenToMarkers();
   }, [connected, listenToWin, listenToCodeResponse]);
 
   return (
@@ -55,7 +57,8 @@ const mapStatToProps = state => state.socket;
 const mapDispatchToProps = dispatch => ({
   sendCode: code => dispatch(emit("code", code)),
   listenToCodeResponse: () => dispatch(listenTo("code_response")),
-  listenToWin: () => dispatch(listenTo("win"))
+  listenToWin: () => dispatch(listenTo("win")),
+  listenToMarkers: () => dispatch(listenTo("markers"))
 });
 
 export default connect(mapStatToProps, mapDispatchToProps)(Scan);
