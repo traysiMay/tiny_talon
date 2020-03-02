@@ -37,7 +37,7 @@ const Registration = ({ getToken, hash, registerDevice, status, token }) => {
       <ButtonContainer>
         <Smiler style={{ width: "35%", margin: "0 auto" }} />
         <div>hmm I don't recognize this device...</div>
-        <div>please register it to your email</div>{" "}
+        <div>please sync it to your email</div>{" "}
         <div
           style={{
             color: "#f36060",
@@ -59,9 +59,11 @@ const Registration = ({ getToken, hash, registerDevice, status, token }) => {
     return (
       <ButtonContainer>
         <Smiler style={{ width: "35%", margin: "0 auto", fill: "#3ef3ff" }} />
-        <div>oh boy! welcome back :)</div>
-        <div>you are looking quite nice today</div>
-        <div>press connect below to sync</div>
+        <div style={{ border: "2px solid black" }}>
+          <div>oh boy! welcome back :)</div>
+          <div>you are looking quite nice today</div>
+          <div>press connect below to sync</div>
+        </div>
         <Button onClick={getToken}>Connect</Button>
       </ButtonContainer>
     );

@@ -23,7 +23,6 @@ const Loading = ({ fill = "white", message }) => {
     animate();
     return () => cancelAnimationFrame(frame);
   }, []);
-  console.log(message);
   return (
     <div>
       <Raptor opacity={opacity} fill={fill} />

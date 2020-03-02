@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { connectSocket, getMarkers } from "../../actions";
+import { connectSocket, getMarkers, logOut } from "../../actions";
 import Status from "../Status";
 import Map from "../../components/Map";
+import Logout from "../../components/Logout";
 
 // when the map socket connects it needs to update it's marker map
 const MapView = ({
@@ -10,6 +11,7 @@ const MapView = ({
   connectToSocket,
   getMarkers,
   history,
+  logout,
   mapKey,
   markers,
   places
@@ -27,6 +29,7 @@ const MapView = ({
   return (
     <div>
       <Status />
+      <Logout logout={logout} />
       <Map
         history={history}
         mapKey={mapKey}
@@ -49,6 +52,7 @@ const mapStateToProps = ({
 const mapDipstachToProps = dispatch => ({
   connectToSocket: () => dispatch(connectSocket()),
   getMarkers: () => dispatch(getMarkers()),
+  logout: () => dispatch(logOut()),
   dispatch
 });
 

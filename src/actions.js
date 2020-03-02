@@ -9,6 +9,7 @@ export const READY = "READY";
 export const MAP_KEY = "MAP_KEY";
 export const DEVICE_INIT = "DEVICE_INIT";
 export const SET_TOKEN = "SET_TOKEN";
+export const LOGOUT = "LOGOUT";
 
 export const MAP_INIT = "MAP_INIT";
 export const GET_MARKERS = "GET_MARKERS";
@@ -84,6 +85,13 @@ export const newToken = () => {
   };
 };
 
+export const logOut = () => {
+  return async dispatch => {
+    localStorage.setItem("token", "");
+    dispatch({ type: LOGOUT });
+  };
+};
+
 function socketWrap(hash) {
   return io(
     `${process.env.REACT_APP_SOCKET_SERVER}?token=${localStorage.getItem(
@@ -93,6 +101,7 @@ function socketWrap(hash) {
   );
 }
 
+// MARKERS SHOULD HAVE ITS OWN MIDDLEWARE
 export const connectSocket = () => {
   return async (dispatch, getState) => {
     const {
@@ -101,7 +110,10 @@ export const connectSocket = () => {
     const socket = await socketWrap(hash);
     socket.on("error", error => dispatch({ type: ERROR, error }));
     socket.on("found", found => dispatch({ type: FOUND, name: found }));
-    socket.on("markers", markers => dispatch({ type: MAP_INIT, markers }));
+    socket.on("markers", markers => {
+      if (markers.length === 0) dispatch({ type: ERROR, error: BAD_TOKEN });
+      dispatch({ type: MAP_INIT, markers });
+    });
     dispatch({ type: CONNECTED, socket });
   };
 };
@@ -115,7 +127,9 @@ export const socketMessage = message => {
 };
 
 const listenDispatcher = (dispatch, topic, payload) => {
-  if (topic === "markers") dispatch({ type: MAP_INIT, markers: payload });
+  if (topic === "markers") {
+    dispatch({ type: MAP_INIT, markers: payload });
+  }
 };
 
 export const listenTo = topic => {

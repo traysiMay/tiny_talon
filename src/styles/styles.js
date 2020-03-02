@@ -23,7 +23,7 @@ export const ButtonContainer = styled.div`
   margin: auto;
   div {
     margin: 4% auto;
-    border-bottom: 2px solid black;
+    border-bottom: 4px dotted black;
     padding: 3%;
     width: 80%;
   }
@@ -33,6 +33,10 @@ export const ButtonContainer = styled.div`
     margin: 7% auto 7%;
     align-self: center;
     padding: 0;
+  }
+
+  @media only screen and (min-width: 700px) {
+    justify-content: flex-start;
   }
 `;
 export const Input = styled.input`
