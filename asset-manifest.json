@@ -1,23 +1,23 @@
 {
   "files": {
     "main.css": "/tiny_talon/static/css/main.8d88dfd9.chunk.css",
-    "main.js": "/tiny_talon/static/js/main.044eb114.chunk.js",
-    "main.js.map": "/tiny_talon/static/js/main.044eb114.chunk.js.map",
+    "main.js": "/tiny_talon/static/js/main.725cd016.chunk.js",
+    "main.js.map": "/tiny_talon/static/js/main.725cd016.chunk.js.map",
     "runtime-main.js": "/tiny_talon/static/js/runtime-main.10dd6dda.js",
     "runtime-main.js.map": "/tiny_talon/static/js/runtime-main.10dd6dda.js.map",
-    "static/js/2.6b4c7cb1.chunk.js": "/tiny_talon/static/js/2.6b4c7cb1.chunk.js",
-    "static/js/2.6b4c7cb1.chunk.js.map": "/tiny_talon/static/js/2.6b4c7cb1.chunk.js.map",
+    "static/js/2.1c60a520.chunk.js": "/tiny_talon/static/js/2.1c60a520.chunk.js",
+    "static/js/2.1c60a520.chunk.js.map": "/tiny_talon/static/js/2.1c60a520.chunk.js.map",
     "index.html": "/tiny_talon/index.html",
-    "precache-manifest.92539facebca610fafd2e6fafcd9c340.js": "/tiny_talon/precache-manifest.92539facebca610fafd2e6fafcd9c340.js",
+    "precache-manifest.12c96a3345d7df8a4a0f22a691951a45.js": "/tiny_talon/precache-manifest.12c96a3345d7df8a4a0f22a691951a45.js",
     "service-worker.js": "/tiny_talon/service-worker.js",
     "static/css/main.8d88dfd9.chunk.css.map": "/tiny_talon/static/css/main.8d88dfd9.chunk.css.map",
-    "static/js/2.6b4c7cb1.chunk.js.LICENSE.txt": "/tiny_talon/static/js/2.6b4c7cb1.chunk.js.LICENSE.txt",
+    "static/js/2.1c60a520.chunk.js.LICENSE.txt": "/tiny_talon/static/js/2.1c60a520.chunk.js.LICENSE.txt",
     "static/media/index.css": "/tiny_talon/static/media/Euclid.11fb02bf.ttf"
   },
   "entrypoints": [
     "static/js/runtime-main.10dd6dda.js",
-    "static/js/2.6b4c7cb1.chunk.js",
+    "static/js/2.1c60a520.chunk.js",
     "static/css/main.8d88dfd9.chunk.css",
-    "static/js/main.044eb114.chunk.js"
+    "static/js/main.725cd016.chunk.js"
   ]
 }
