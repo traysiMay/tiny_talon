@@ -9,13 +9,14 @@ import Registration from "./containers/Registration";
 import { DEVICE_NOT_REGISTERED } from "./statuses";
 import Loading from "./animations/Loading";
 
-function App({ error, hash, status, token, loading, welcome }) {
-  console.log("app");
+function App({ hash, status, token, loading, welcome }) {
   if (welcome) return <Loading fill={"yellow"} message={"welcome!"} />;
   if (loading) return <Loading message={"loading ..."} />;
-
+  // this is annoyingly dumb
   if (status === DEVICE_NOT_REGISTERED || !hash || !token) {
-    return <Registration hash={hash} token={token} status={status} />;
+    if (!token) {
+      return <Registration hash={hash} token={token} status={status} />;
+    }
   }
   return (
     <>

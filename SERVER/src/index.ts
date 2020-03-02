@@ -50,7 +50,7 @@ app.use(
       jwt.verify(socket.handshake.query.token, process.env.SACRET);
       return next();
     } catch {
-      return next(new Error("authentication error"));
+      return next(new Error("BAD_TOKEN"));
     }
   });
 

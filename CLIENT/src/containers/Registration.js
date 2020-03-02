@@ -5,6 +5,7 @@ import { newToken, registerDevice } from "../actions";
 import { connect } from "react-redux";
 import Loading from "../animations/Loading";
 import { validateEmail } from "../services/utils";
+import Smiler from "../graphics/Smiler";
 
 const Registration = ({ getToken, hash, registerDevice, status, token }) => {
   const [error, setError] = useState("");
@@ -34,11 +35,22 @@ const Registration = ({ getToken, hash, registerDevice, status, token }) => {
     const handleChange = e => (email.current = e.target.value);
     return (
       <ButtonContainer>
+        <Smiler style={{ width: "35%", margin: "0 auto" }} />
         <div>hmm I don't recognize this device...</div>
-        <div>please register it to your email</div>
-        <Input onChange={handleChange} name="email" placeholder="email" />
+        <div>please sync it to your email</div>{" "}
+        <div
+          style={{
+            color: "#f36060",
+            display: error ? "block" : "none",
+            borderBottom: "none",
+            margin: "7% auto -8%",
+            textAlign: "center"
+          }}
+        >
+          {error}
+        </div>
+        <Input onChange={handleChange} name="email" placeholder="email..." />
         <Button onClick={register}>Register</Button>
-        <div style={{ color: "#f36060" }}>{error}</div>
       </ButtonContainer>
     );
   }
@@ -46,9 +58,12 @@ const Registration = ({ getToken, hash, registerDevice, status, token }) => {
   if (!token) {
     return (
       <ButtonContainer>
-        <div>oh boy! welcome back :)</div>
-        <div>you are looking quite nice today</div>
-        <div>press connect below to sync</div>
+        <Smiler style={{ width: "35%", margin: "0 auto", fill: "#3ef3ff" }} />
+        <div style={{ border: "2px solid black" }}>
+          <div>oh boy! welcome back :)</div>
+          <div>you are looking quite nice today</div>
+          <div>press connect below to sync</div>
+        </div>
         <Button onClick={getToken}>Connect</Button>
       </ButtonContainer>
     );

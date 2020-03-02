@@ -8,7 +8,8 @@ const peelError = ({ getState, dispatch }) => {
     console.log(action);
     console.log(getState());
     if (action.type === ERROR) {
-      switch (action.message) {
+      // should this be error or message?
+      switch (action.error) {
         case BAD_TOKEN:
           localStorage.removeItem("token");
           break;

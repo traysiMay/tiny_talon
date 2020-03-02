@@ -14,14 +14,29 @@ export const ScanContainer = styled.div`
 `;
 
 export const ButtonContainer = styled.div`
-  margin: 10% auto;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  width: 80%;
   max-width: 900px;
-  * {
-    margin: 7% 0;
+  margin: auto;
+  div {
+    margin: 4% auto;
+    border-bottom: 4px dotted black;
+    padding: 3%;
+    width: 80%;
+  }
+
+  input,
+  button {
+    margin: 7% auto 7%;
+    align-self: center;
+    padding: 0;
+  }
+
+  @media only screen and (min-width: 700px) {
+    justify-content: flex-start;
   }
 `;
 export const Input = styled.input`

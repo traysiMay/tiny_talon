@@ -5,11 +5,6 @@ import { emit, listenTo } from "../actions";
 import Scanning from "../components/Scanning";
 import { ScanContainer } from "../styles/styles";
 
-//  1 connects socket
-// listens for the response
-// sends the code
-// shows response
-
 const Scan = ({
   connected,
   listenToCodeResponse,
@@ -37,7 +32,7 @@ const Scan = ({
     listenToCodeResponse();
     listenToWin();
     listenToMarkers();
-  }, [connected, listenToWin, listenToCodeResponse]);
+  }, [connected, listenToWin, listenToCodeResponse, listenToMarkers]);
 
   return (
     <div style={{ height: "90%" }}>
@@ -52,7 +47,7 @@ const Scan = ({
   );
 };
 
-const mapStatToProps = state => state.socket;
+const mapStateToProps = state => state.socket;
 
 const mapDispatchToProps = dispatch => ({
   sendCode: code => dispatch(emit("code", code)),
@@ -61,4 +56,4 @@ const mapDispatchToProps = dispatch => ({
   listenToMarkers: () => dispatch(listenTo("markers"))
 });
 
-export default connect(mapStatToProps, mapDispatchToProps)(Scan);
+export default connect(mapStateToProps, mapDispatchToProps)(Scan);

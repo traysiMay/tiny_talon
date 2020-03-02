@@ -17,8 +17,10 @@ const getRaptorsMarkers = async token => {
 const sockets = async socket => {
   console.log("a user has connected");
   // probably put this in a get request
+
   const decoded = jwt.verify(socket.handshake.query.token, process.env.SACRET);
 
+  console.log("bye");
   socket.join(decoded.id);
   socket.on("disconnect", () => console.log("a user has disconnected"));
 

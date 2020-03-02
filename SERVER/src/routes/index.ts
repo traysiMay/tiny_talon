@@ -14,7 +14,7 @@ const authDevice = async (req, res) => {
   if (!devices) {
     return res.status(401).send({ error: "device_not_registered" });
   } else {
-    const authHeader = req.header.authorization;
+    const authHeader = req.headers.authorization;
     if (!authHeader) {
       return res.status(401).send({ error: "no_token" });
     }
