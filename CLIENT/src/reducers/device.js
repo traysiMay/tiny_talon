@@ -19,8 +19,8 @@ const device = (state = deviceState, action) => {
     case LOGOUT:
       return { ...state, token: 0x0 };
     case ERROR:
-      const { message } = action;
-      return { ...state, error: message, status: message };
+      const { error } = action;
+      return { ...state, error, status: error };
     case RESPONSE:
       const { response } = action;
       return { ...state, response, status: response };

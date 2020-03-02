@@ -37,7 +37,7 @@ const Registration = ({ getToken, hash, registerDevice, status, token }) => {
       <ButtonContainer>
         <Smiler style={{ width: "35%", margin: "0 auto" }} />
         <div>hmm I don't recognize this device...</div>
-        <div>please sync it to your email</div>{" "}
+        <div>please sync it to your email</div>
         <div
           style={{
             color: "#f36060",

@@ -22,5 +22,5 @@ export const handleResponse = response => {
 
 export const handleError = (error, dispatch) => {
   const { message } = error;
-  dispatch({ type: ERROR, message });
+  dispatch({ type: ERROR, error: message });
 };

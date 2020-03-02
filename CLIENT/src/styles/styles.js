@@ -39,6 +39,7 @@ export const ButtonContainer = styled.div`
     justify-content: flex-start;
   }
 `;
+
 export const Input = styled.input`
   text-align: center;
   font-size: 22px;

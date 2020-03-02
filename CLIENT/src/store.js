@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import reducers from "./reducers";
-import { ERROR, BAD_TOKEN } from "./actions";
+import { ERROR, BAD_TOKEN, DEVICE_NOT_FOUND, deviceInit } from "./actions";
 
 const peelError = ({ getState, dispatch }) => {
   return next => action => {
@@ -12,6 +12,9 @@ const peelError = ({ getState, dispatch }) => {
       switch (action.error) {
         case BAD_TOKEN:
           localStorage.removeItem("token");
+          break;
+        case DEVICE_NOT_FOUND:
+          dispatch(deviceInit());
           break;
         default:
       }

@@ -83,7 +83,7 @@ const newToken = async (req, res) => {
     const token = jwt.sign({ hash, id }, process.env.SACRET);
     return res.send({ token });
   }
-  return res.status(500).send({ error: "device not found" });
+  return res.status(500).send({ error: "DEVICE_NOT_FOUND" });
 };
 
 routes.post("/auth_device", authDevice);

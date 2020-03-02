@@ -18,7 +18,10 @@ if (!token) {
   store.dispatch({ type: SET_TOKEN, token });
 }
 
-const bytes = AES.decrypt(process.env.REACT_APP_MAP_KEY, "ilovefroggy");
+const bytes = AES.decrypt(
+  process.env.REACT_APP_MAP_KEY,
+  process.env.REACT_APP_FROGGY
+);
 const mapKey = bytes.toString(enc.Utf8);
 store.dispatch({ type: MAP_KEY, mapKey });
 

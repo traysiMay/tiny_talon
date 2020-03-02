@@ -18,10 +18,12 @@ export const UPDATE_MAP = "UPDATE_MAP";
 export const CONNECTING = "CONNECTING";
 export const CONNECTED = "CONNECTED";
 export const LISTEN_TO = "LISTEN_TO";
+export const SOCKET_MESSAGE = "SOCKET_MESSAGE";
 
 export const ERROR = "ERROR";
 export const BAD_TOKEN = "BAD_TOKEN";
 export const RESPONSE = "RESPONSE";
+export const DEVICE_NOT_FOUND = "DEVICE_NOT_FOUND";
 
 export const FOUND = "FOUND";
 export const SEND_CODE = "SEND_CODE";
@@ -122,7 +124,7 @@ export const connectSocket = () => {
 // there is a QR scanner screen
 export const socketMessage = message => {
   return dispatch => {
-    dispatch({ type: "SOCKET_MESSAGE", message });
+    dispatch({ type: SOCKET_MESSAGE, message });
   };
 };
 

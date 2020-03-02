@@ -12,11 +12,8 @@ import Loading from "./animations/Loading";
 function App({ hash, status, token, loading, welcome }) {
   if (welcome) return <Loading fill={"yellow"} message={"welcome!"} />;
   if (loading) return <Loading message={"loading ..."} />;
-  // this is annoyingly dumb
-  if (status === DEVICE_NOT_REGISTERED || !hash || !token) {
-    if (!token) {
-      return <Registration hash={hash} token={token} status={status} />;
-    }
+  if ((status === DEVICE_NOT_REGISTERED && !hash) || !token) {
+    return <Registration hash={hash} token={token} status={status} />;
   }
   return (
     <>

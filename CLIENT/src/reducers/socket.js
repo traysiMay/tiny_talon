@@ -1,4 +1,10 @@
-import { CONNECTING, CONNECTED, GET_MARKERS, LISTEN_TO } from "../actions";
+import {
+  CONNECTING,
+  CONNECTED,
+  GET_MARKERS,
+  LISTEN_TO,
+  SOCKET_MESSAGE
+} from "../actions";
 
 const socketState = {
   socket: null,
@@ -20,7 +26,7 @@ const socket = (state = socketState, action) => {
     case LISTEN_TO:
       const { topic } = action;
       return { ...state, listeners: [...state.listeners, topic] };
-    case "SOCKET_MESSAGE":
+    case SOCKET_MESSAGE:
       const { message } = action;
       return { ...state, message };
     default:

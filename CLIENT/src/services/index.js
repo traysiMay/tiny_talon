@@ -34,11 +34,3 @@ export const getToken = (dispatch, hash) => {
     })
     .catch(error => handleError(error, dispatch));
 };
-
-export const getRequest = () => {
-  fetch(`${process.env.REACT_APP_SERVER}`, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-  })
-    .then(handleResponse)
-    .then(console.log);
-};
