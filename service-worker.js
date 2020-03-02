@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/tiny_talon/precache-manifest.2602847d246fc8170598de6cff472b8e.js"
+  "/tiny_talon/precache-manifest.dd5dd9ef45421b42e0299c3000b215d8.js"
 );
 
 self.addEventListener('message', (event) => {
