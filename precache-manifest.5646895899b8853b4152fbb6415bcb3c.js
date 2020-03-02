@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "66e8b30e927ed2258a369a3f52e6b818",
+    "revision": "73eb248b1823c61bfae02943149398d8",
     "url": "/tiny_talon/index.html"
   },
   {
-    "revision": "e002c0198a9b1bd43190",
+    "revision": "79d7a99e7ca1fe09eb31",
     "url": "/tiny_talon/static/css/main.8d88dfd9.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/tiny_talon/static/js/2.1c60a520.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "e002c0198a9b1bd43190",
-    "url": "/tiny_talon/static/js/main.725cd016.chunk.js"
+    "revision": "79d7a99e7ca1fe09eb31",
+    "url": "/tiny_talon/static/js/main.295d1d3b.chunk.js"
   },
   {
     "revision": "b75106c08ef663ff0961",
