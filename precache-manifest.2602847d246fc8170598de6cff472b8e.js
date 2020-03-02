@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "73eb248b1823c61bfae02943149398d8",
+    "revision": "dec991516a9d35c54acd58fcd83e5057",
     "url": "/tiny_talon/index.html"
   },
   {
-    "revision": "79d7a99e7ca1fe09eb31",
+    "revision": "851411e55a672ada0226",
     "url": "/tiny_talon/static/css/main.8d88dfd9.chunk.css"
   },
   {
-    "revision": "efaccf7bdbc04ec0221b",
-    "url": "/tiny_talon/static/js/2.1c60a520.chunk.js"
+    "revision": "e316b1616f77b1bd19c3",
+    "url": "/tiny_talon/static/js/2.bf572266.chunk.js"
   },
   {
     "revision": "26967cad1b155fa9164333d88e27e117",
-    "url": "/tiny_talon/static/js/2.1c60a520.chunk.js.LICENSE.txt"
+    "url": "/tiny_talon/static/js/2.bf572266.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "79d7a99e7ca1fe09eb31",
-    "url": "/tiny_talon/static/js/main.295d1d3b.chunk.js"
+    "revision": "851411e55a672ada0226",
+    "url": "/tiny_talon/static/js/main.979bbd0e.chunk.js"
   },
   {
     "revision": "b75106c08ef663ff0961",
