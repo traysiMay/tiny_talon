@@ -19,7 +19,8 @@ const greatPlaceStyle = {
   fontSize: 16,
   fontWeight: "bold",
   //   padding: 4,
-  cursor: "pointer"
+  cursor: "pointer",
+  userSelect: "none"
 };
 
 const greatPlaceStyleHover = {
@@ -48,7 +49,7 @@ const RaptorMarker = ({ found }) => {
     return () => cancelAnimationFrame(frame);
   }, [found]);
   return (
-    <div style={greatPlaceStyleHover}>
+    <div style={greatPlaceStyleHover} onPointerDown={console.log}>
       <Raptor
         bg={found ? "#7ffdcb" : bg}
         fill={`${found ? "#FF0000" : "#FFFFFF"}`}

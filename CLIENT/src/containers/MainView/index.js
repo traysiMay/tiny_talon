@@ -5,13 +5,15 @@ import { Route } from "react-router-dom";
 import Chodal from "./Chodal";
 
 const MainView = ({ history, match }) => {
+  const { hunt } = match.params;
+  console.log(`${match.url}`);
   return (
     <div>
       <Route
-        path={`${match.url}pop/:marker`}
+        path={`/map/pop/:marker`}
         render={({ match }) => <Chodal history={history} match={match} />}
       />
-      <MapView history={history} />
+      <MapView history={history} hunt={hunt} />
     </div>
   );
 };

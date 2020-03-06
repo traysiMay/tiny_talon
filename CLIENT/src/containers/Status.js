@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { GET_MARKERS } from "../actions";
 
-const Status = ({ getMarkers, status }) => {
+const Status = ({ getMarkers, hunt, status }) => {
   const [focus, setFocus] = useState("lala");
 
   useEffect(() => {
@@ -12,7 +12,7 @@ const Status = ({ getMarkers, status }) => {
 
   useEffect(() => {
     if (focus === "focus") {
-      getMarkers();
+      getMarkers(hunt);
     }
   }, [focus, getMarkers]);
 
@@ -25,7 +25,7 @@ const Status = ({ getMarkers, status }) => {
 
 const mapStateToProps = state => state.socket;
 const mapDispatchToProps = dispatch => ({
-  getMarkers: () => dispatch({ type: GET_MARKERS })
+  getMarkers: hunt => dispatch({ type: GET_MARKERS, hunt })
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Status);

@@ -63,6 +63,13 @@ export const Button = styled.button`
   line-height: 122px;
 `;
 
+export const SquareButton = styled.button`
+  background: white;
+  color: black;
+  border: 2px solid white;
+  margin: 4px;
+`;
+
 export const MapContainer = styled.div`
   height: 100vh;
   width: 100%;

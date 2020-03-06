@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { connectSocket, getMarkers, logOut } from "../../actions";
+import { connectSocket, getMarkers, logOut, listenTo } from "../../actions";
 import Status from "../Status";
 import Map from "../../components/Map";
 import Logout from "../../components/Logout";
@@ -11,9 +11,13 @@ const MapView = ({
   connectToSocket,
   getMarkers,
   history,
+  hunt,
   logout,
+  listenToMarkerFound,
+  listenToWin,
   mapKey,
   markers,
+  markersFound,
   places
 }) => {
   useEffect(() => {
@@ -24,16 +28,19 @@ const MapView = ({
 
   useEffect(() => {
     if (!connected) return;
-    getMarkers();
+    getMarkers(hunt);
+    listenToMarkerFound();
+    listenToWin();
   }, [connected, getMarkers]);
   return (
     <div>
-      <Status />
+      <Status hunt={hunt} />
       <Logout logout={logout} />
       <Map
         history={history}
         mapKey={mapKey}
         markers={markers}
+        markersFound={markersFound}
         places={places}
       />
     </div>
@@ -41,18 +48,21 @@ const MapView = ({
 };
 
 const mapStateToProps = ({
-  map: { mapKey, markers, places },
+  map: { mapKey, markers, markersFound, places },
   socket: { connected }
 }) => ({
   connected,
   mapKey,
   markers,
+  markersFound,
   places
 });
 const mapDipstachToProps = dispatch => ({
   connectToSocket: () => dispatch(connectSocket()),
-  getMarkers: () => dispatch(getMarkers()),
+  getMarkers: hunt => dispatch(getMarkers(hunt)),
   logout: () => dispatch(logOut()),
+  listenToMarkerFound: () => dispatch(listenTo("marker_found")),
+  listenToWin: () => dispatch(listenTo("win")),
   dispatch
 });
 

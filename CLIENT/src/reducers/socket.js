@@ -21,7 +21,8 @@ const socket = (state = socketState, action) => {
       const { socket } = action;
       return { ...state, status: "connected", connected: true, socket };
     case GET_MARKERS:
-      state.socket.emit("get_markers");
+      const { hunt } = action;
+      state.socket.emit("get_markers", hunt);
       return state;
     case LISTEN_TO:
       const { topic } = action;

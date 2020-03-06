@@ -29,7 +29,7 @@ export const FOUND = "FOUND";
 export const SEND_CODE = "SEND_CODE";
 
 export const deviceInit = () => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     dispatch({ type: LOADING });
     if (window.requestIdleCallback) {
       requestIdleCallback(function() {
@@ -38,8 +38,10 @@ export const deviceInit = () => {
             return component.value;
           });
           const device = Fingerprint2.x64hash128(values.join(""), 31);
-          tRequest("auth_device", { device }, dispatch);
           dispatch({ type: DEVICE_INIT, hash: device });
+          if (!getState().device.token) {
+            tRequest("auth_device", { device }, dispatch);
+          }
           dispatch(readyDelay(1));
         });
       });
@@ -50,14 +52,18 @@ export const deviceInit = () => {
             return component.value;
           });
           const device = Fingerprint2.x64hash128(values.join(""), 31);
-          tRequest("auth_device", { device }, dispatch);
           dispatch({ type: DEVICE_INIT, hash: device });
+          if (!getState().device.token) {
+            tRequest("auth_device", { device }, dispatch);
+          }
           dispatch(readyDelay(1));
         });
       }, 500);
     }
   };
 };
+
+export const authenticateDevice = () => {};
 
 export const readyDelay = delay => {
   return dispatch => {
@@ -132,6 +138,9 @@ const listenDispatcher = (dispatch, topic, payload) => {
   if (topic === "markers") {
     dispatch({ type: MAP_INIT, markers: payload });
   }
+  if (topic === "marker_found") {
+    dispatch({ type: "MARKER_FOUND", markersFound: payload });
+  }
 };
 
 export const listenTo = topic => {
@@ -145,9 +154,9 @@ export const listenTo = topic => {
 };
 // ------
 
-export const getMarkers = () => {
+export const getMarkers = hunt => {
   return async dispatch => {
-    dispatch({ type: GET_MARKERS });
+    dispatch({ type: GET_MARKERS, hunt });
   };
 };
 

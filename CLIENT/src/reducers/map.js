@@ -8,7 +8,8 @@ const ppark = {
 const mapState = {
   places: { ppark },
   mapKey: "",
-  markers: []
+  markers: [],
+  markersFound: []
 };
 
 const map = (state = mapState, action) => {
@@ -19,6 +20,10 @@ const map = (state = mapState, action) => {
     case MAP_KEY:
       const { mapKey } = action;
       return { ...state, mapKey };
+    case "MARKER_FOUND":
+      const { markersFound } = action;
+      console.log(markersFound);
+      return { ...state, markersFound };
     default:
       return state;
   }

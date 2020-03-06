@@ -28,7 +28,7 @@ const Registration = ({ getToken, hash, registerDevice, status, token }) => {
     });
     // eslint-disable-next-line
   }, []);
-
+  console.log(hash);
   if (!hash) return <Loading />;
 
   if (status === DEVICE_NOT_REGISTERED) {
@@ -50,7 +50,7 @@ const Registration = ({ getToken, hash, registerDevice, status, token }) => {
           {error}
         </div>
         <Input onChange={handleChange} name="email" placeholder="email..." />
-        <Button onClick={register}>Register</Button>
+        <Button onClick={register}>Sync</Button>
       </ButtonContainer>
     );
   }

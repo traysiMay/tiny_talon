@@ -34,3 +34,43 @@ export const getToken = (dispatch, hash) => {
     })
     .catch(error => handleError(error, dispatch));
 };
+
+export const getAllSeries = () => {
+  const endPoint = "all_series";
+  const token = localStorage.getItem("token");
+  const options = fetchOptions("GET", token, null);
+  console.log(options);
+  return fetch(`${process.env.REACT_APP_SERVER}/${endPoint}`, options)
+    .then(handleResponse)
+    .then(data => data);
+};
+
+export const createHunt = async ({ seriesId, email }) => {
+  const endPoint = "create_hunt";
+  const token = localStorage.getItem("token");
+  const options = fetchOptions("POST", token, { id: seriesId, email });
+  await fetch(`${process.env.REACT_APP_SERVER}/${endPoint}`, options)
+    .then(handleResponse)
+    .then(data => console.log(data))
+    .catch(error => console.log(error));
+};
+
+export const sendSeries = async ({ cat, description, name }) => {
+  const endPoint = "send_series";
+  const token = localStorage.getItem("token");
+  const options = fetchOptions("POST", token, { cat, description, name });
+  await fetch(`${process.env.REACT_APP_SERVER}/${endPoint}`, options)
+    .then(handleResponse)
+    .then(data => {
+      console.log(data);
+    });
+};
+
+export const createMarker = async marker => {
+  const endPoint = "create_marker";
+  const token = localStorage.getItem("token");
+  const options = fetchOptions("POST", token, marker);
+  fetch(`${process.env.REACT_APP_SERVER}/${endPoint}`, options)
+    .then(handleResponse)
+    .then(data => console.log(data));
+};

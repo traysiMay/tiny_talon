@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { Devices } from "./Devices";
+import { Hunts } from "./Hunts";
 
 @Entity()
 export class Emails {
@@ -14,4 +15,10 @@ export class Emails {
     devices => devices.email
   )
   devices: Devices[];
+
+  @OneToMany(
+    type => Hunts,
+    hunts => hunts.emails
+  )
+  hunts: Hunts[];
 }

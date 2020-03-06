@@ -1,35 +1,27 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { Series } from "./Series";
+import { Emails } from "./Emails";
 
 @Entity()
-export class Markers {
+export class Hunts {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  name: string;
-
-  @Column()
-  description: string;
-
-  @Column()
-  hash: string;
-
   @Column({ default: false })
-  found: boolean;
+  completed: boolean;
 
-  @Column()
-  cat: string;
-
-  @Column()
-  lat: string;
-
-  @Column()
-  lng: string;
+  @Column("simple-array")
+  marker_map: string[];
 
   @ManyToOne(
     type => Series,
-    series => series.markers
+    series => series.hunts
   )
   series: Series;
+  // optional?
+  @ManyToOne(
+    type => Emails,
+    emails => emails.hunts
+  )
+  emails: Emails;
 }

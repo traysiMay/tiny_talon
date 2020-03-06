@@ -8,12 +8,13 @@ export const fetchOptions = (method, token, body) => ({
         Authorization: `Bearer ${token}`
       }
     : { "Content-Type": "application/json" },
-  body: JSON.stringify({ ...body })
+  body: method === "POST" ? JSON.stringify({ ...body }) : null
 });
 
 export const handleResponse = response => {
   if (response.status !== 200) {
     return response.json().then(error => {
+      console.log(error);
       throw new Error(error.error);
     });
   }
