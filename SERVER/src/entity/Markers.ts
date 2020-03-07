@@ -1,7 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  Unique
+} from "typeorm";
 import { Series } from "./Series";
 
 @Entity()
+@Unique(["hash"])
 export class Markers {
   @PrimaryGeneratedColumn()
   id: number;
@@ -27,9 +34,6 @@ export class Markers {
   @Column()
   lng: string;
 
-  @ManyToOne(
-    type => Series,
-    series => series.markers
-  )
+  @ManyToOne(type => Series)
   series: Series;
 }

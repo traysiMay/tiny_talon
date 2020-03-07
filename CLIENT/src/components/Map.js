@@ -10,6 +10,11 @@ const sf = {
   lng: -122.41344338335298
 };
 
+const pewpew = {
+  lat: 40.716323,
+  lng: -73.989691
+};
+
 const Map = ({ history, hunt, mapKey, markers, markersFound, places }) => {
   const [userLocation, setUserLocation] = useState();
   useEffect(() => {
@@ -48,7 +53,7 @@ const Map = ({ history, hunt, mapKey, markers, markersFound, places }) => {
     <MapContainer>
       <GoogleMapReact
         defaultCenter={userLocation ? userLocation : places.ppark}
-        center={userLocation}
+        center={pewpew}
         defaultZoom={15}
         bootstrapURLKeys={{ key: mapKey }}
         options={{ styles: whiteMap }}

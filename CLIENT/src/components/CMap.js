@@ -26,7 +26,12 @@ const Overlay = styled.div`
   }
 `;
 
-const CMap = ({ mapKey, series }) => {
+const pewpew = {
+  lat: 40.716323,
+  lng: -73.989691
+};
+
+const CMap = ({ mapKey, series, socket }) => {
   const [userLocation, setUserLocation] = useState();
   const [marker, setMarker] = useState([]);
   const [info, setInfo] = useState({
@@ -50,8 +55,12 @@ const CMap = ({ mapKey, series }) => {
     // info.series = series;
     // info.lat = marker.lat;
     // info.lng = marker.lng;
-    const payload = { ...info, series, lat: marker.lat, lng: marker.lng };
-    createMarker(payload);
+    const payload = {
+      marker: { ...info, lat: marker.lat, lng: marker.lng },
+      series
+    };
+    socket.emit("create_marker", payload);
+    //createMarker(payload);
   };
 
   return (
@@ -74,7 +83,7 @@ const CMap = ({ mapKey, series }) => {
             <SquareButton onClick={submitMarker}>submit</SquareButton>
           </Overlay>
           <GoogleMapReact
-            defaultCenter={userLocation}
+            defaultCenter={pewpew}
             defaultZoom={17}
             bootstrapURLKeys={{ key: mapKey }}
             options={{ styles: whiteMap }}

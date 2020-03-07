@@ -17,6 +17,9 @@ export class Series {
   @Column()
   cat: string;
 
+  @Column({ nullable: true })
+  num_markers: number;
+
   @OneToMany(
     type => Hunts,
     hunts => hunts.series

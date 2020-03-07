@@ -15,6 +15,7 @@ export const MAP_INIT = "MAP_INIT";
 export const GET_MARKERS = "GET_MARKERS";
 export const MARKER_FOUND = "MARKER_FOUND";
 export const UPDATE_MAP = "UPDATE_MAP";
+export const NEW_MARKER = "NEW_MARKER";
 
 export const CONNECTING = "CONNECTING";
 export const CONNECTED = "CONNECTED";
@@ -142,15 +143,26 @@ const listenDispatcher = (dispatch, topic, payload) => {
   if (topic === "marker_found") {
     dispatch({ type: "MARKER_FOUND", markersFound: payload });
   }
+  if (topic === "new_marker") {
+    dispatch({ type: "NEW_MARKER", newMarker: payload });
+  }
 };
 
 export const listenTo = topic => {
   return async (dispatch, getState) => {
     getState().socket.socket.on(topic, message => {
       listenDispatcher(dispatch, topic, message);
-      // dispatch(socketMessage(message));
+      dispatch(socketMessage(message));
     });
-    dispatch({ type: "LISTEN_TO", topic });
+    dispatch({ type: LISTEN_TO, topic });
+  };
+};
+
+export const joinRoom = room => {
+  const topic = "join";
+  return async (dispatch, getState) => {
+    getState().socket.socket.emit(topic, room);
+    // dispatch({ type: LISTEN_TO, topic });
   };
 };
 // ------

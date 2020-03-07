@@ -1,7 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  Unique
+} from "typeorm";
 import { Emails } from "./Emails";
 
 @Entity()
+@Unique(["hash"])
 export class Devices {
   @PrimaryGeneratedColumn()
   id: number;

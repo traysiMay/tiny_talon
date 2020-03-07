@@ -1,8 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  Unique,
+  Index
+} from "typeorm";
 import { Devices } from "./Devices";
 import { Hunts } from "./Hunts";
 
 @Entity()
+@Unique(["email"])
 export class Emails {
   @PrimaryGeneratedColumn()
   id: number;

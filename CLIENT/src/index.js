@@ -24,11 +24,35 @@ const bytes = AES.decrypt(
 const mapKey = bytes.toString(enc.Utf8);
 store.dispatch({ type: MAP_KEY, mapKey });
 
+const isLocalHost = hostname =>
+  !!(
+    hostname === "localhost" ||
+    hostname === "[::1]" ||
+    hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/)
+  );
+
+const HttpsRedirect = ({ disabled, children }) => {
+  if (
+    !disabled &&
+    typeof window !== "undefined" &&
+    window.location &&
+    window.location.protocol === "http:" &&
+    !isLocalHost(window.location.hostname)
+  ) {
+    window.location.href = window.location.href.replace(/^http(?!s)/, "https");
+    return null;
+  }
+
+  return children;
+};
+
 ReactDOM.render(
-  <Provider store={store}>
-    <Router basename="/">
-      <App />
-    </Router>
-  </Provider>,
+  <HttpsRedirect>
+    <Provider store={store}>
+      <Router basename="/">
+        <App />
+      </Router>
+    </Provider>
+  </HttpsRedirect>,
   document.getElementById("root")
 );

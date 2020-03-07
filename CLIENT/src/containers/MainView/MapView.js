@@ -1,6 +1,12 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { connectSocket, getMarkers, logOut, listenTo } from "../../actions";
+import {
+  connectSocket,
+  getMarkers,
+  logOut,
+  listenTo,
+  joinRoom
+} from "../../actions";
 import Status from "../Status";
 import Map from "../../components/Map";
 import Logout from "../../components/Logout";
@@ -12,13 +18,16 @@ const MapView = ({
   getMarkers,
   history,
   hunt,
+  joinSeries,
   logout,
   listenToMarkerFound,
+  listenToNewMarker,
   listenToWin,
   mapKey,
   markers,
   markersFound,
-  places
+  places,
+  socket
 }) => {
   useEffect(() => {
     if (connected) return;
@@ -30,7 +39,9 @@ const MapView = ({
     if (!connected) return;
     getMarkers(hunt);
     listenToMarkerFound();
+    listenToNewMarker();
     listenToWin();
+    joinSeries(hunt);
   }, [connected, getMarkers]);
   return (
     <div>
@@ -50,7 +61,7 @@ const MapView = ({
 
 const mapStateToProps = ({
   map: { mapKey, markers, markersFound, places },
-  socket: { connected }
+  socket: { connected, socket }
 }) => ({
   connected,
   mapKey,
@@ -61,7 +72,9 @@ const mapStateToProps = ({
 const mapDipstachToProps = dispatch => ({
   connectToSocket: () => dispatch(connectSocket()),
   getMarkers: hunt => dispatch(getMarkers(hunt)),
+  joinSeries: hunt => dispatch(joinRoom(hunt)),
   logout: () => dispatch(logOut()),
+  listenToNewMarker: () => dispatch(listenTo("new_marker")),
   listenToMarkerFound: () => dispatch(listenTo("marker_found")),
   listenToWin: () => dispatch(listenTo("win")),
   dispatch
