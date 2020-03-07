@@ -13,6 +13,7 @@ export const LOGOUT = "LOGOUT";
 
 export const MAP_INIT = "MAP_INIT";
 export const GET_MARKERS = "GET_MARKERS";
+export const MARKER_FOUND = "MARKER_FOUND";
 export const UPDATE_MAP = "UPDATE_MAP";
 
 export const CONNECTING = "CONNECTING";
@@ -147,7 +148,7 @@ export const listenTo = topic => {
   return async (dispatch, getState) => {
     getState().socket.socket.on(topic, message => {
       listenDispatcher(dispatch, topic, message);
-      dispatch(socketMessage(message));
+      // dispatch(socketMessage(message));
     });
     dispatch({ type: "LISTEN_TO", topic });
   };

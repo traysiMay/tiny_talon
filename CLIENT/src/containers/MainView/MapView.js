@@ -38,6 +38,7 @@ const MapView = ({
       <Logout logout={logout} />
       <Map
         history={history}
+        hunt={hunt}
         mapKey={mapKey}
         markers={markers}
         markersFound={markersFound}

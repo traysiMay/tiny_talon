@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import Modal from "../../components/Modal";
 import styled from "styled-components";
 
@@ -13,13 +14,14 @@ const ModalMessage = styled.div`
   transition: max-height 1s, background 1s;
 `;
 
-const Chodal = ({ history, match }) => {
+const Chodal = ({ history, markers, match }) => {
   const [maxHeight, setMaxHeight] = useState(0);
   const [background, setBackground] = useState("red");
   useEffect(() => {
     setMaxHeight(1000);
   }, []);
-
+  const m = markers.filter(m => m.id === parseInt(match.params.marker));
+  if (m.length === 0) return <div>wtf</div>;
   return (
     <Modal
       onClick={() => {
@@ -29,9 +31,10 @@ const Chodal = ({ history, match }) => {
       }}
     >
       <ModalMessage background={background} maxHeight={maxHeight}>
-        {match.params.marker}
+        {m[0].description}
       </ModalMessage>
     </Modal>
   );
 };
-export default Chodal;
+const mapStateToProps = ({ map: { markers } }) => ({ markers });
+export default connect(mapStateToProps)(Chodal);

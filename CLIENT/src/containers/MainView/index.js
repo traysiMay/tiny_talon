@@ -6,11 +6,10 @@ import Chodal from "./Chodal";
 
 const MainView = ({ history, match }) => {
   const { hunt } = match.params;
-  console.log(`${match.url}`);
   return (
     <div>
       <Route
-        path={`/map/pop/:marker`}
+        path={`/map/:hunt/pop/:marker`}
         render={({ match }) => <Chodal history={history} match={match} />}
       />
       <MapView history={history} hunt={hunt} />

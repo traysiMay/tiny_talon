@@ -70,8 +70,9 @@ const sockets = async socket => {
       socket.handshake.query.token,
       hunt
     );
-    await socket.emit("markers", markers);
-    socket.emit("marker_found", markerMap);
+    console.log("wat");
+    await socket.emit("markers", { markers, markerMap });
+    // socket.emit("marker_found", markerMap);
   });
 };
 

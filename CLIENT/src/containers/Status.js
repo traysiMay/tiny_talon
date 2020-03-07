@@ -10,6 +10,7 @@ const Status = ({ getMarkers, hunt, status }) => {
     window.addEventListener("blur", () => setFocus("nofucs"));
   }, []);
 
+  // this could do some sort of reselect
   useEffect(() => {
     if (focus === "focus") {
       getMarkers(hunt);

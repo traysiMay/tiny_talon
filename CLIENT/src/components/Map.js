@@ -10,7 +10,7 @@ const sf = {
   lng: -122.41344338335298
 };
 
-const Map = ({ history, mapKey, markers, markersFound, places }) => {
+const Map = ({ history, hunt, mapKey, markers, markersFound, places }) => {
   const [userLocation, setUserLocation] = useState();
   useEffect(() => {
     const startTime = Date.now();
@@ -43,23 +43,23 @@ const Map = ({ history, mapKey, markers, markersFound, places }) => {
       </div>
     );
   }
-  console.log(markersFound);
+  console.log("render");
   return (
     <MapContainer>
       <GoogleMapReact
-        // defaultCenter={places.ppark}
-        defaultCenter={userLocation}
+        defaultCenter={userLocation ? userLocation : places.ppark}
+        center={userLocation}
         defaultZoom={15}
         bootstrapURLKeys={{ key: mapKey }}
         options={{ styles: whiteMap }}
         onChildClick={p => {
-          history.push(`/map/pop/${p}`);
+          history.push(`/map/${hunt}/pop/${p}`);
         }}
       >
         {markers.map((m, i) => {
           return (
             <RaptorMarker
-              key={m.hash + i}
+              key={m.id}
               id={m.hash}
               found={markersFound.includes(`${m.id}`)}
               lat={m.lat}
