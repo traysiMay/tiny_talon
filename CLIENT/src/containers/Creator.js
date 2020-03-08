@@ -2,23 +2,43 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import CMap from "../components/CMap";
 import Logout from "../components/Logout";
-import { logOut, connectSocket, listenTo } from "../actions";
+import {
+  logOut,
+  connectSocket,
+  listenTo,
+  getMarkers,
+  joinRoom
+} from "../actions";
 import Series from "../components/Series";
 import Hunt from "../components/Hunt";
 
-const SERIES = "series";
+const SERIES = "SERIES";
 const MAP = "MAP";
 
-const Creator = ({ connected, connectToSocket, logout, mapKey, socket }) => {
+const Creator = ({
+  connected,
+  connectToSocket,
+  joinSeries,
+  logout,
+  mapKey,
+  markers,
+  socket,
+  getMarkers,
+  listenToNewMarker
+}) => {
   const [scene, setScene] = useState(SERIES);
   const [selectedSeries, setSelectedSeries] = useState();
 
   useEffect(() => {
-    if (connected) return;
-    connectToSocket();
+    if (!connected) {
+      connectToSocket();
+    }
+    // if (!selectedSeries) return;
+    // getMarkers(selectedSeries);
+    // joinSeries(selectedSeries);
+    // listenToNewMarker();
     //eslint-disable-next-line
   }, [connectToSocket]);
-
   return (
     <div>
       {selectedSeries}
@@ -30,22 +50,33 @@ const Creator = ({ connected, connectToSocket, logout, mapKey, socket }) => {
         </div>
       )}
       {scene === MAP && (
-        <CMap mapKey={mapKey} series={selectedSeries} socket={socket} />
+        <CMap
+          mapKey={mapKey}
+          markers={markers}
+          series={selectedSeries}
+          setScene={setScene}
+          getMarkers={getMarkers}
+          socket={socket}
+        />
       )}
     </div>
   );
 };
 
 const mapStateToProps = ({
-  map: { mapKey },
+  map: { mapKey, markers },
   socket: { connected, socket }
 }) => ({
   connected,
   mapKey,
+  markers,
   socket
 });
 const mapDipstachToProps = dispatch => ({
   connectToSocket: () => dispatch(connectSocket()),
+  getMarkers: series => dispatch(getMarkers(series)),
+  joinSeries: series => dispatch(joinRoom(series)),
+  listenToNewMarker: () => dispatch(listenTo("new_marker")),
   logout: () => dispatch(logOut()),
   dispatch
 });

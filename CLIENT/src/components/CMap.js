@@ -31,7 +31,7 @@ const pewpew = {
   lng: -73.989691
 };
 
-const CMap = ({ mapKey, series, socket }) => {
+const CMap = ({ mapKey, markers, series, setScene, socket, getMarkers }) => {
   const [userLocation, setUserLocation] = useState();
   const [marker, setMarker] = useState([]);
   const [info, setInfo] = useState({
@@ -42,6 +42,7 @@ const CMap = ({ mapKey, series, socket }) => {
   });
 
   useEffect(() => {
+    getMarkers(series);
     navigator.geolocation.getCurrentPosition(p => {
       const { latitude: lat, longitude: lng } = p.coords;
       setUserLocation({ lat, lng });
@@ -60,6 +61,7 @@ const CMap = ({ mapKey, series, socket }) => {
       series
     };
     socket.emit("create_marker", payload);
+    getMarkers(series);
     //createMarker(payload);
   };
 
@@ -81,6 +83,7 @@ const CMap = ({ mapKey, series, socket }) => {
               );
             })}
             <SquareButton onClick={submitMarker}>submit</SquareButton>
+            <SquareButton onClick={() => setScene("SERIES")}>back</SquareButton>
           </Overlay>
           <GoogleMapReact
             defaultCenter={pewpew}
@@ -101,6 +104,20 @@ const CMap = ({ mapKey, series, socket }) => {
               console.log(e);
             }}
           >
+            {markers.map(marker => {
+              console.log(marker);
+              return (
+                <RaptorMarker
+                  g={200}
+                  b={100}
+                  key={marker.hash}
+                  id={marker.hash}
+                  found={marker.found}
+                  lat={marker.lat}
+                  lng={marker.lng}
+                />
+              );
+            })}
             <RaptorMarker
               key={marker.hash}
               id={marker.hash}

@@ -9,6 +9,8 @@ import {
 const socketState = {
   socket: null,
   connected: false,
+  codeResponse: "",
+  message: "",
   status: "disconnected",
   listeners: []
 };
@@ -30,6 +32,13 @@ const socket = (state = socketState, action) => {
     case SOCKET_MESSAGE:
       const { message } = action;
       return { ...state, message };
+    case "CODE_RESPONSE":
+      const { payload } = action;
+      return {
+        ...state,
+        codeResponse: payload.message,
+        seriesId: payload.seriesId
+      };
     default:
       return state;
   }

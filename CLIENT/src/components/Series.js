@@ -107,7 +107,10 @@ const Series = ({ setScene, setSelectedSeries }) => {
 
       <Select
         value={optionValue}
-        onChange={e => setOptionValue(e.target.value)}
+        onChange={e => {
+          setOptionValue(e.target.value);
+          setSelectedSeries(e.target.value);
+        }}
       >
         {series.map(s => {
           return (

@@ -7,12 +7,13 @@ import { ScanContainer } from "../styles/styles";
 
 const Scan = ({
   connected,
+  codeResponse,
   listenToCodeResponse,
   listenToMarkers,
   listenToWin,
   match,
-  message,
-  sendCode
+  sendCode,
+  seriesId
 }) => {
   const scanTainer = useRef();
   const myRe = new RegExp(process.env.REACT_APP_REG);
@@ -26,18 +27,20 @@ const Scan = ({
       sendCode(code);
     }
   }, [meepo, match, sendCode]);
-
   useEffect(() => {
     if (!connected) return;
     listenToCodeResponse();
-    listenToWin();
     listenToMarkers();
   }, [connected, listenToWin, listenToCodeResponse, listenToMarkers]);
-
+  console.log(codeResponse);
   return (
     <div style={{ height: "90%" }}>
       {!meepo ? (
-        <Scanning scanTainer={scanTainer} message={message} />
+        <Scanning
+          scanTainer={scanTainer}
+          message={codeResponse}
+          seriesId={seriesId}
+        />
       ) : (
         <ScanContainer ref={scanTainer}>
           This is not a valid request for reasons I cannot explain :)
@@ -47,7 +50,13 @@ const Scan = ({
   );
 };
 
-const mapStateToProps = state => state.socket;
+const mapStateToProps = ({
+  socket: { connected, codeResponse, seriesId }
+}) => ({
+  connected,
+  codeResponse,
+  seriesId
+});
 
 const mapDispatchToProps = dispatch => ({
   sendCode: code => dispatch(emit("code", code)),

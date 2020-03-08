@@ -146,6 +146,9 @@ const listenDispatcher = (dispatch, topic, payload) => {
   if (topic === "new_marker") {
     dispatch({ type: "NEW_MARKER", newMarker: payload });
   }
+  if (topic === "code_response") {
+    dispatch({ type: "CODE_RESPONSE", payload });
+  }
 };
 
 export const listenTo = topic => {

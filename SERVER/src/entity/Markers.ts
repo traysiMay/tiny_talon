@@ -22,9 +22,6 @@ export class Markers {
   @Column()
   hash: string;
 
-  @Column({ default: false })
-  found: boolean;
-
   @Column()
   cat: string;
 

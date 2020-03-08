@@ -34,7 +34,7 @@ const Message = styled.div`
   padding: 1rem;
 `;
 
-const Scanning = ({ message, scanTainer }) => {
+const Scanning = ({ message, scanTainer, seriesId }) => {
   const [displayMessage, setMessage] = useState("scanning...");
   const raptorRef = useRef();
 
@@ -61,6 +61,8 @@ const Scanning = ({ message, scanTainer }) => {
         raptorOutline.stroke = "yellow";
       } else if (message === "cool find!") {
         raptorOutline.stroke = "#9dff9d";
+      } else if (message === "you win!") {
+        raptorOutline.stroke = "lavender";
       } else {
         raptorOutline.stroke = "red";
       }
@@ -99,9 +101,13 @@ const Scanning = ({ message, scanTainer }) => {
         {displayMessage === "scanning..." ? "Scanning" : "Scanned"}
       </ScanContainer>
       <div>
-        <Link to="/">
+        {seriesId ? (
+          <Link to={`/map/${seriesId}`}>
+            <Raptor reff={raptorRef} />
+          </Link>
+        ) : (
           <Raptor reff={raptorRef} />
-        </Link>
+        )}
       </div>
       <Message>{displayMessage.toUpperCase()}</Message>
     </Container>

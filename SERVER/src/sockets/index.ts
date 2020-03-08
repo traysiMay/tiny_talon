@@ -40,6 +40,7 @@ const sockets = async socket => {
   });
   socket.on("code", async code => {
     console.log("SENDING CODE");
+    let message = "that aint right";
 
     const huntsRepo = getRepository(Hunts);
     const hunts = await huntsRepo
@@ -50,14 +51,20 @@ const sockets = async socket => {
       .where("markers.hash = :hash", { hash: code })
       .andWhere("emails.id = :eid", { eid: decoded.id })
       .getOne();
+
+    if (!hunts) {
+      return socket.emit("code_response", {
+        message,
+        seriesId: 0
+      });
+    }
     const {
-      series: { markers, num_markers }
+      series: { id, markers, num_markers }
     } = hunts;
 
-    let message = "that aint right";
     let { marker_map } = hunts;
     if (marker_map.includes(`${markers[0].id}`)) {
-      message = "you already found";
+      message = "you already found this one!";
     } else {
       message = "cool find!";
       marker_map = [...marker_map, `${markers[0].id}`];
@@ -68,9 +75,10 @@ const sockets = async socket => {
     if (marker_map.length === num_markers) {
       message = "you win!";
     }
-    socket.emit("code_response", message);
-    ws.in(decoded.id).emit("marker_found", marker_map);
     if (message === "you win!") ws.in(decoded.id).emit("win", "you_win");
+
+    socket.emit("code_response", { message, seriesId: id });
+    ws.in(decoded.id).emit("marker_found", marker_map);
   });
 
   socket.on("create_marker", async ({ marker, series }) => {

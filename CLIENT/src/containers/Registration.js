@@ -28,14 +28,13 @@ const Registration = ({ getToken, hash, registerDevice, status, token }) => {
     });
     // eslint-disable-next-line
   }, []);
-  console.log(hash);
   if (!hash) return <Loading />;
 
   if (status === DEVICE_NOT_REGISTERED) {
     const handleChange = e => (email.current = e.target.value);
     return (
       <ButtonContainer>
-        <Smiler style={{ width: "35%", margin: "0 auto" }} />
+        <Smiler style={{ margin: "0 auto", width: "35%" }} />
         <div>hmm I don't recognize this device...</div>
         <div>please sync it to your email</div>
         <div
