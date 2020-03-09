@@ -9,16 +9,17 @@ const mapState = {
   places: { ppark },
   mapKey: "",
   markers: [],
-  markersFound: []
+  markersFound: [],
+  completed: false
 };
 
 const map = (state = mapState, action) => {
   switch (action.type) {
     case MAP_INIT:
       const {
-        markers: { markers, markerMap }
+        markers: { completed, markers, markerMap }
       } = action;
-      return { ...state, markers, markersFound: markerMap };
+      return { ...state, completed, markers, markersFound: markerMap };
     case MAP_KEY:
       const { mapKey } = action;
       return { ...state, mapKey };
@@ -28,6 +29,8 @@ const map = (state = mapState, action) => {
     case NEW_MARKER:
       const { newMarker } = action;
       return { ...state, markers: [...state.markers, newMarker] };
+    case "HUNT_COMPLETED":
+      return { ...state, completed: true };
     default:
       return state;
   }

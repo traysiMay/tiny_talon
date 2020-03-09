@@ -23,9 +23,6 @@ export class Markers {
   hash: string;
 
   @Column()
-  cat: string;
-
-  @Column()
   lat: string;
 
   @Column()

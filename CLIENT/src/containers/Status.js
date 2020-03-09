@@ -15,7 +15,7 @@ const Status = ({ getMarkers, hunt, status }) => {
     if (focus === "focus") {
       getMarkers(hunt);
     }
-  }, [focus, getMarkers]);
+  }, [focus, getMarkers, hunt]);
 
   return (
     <div style={{ display: "none" }}>

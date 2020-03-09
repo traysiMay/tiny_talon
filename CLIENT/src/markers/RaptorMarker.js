@@ -47,6 +47,7 @@ const RaptorMarker = ({ found, r = 200, g = 0, b = 0 }) => {
     };
     animate();
     return () => cancelAnimationFrame(frame);
+    //eslint-disable-next-line
   }, [found]);
   return (
     <div style={greatPlaceStyleHover} onPointerDown={console.log}>

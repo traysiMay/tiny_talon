@@ -5,10 +5,10 @@ import RaptorMarker from "../markers/RaptorMarker";
 import whiteMap from "../styles/whiteMap.json";
 import Smiler from "../graphics/Smiler";
 
-const sf = {
-  lat: 37.78126372769892,
-  lng: -122.41344338335298
-};
+// const sf = {
+//   lat: 37.78126372769892,
+//   lng: -122.41344338335298
+// };
 
 const pewpew = {
   lat: 40.716323,
@@ -48,7 +48,7 @@ const Map = ({ history, hunt, mapKey, markers, markersFound, places }) => {
       </div>
     );
   }
-  console.log("render");
+
   return (
     <MapContainer>
       <GoogleMapReact

@@ -92,9 +92,12 @@ const Scanning = ({ message, scanTainer, seriesId }) => {
 
     animate();
 
-    return () => cancelAnimationFrame(frame);
+    return () => {
+      cancelAnimationFrame(frame);
+      document.body.style.background = "white";
+    };
   }, [message, scanTainer]);
-
+  console.log(seriesId);
   return (
     <Container>
       <ScanContainer ref={scanTainer}>

@@ -80,7 +80,7 @@ const sendSeries = async (req, res) => {
   const { cat, description, name } = req.body;
   const seriesRepo = getRepository(Series);
   const series = new Series();
-  series.cat = cat;
+  series.type = cat;
   series.description = description;
   series.name = name;
   await seriesRepo.save(series);
@@ -88,14 +88,13 @@ const sendSeries = async (req, res) => {
 };
 
 const createMarker = async (req, res) => {
-  const { name, hash, details, series, type, lat, lng } = req.body;
+  const { name, hash, details, series, lat, lng } = req.body;
   const markerRepo = getRepository(Markers);
   const marker = new Markers();
   marker.name = name;
   marker.hash = hash;
   marker.description = details;
   marker.series = series;
-  marker.cat = type;
   marker.lat = lat;
   marker.lng = lng;
 

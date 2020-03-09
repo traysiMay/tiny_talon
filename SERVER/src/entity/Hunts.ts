@@ -19,13 +19,14 @@ export class Hunts {
   @Column({ default: false })
   completed: boolean;
 
-  @Column("simple-array")
+  @Column("simple-array", { default: "" })
   marker_map: string[];
 
   @ManyToOne(type => Series)
   @JoinColumn({ name: "series_id" })
   series: Series;
   // optional?
+  // or a key for public like 9999
   @ManyToOne(type => Emails)
   @JoinColumn({ name: "emails_id" })
   emails: Emails;

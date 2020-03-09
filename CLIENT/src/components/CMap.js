@@ -5,7 +5,6 @@ import RaptorMarker from "../markers/RaptorMarker";
 import whiteMap from "../styles/whiteMap.json";
 import Smiler from "../graphics/Smiler";
 import styled from "styled-components";
-import { createMarker } from "../services";
 
 const Overlay = styled.div`
   position: absolute;
@@ -37,8 +36,7 @@ const CMap = ({ mapKey, markers, series, setScene, socket, getMarkers }) => {
   const [info, setInfo] = useState({
     name: "",
     hash: "",
-    details: "",
-    type: ""
+    details: ""
   });
 
   useEffect(() => {
@@ -47,6 +45,7 @@ const CMap = ({ mapKey, markers, series, setScene, socket, getMarkers }) => {
       const { latitude: lat, longitude: lng } = p.coords;
       setUserLocation({ lat, lng });
     });
+    //eslint-disable-next-line
   }, []);
 
   const handleChange = e =>

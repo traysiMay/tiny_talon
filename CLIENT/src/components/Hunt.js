@@ -30,7 +30,7 @@ const Select = styled.select`
   font-size: 18px;
 `;
 
-const Hunt = ({}) => {
+const Hunt = () => {
   const [values, setValues] = useState({ email: "" });
   const [toggle, setToggle] = useState(false);
   const vals = useRef({ email: "" });

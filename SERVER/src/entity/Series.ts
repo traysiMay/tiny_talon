@@ -2,6 +2,12 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { Markers } from "./Markers";
 import { Hunts } from "./Hunts";
 
+export enum SeriesType {
+  HUNT = "hunt",
+  PERSONAL = "personal",
+  GLOBAL = "global"
+}
+
 @Entity()
 export class Series {
   @PrimaryGeneratedColumn()
@@ -14,8 +20,8 @@ export class Series {
   description?: string;
 
   // personal, hunt, global
-  @Column()
-  cat: string;
+  @Column({ type: "enum", enum: SeriesType, default: SeriesType.HUNT })
+  type: SeriesType;
 
   @Column({ nullable: true })
   num_markers: number;

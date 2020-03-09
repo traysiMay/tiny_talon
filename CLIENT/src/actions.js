@@ -29,6 +29,7 @@ export const DEVICE_NOT_FOUND = "DEVICE_NOT_FOUND";
 
 export const FOUND = "FOUND";
 export const SEND_CODE = "SEND_CODE";
+export const CODE_RESPONSE = "CODE_RESPONSE";
 
 export const deviceInit = () => {
   return async (dispatch, getState) => {
@@ -121,15 +122,15 @@ export const connectSocket = () => {
     socket.on("error", error => dispatch({ type: ERROR, error }));
     socket.on("found", found => dispatch({ type: FOUND, name: found }));
     socket.on("markers", markers => {
-      if (markers.length === 0) dispatch({ type: ERROR, error: BAD_TOKEN });
+      if (!markers.success) return dispatch({ type: ERROR, error: BAD_TOKEN });
       dispatch({ type: MAP_INIT, markers });
     });
     dispatch({ type: CONNECTED, socket });
   };
 };
 
-// these two are a little silly-- this could live in the scan or be more general if
-// there is a QR scanner screen
+// ** CONSOLIDATE OR SPLIT UP THE DIFFERENT BETWEEN LISTENERS ON SOCKET CONNECTION
+// AND SOCKET CONNECTIONS that are handled by the listendispatcher
 export const socketMessage = message => {
   return dispatch => {
     dispatch({ type: SOCKET_MESSAGE, message });
@@ -141,13 +142,17 @@ const listenDispatcher = (dispatch, topic, payload) => {
     dispatch({ type: MAP_INIT, markers: payload });
   }
   if (topic === "marker_found") {
-    dispatch({ type: "MARKER_FOUND", markersFound: payload });
+    dispatch({ type: MARKER_FOUND, markersFound: payload });
   }
   if (topic === "new_marker") {
-    dispatch({ type: "NEW_MARKER", newMarker: payload });
+    dispatch({ type: NEW_MARKER, newMarker: payload });
   }
   if (topic === "code_response") {
-    dispatch({ type: "CODE_RESPONSE", payload });
+    dispatch({ type: CODE_RESPONSE, payload });
+  }
+  // ** not great
+  if (payload === "you_win") {
+    dispatch({ type: "HUNT_COMPLETED" });
   }
 };
 
@@ -169,10 +174,16 @@ export const joinRoom = room => {
   };
 };
 // ------
-
+// GET MARKERS SENDS THE SOCKET EVENT TO REQUEST MARKERS
 export const getMarkers = hunt => {
   return async dispatch => {
     dispatch({ type: GET_MARKERS, hunt });
+  };
+};
+
+export const getMarkersBySeries = series => {
+  return async (dispatch, getState) => {
+    getState().socket.socket.emit("get_markers_by_series", series);
   };
 };
 

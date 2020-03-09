@@ -7,7 +7,8 @@ import {
   connectSocket,
   listenTo,
   getMarkers,
-  joinRoom
+  joinRoom,
+  getMarkersBySeries
 } from "../actions";
 import Series from "../components/Series";
 import Hunt from "../components/Hunt";
@@ -18,13 +19,11 @@ const MAP = "MAP";
 const Creator = ({
   connected,
   connectToSocket,
-  joinSeries,
   logout,
   mapKey,
   markers,
   socket,
-  getMarkers,
-  listenToNewMarker
+  getMarkers
 }) => {
   const [scene, setScene] = useState(SERIES);
   const [selectedSeries, setSelectedSeries] = useState();
@@ -33,12 +32,7 @@ const Creator = ({
     if (!connected) {
       connectToSocket();
     }
-    // if (!selectedSeries) return;
-    // getMarkers(selectedSeries);
-    // joinSeries(selectedSeries);
-    // listenToNewMarker();
-    //eslint-disable-next-line
-  }, [connectToSocket]);
+  }, [connectToSocket, connected]);
   return (
     <div>
       {selectedSeries}
@@ -74,7 +68,7 @@ const mapStateToProps = ({
 });
 const mapDipstachToProps = dispatch => ({
   connectToSocket: () => dispatch(connectSocket()),
-  getMarkers: series => dispatch(getMarkers(series)),
+  getMarkers: series => dispatch(getMarkersBySeries(series)),
   joinSeries: series => dispatch(joinRoom(series)),
   listenToNewMarker: () => dispatch(listenTo("new_marker")),
   logout: () => dispatch(logOut()),

@@ -3,7 +3,8 @@ import {
   CONNECTED,
   GET_MARKERS,
   LISTEN_TO,
-  SOCKET_MESSAGE
+  SOCKET_MESSAGE,
+  CODE_RESPONSE
 } from "../actions";
 
 const socketState = {
@@ -22,6 +23,7 @@ const socket = (state = socketState, action) => {
     case CONNECTED:
       const { socket } = action;
       return { ...state, status: "connected", connected: true, socket };
+    // this should be refactored
     case GET_MARKERS:
       const { hunt } = action;
       state.socket.emit("get_markers", hunt);
@@ -32,7 +34,7 @@ const socket = (state = socketState, action) => {
     case SOCKET_MESSAGE:
       const { message } = action;
       return { ...state, message };
-    case "CODE_RESPONSE":
+    case CODE_RESPONSE:
       const { payload } = action;
       return {
         ...state,

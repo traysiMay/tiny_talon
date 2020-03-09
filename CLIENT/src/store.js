@@ -12,6 +12,7 @@ const peelError = ({ getState, dispatch }) => {
       switch (action.error) {
         case BAD_TOKEN:
           localStorage.removeItem("token");
+          window.location.href = "/";
           break;
         case DEVICE_NOT_FOUND:
           dispatch(deviceInit());

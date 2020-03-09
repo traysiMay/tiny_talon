@@ -26,8 +26,7 @@ const MapView = ({
   mapKey,
   markers,
   markersFound,
-  places,
-  socket
+  places
 }) => {
   useEffect(() => {
     if (connected) return;
@@ -42,6 +41,7 @@ const MapView = ({
     listenToNewMarker();
     listenToWin();
     joinSeries(hunt);
+    //eslint-disable-next-line
   }, [connected, getMarkers]);
   return (
     <div>
@@ -61,7 +61,7 @@ const MapView = ({
 
 const mapStateToProps = ({
   map: { mapKey, markers, markersFound, places },
-  socket: { connected, socket }
+  socket: { connected }
 }) => ({
   connected,
   mapKey,

@@ -5,7 +5,7 @@ export const ScanContainer = styled.div`
   background: white;
   border: 1px solid black;
   color: black;
-  padding: 8%;
+  padding: 19px;
   font-family: Arial;
   font-weight: bold;
   font-size: 2.4rem;
@@ -15,7 +15,6 @@ export const ScanContainer = styled.div`
 
 export const ButtonContainer = styled.div`
   height: 100%;
-  min-height: 640px;
   display: flex;
   flex-direction: column;
   justify-content: center;

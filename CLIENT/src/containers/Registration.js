@@ -34,7 +34,15 @@ const Registration = ({ getToken, hash, registerDevice, status, token }) => {
     const handleChange = e => (email.current = e.target.value);
     return (
       <ButtonContainer>
-        <Smiler style={{ margin: "0 auto", width: "35%" }} />
+        <div style={{ borderBottom: "none" }}>
+          <Smiler
+            style={{
+              margin: "0 auto",
+              display: "block",
+              width: "35%"
+            }}
+          />
+        </div>
         <div>hmm I don't recognize this device...</div>
         <div>please sync it to your email</div>
         <div
@@ -57,7 +65,16 @@ const Registration = ({ getToken, hash, registerDevice, status, token }) => {
   if (!token) {
     return (
       <ButtonContainer>
-        <Smiler style={{ width: "35%", margin: "0 auto", fill: "#3ef3ff" }} />
+        <div style={{ borderBottom: "none" }}>
+          <Smiler
+            style={{
+              display: "block",
+              width: "35%",
+              margin: "0 auto",
+              fill: "#3ef3ff"
+            }}
+          />
+        </div>
         <div style={{ border: "2px solid black" }}>
           <div>oh boy! welcome back :)</div>
           <div>you are looking quite nice today</div>
