@@ -1,5 +1,6 @@
 import { getRepository } from "typeorm";
 import { Hunts } from "../entity/Hunts";
+import { Series, SeriesType } from "../entity/Series";
 
 export enum CodeMessage {
   NOT_FOUND = "that ain't right",
@@ -10,7 +11,8 @@ export enum CodeMessage {
 
 export const codeReducer = async (code, jwtID) => {
   const huntsRepo = getRepository(Hunts);
-  const hunt = await huntsRepo
+  let hunt, series;
+  hunt = await huntsRepo
     .createQueryBuilder("hunts")
     .leftJoinAndSelect("hunts.series", "series")
     .leftJoinAndSelect("series.markers", "markers")
@@ -20,7 +22,23 @@ export const codeReducer = async (code, jwtID) => {
     .getOne();
 
   if (!hunt) {
-    return { message: CodeMessage.NOT_FOUND, id: 0 };
+    const seriesRepo = getRepository(Series);
+    series = await seriesRepo
+      .createQueryBuilder("series")
+      .leftJoinAndSelect("series.markers", "markers")
+      .where("markers.hash = :code", { code })
+      .getOne();
+
+    if (series && series.type === SeriesType.GLOBAL) {
+      hunt = new Hunts();
+      hunt.emails = jwtID;
+      hunt.series = series;
+      hunt.completed = false;
+      const huntRepo = getRepository(Hunts);
+      await huntRepo.save(hunt);
+    } else {
+      return { message: CodeMessage.NOT_FOUND, id: 0 };
+    }
   }
 
   const {
@@ -46,5 +64,5 @@ export const codeReducer = async (code, jwtID) => {
     await huntsRepo.save(hunt);
   }
   const { completed } = hunt;
-  return { completed, id, message, markers, markerMap };
+  return { completed, id, message, markerMap };
 };
