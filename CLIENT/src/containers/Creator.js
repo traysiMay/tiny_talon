@@ -6,7 +6,6 @@ import {
   logOut,
   connectSocket,
   listenTo,
-  getMarkers,
   joinRoom,
   getMarkersBySeries
 } from "../actions";

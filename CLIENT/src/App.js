@@ -9,6 +9,7 @@ import Registration from "./containers/Registration";
 import { DEVICE_NOT_REGISTERED } from "./statuses";
 import Loading from "./animations/Loading";
 import Creator from "./containers/Creator";
+import Fallback from "./Fallback";
 
 function App({ hash, status, token, loading, welcome }) {
   if (welcome) return <Loading fill={"yellow"} message={"welcome!"} />;
@@ -23,7 +24,7 @@ function App({ hash, status, token, loading, welcome }) {
         <Route path="/code/:code" component={Scan} />
         <Route path="/creator" component={Creator} />
         <Route path="/map/:hunt" component={MainView} />
-        <Route path="/" render={() => <div>nope</div>} />
+        <Route path="/" component={Fallback} />
       </Switch>
     </>
   );

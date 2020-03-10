@@ -58,11 +58,20 @@ const sockets = async socket => {
 
   // ** GETTING MARKERS **
   socket.on("get_markers", async hunt => {
-    const { markers, markerMap, completed, success } = await getRaptorsMarkers(
-      socket.handshake.query.token,
-      hunt
-    );
-    await socket.emit("markers", { markers, markerMap, completed, success });
+    const {
+      markers,
+      markerMap,
+      name,
+      completed,
+      success
+    } = await getRaptorsMarkers(socket.handshake.query.token, hunt);
+    await socket.emit("markers", {
+      markers,
+      markerMap,
+      name,
+      completed,
+      success
+    });
   });
 
   socket.on("get_markers_by_series", async series => {

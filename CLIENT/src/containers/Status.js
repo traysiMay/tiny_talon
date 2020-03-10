@@ -3,19 +3,27 @@ import { connect } from "react-redux";
 import { GET_MARKERS } from "../actions";
 
 const Status = ({ getMarkers, hunt, status }) => {
-  const [focus, setFocus] = useState("lala");
+  const [focus, setFocus] = useState(false);
 
+  const toggleFocus = () => {
+    setFocus(!focus);
+  };
   useEffect(() => {
-    window.addEventListener("focus", () => setFocus("focus"));
-    window.addEventListener("blur", () => setFocus("nofucs"));
-  }, []);
+    window.addEventListener("focus", toggleFocus, false);
+    window.addEventListener("blur", toggleFocus, false);
+    return () => {
+      window.removeEventListener("focus", toggleFocus, false);
+      window.removeEventListener("blur", toggleFocus, false);
+    };
+  }, [toggleFocus]);
 
   // this could do some sort of reselect
   useEffect(() => {
-    if (focus === "focus") {
+    if (focus) {
       getMarkers(hunt);
     }
-  }, [focus, getMarkers, hunt]);
+    // eslint-disable-next-line
+  }, [focus]);
 
   return (
     <div style={{ display: "none" }}>

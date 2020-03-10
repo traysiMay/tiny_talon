@@ -29,14 +29,17 @@ export const getRaptorsMarkers = async (token, id) => {
     .where("series.id = :sid", { sid: id })
     .andWhere("emails.id = :eid", { eid: decoded.id })
     .getOne();
+
   let markerMap = [];
   let markers = [];
   let completed = false;
   let success = false;
+  let name = "";
 
   if (hunt) {
     markerMap = hunt.marker_map;
     markers = hunt.series.markers;
+    name = hunt.series.name;
     completed = hunt.completed;
     success = true;
   } else {
@@ -54,11 +57,9 @@ export const getRaptorsMarkers = async (token, id) => {
       await huntRepo.save(hunt);
       markers = series.markers;
       markerMap = hunt.marker_map;
+      name = series.name;
       success = true;
-    } else {
-      // redunant?
-      return { markers, markerMap, completed, success };
     }
   }
-  return { markers, markerMap, completed, success };
+  return { markers, markerMap, name, completed, success };
 };

@@ -10,6 +10,7 @@ const mapState = {
   mapKey: "",
   markers: [],
   markersFound: [],
+  name: "",
   completed: false
 };
 
@@ -17,9 +18,9 @@ const map = (state = mapState, action) => {
   switch (action.type) {
     case MAP_INIT:
       const {
-        markers: { completed, markers, markerMap }
+        markers: { completed, markers, markerMap, name }
       } = action;
-      return { ...state, completed, markers, markersFound: markerMap };
+      return { ...state, completed, markers, markersFound: markerMap, name };
     case MAP_KEY:
       const { mapKey } = action;
       return { ...state, mapKey };

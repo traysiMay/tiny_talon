@@ -5,11 +5,11 @@ import WinView from "./WinView";
 import { Route } from "react-router-dom";
 import Chodal from "./Chodal";
 
-const MainView = ({ completed, history, match }) => {
+const MainView = ({ completed, history, match, name }) => {
   const { hunt } = match.params;
   return (
     <div>
-      {completed && <WinView />}
+      {completed && <WinView name={name} />}
       {!completed && (
         <div>
           <Route
@@ -23,7 +23,7 @@ const MainView = ({ completed, history, match }) => {
   );
 };
 
-const mapStateToProps = ({ map: { completed } }) => ({ completed });
+const mapStateToProps = ({ map: { completed, name } }) => ({ completed, name });
 
 const mapDispatchToProps = dispatch => ({});
 
