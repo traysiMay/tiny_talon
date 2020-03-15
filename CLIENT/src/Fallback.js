@@ -47,7 +47,7 @@ const errorMessage = error => {
     case UNAUTHORIZED:
       return "hmm you aren't authorized for whatever you tried to do";
     default:
-      return "";
+      return error;
   }
 };
 
@@ -63,7 +63,6 @@ const Fallback = ({ clearErrors, email, error, getAllUserSeries, history }) => {
       .getElementsByTagName("svg")[0]
       .setAttribute("viewBox", "0 -300 1080 1080");
   }, []);
-
   return (
     <div>
       <div style={{ height: 110 }}>

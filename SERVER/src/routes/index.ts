@@ -88,6 +88,7 @@ const getAllSeries = async (_, res) => {
 };
 
 const getAllUserSeries = async (req, res) => {
+  console.log("henlo");
   const { id } = res.locals.jwtInfo;
   const seriesRepo = getRepository(Series);
   const globalAndUsers = await seriesRepo
@@ -157,7 +158,7 @@ const tokenToReq = (req, res, next) => {
     jwtInfo = jwt.verify(token, process.env.SACRET);
     res.locals.jwtInfo = jwtInfo;
   } catch (error) {
-    res.status(401).send();
+    res.status(401).send({ error: "BAD_TOKEN" });
     return;
   }
   next();
