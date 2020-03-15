@@ -18,12 +18,18 @@ const authDevice = async (req, res) => {
   } else {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-      return res.status(401).send({ error: "no_token" });
+      // return res.status(401).send({ error: "no_token" });
+      return res.status(401).send({ error: "no_auth_header" });
     }
     const token = req.headers.authorization.split(" ")[1];
+    console.log(token);
+    if (token === "null") {
+      return res.status(401).send({ error: "no_token" });
+    }
     if (token) {
       try {
         jwt.verify(token, process.env.SACRET);
+        req.token = token;
       } catch {
         return res.status(401).send({ error: "BAD_TOKEN" });
       }
@@ -50,7 +56,12 @@ const registerDevice = async (req, res) => {
   newDevice.hash = hash;
   newDevice.email = registeredEmail;
   deviceRepo.save(newDevice);
-  return res.send({ message: "new_device_created" });
+
+  const token = jwt.sign(
+    { hash, email, id: registeredEmail.id },
+    process.env.SACRET
+  );
+  return res.send({ message: "new_device_created", token });
 };
 
 const newToken = async (req, res) => {
@@ -62,9 +73,9 @@ const newToken = async (req, res) => {
   });
   if (device) {
     const {
-      email: { id }
+      email: { email, id }
     } = device;
-    const token = jwt.sign({ hash, id }, process.env.SACRET);
+    const token = jwt.sign({ email, hash, id }, process.env.SACRET);
     return res.send({ token });
   }
   return res.status(500).send({ error: "DEVICE_NOT_FOUND" });
@@ -74,6 +85,27 @@ const getAllSeries = async (_, res) => {
   const seriesRepo = getRepository(Series);
   const series = await seriesRepo.find();
   res.send(series);
+};
+
+const getAllUserSeries = async (req, res) => {
+  const { id } = res.locals.jwtInfo;
+  const seriesRepo = getRepository(Series);
+  const globalAndUsers = await seriesRepo
+    .createQueryBuilder("series")
+    .leftJoin("series.hunts", "hunts")
+    .leftJoinAndSelect("hunts.emails", "emails")
+    .where("emails.id = :id", { id })
+    .orWhere("series.type = 'global'")
+    .getMany();
+
+  if (globalAndUsers.length === 0) {
+    const emailRepo = getRepository(Emails);
+    const user = await emailRepo.findOne(id);
+    if (!user) {
+      return res.status(500).send({ error: "USER_NOT_FOUND" });
+    }
+  }
+  return res.send(globalAndUsers);
 };
 
 const sendSeries = async (req, res) => {
@@ -118,8 +150,21 @@ const createHunt = async (req, res) => {
   return res.send({ message: "yay" });
 };
 
-routes.get("/all_series", getAllSeries);
+const tokenToReq = (req, res, next) => {
+  const token = req.headers.authorization.split("Bearer ")[1];
+  let jwtInfo;
+  try {
+    jwtInfo = jwt.verify(token, process.env.SACRET);
+    res.locals.jwtInfo = jwtInfo;
+  } catch (error) {
+    res.status(401).send();
+    return;
+  }
+  next();
+};
 
+routes.get("/all_series", getAllSeries);
+routes.get("/all_user_series", [tokenToReq], getAllUserSeries);
 routes.post("/auth_device", authDevice);
 routes.post("/register_device", registerDevice);
 routes.post("/new_token", newToken);

@@ -11,6 +11,7 @@ const peelError = ({ getState, dispatch }) => {
       // should this be error or message?
       switch (action.error) {
         case BAD_TOKEN:
+        case "USER_NOT_FOUND":
           localStorage.removeItem("token");
           window.location.href = "/";
           break;

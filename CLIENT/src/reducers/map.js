@@ -1,4 +1,10 @@
-import { MAP_INIT, MAP_KEY, MARKER_FOUND, NEW_MARKER } from "../actions";
+import {
+  MAP_INIT,
+  MARKER_FOUND,
+  NEW_MARKER,
+  HUNT_COMPLETED,
+  RESET
+} from "../actions";
 
 const ppark = {
   lat: 40.66257,
@@ -7,7 +13,6 @@ const ppark = {
 
 const mapState = {
   places: { ppark },
-  mapKey: "",
   markers: [],
   markersFound: [],
   name: "",
@@ -21,17 +26,16 @@ const map = (state = mapState, action) => {
         markers: { completed, markers, markerMap, name }
       } = action;
       return { ...state, completed, markers, markersFound: markerMap, name };
-    case MAP_KEY:
-      const { mapKey } = action;
-      return { ...state, mapKey };
     case MARKER_FOUND:
       const { markersFound } = action;
       return { ...state, markersFound };
     case NEW_MARKER:
       const { newMarker } = action;
       return { ...state, markers: [...state.markers, newMarker] };
-    case "HUNT_COMPLETED":
+    case HUNT_COMPLETED:
       return { ...state, completed: true };
+    case RESET:
+      return mapState;
     default:
       return state;
   }

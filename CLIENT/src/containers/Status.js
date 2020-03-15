@@ -5,26 +5,20 @@ import { GET_MARKERS } from "../actions";
 const Status = ({ getMarkers, hunt, status }) => {
   const [focus, setFocus] = useState(false);
 
-  const toggleFocus = () => {
-    setFocus(!focus);
-  };
   useEffect(() => {
+    if (focus) {
+      getMarkers(hunt);
+    }
+    const toggleFocus = () => {
+      setFocus(!focus);
+    };
     window.addEventListener("focus", toggleFocus, false);
     window.addEventListener("blur", toggleFocus, false);
     return () => {
       window.removeEventListener("focus", toggleFocus, false);
       window.removeEventListener("blur", toggleFocus, false);
     };
-  }, [toggleFocus]);
-
-  // this could do some sort of reselect
-  useEffect(() => {
-    if (focus) {
-      getMarkers(hunt);
-    }
-    // eslint-disable-next-line
-  }, [focus]);
-
+  }, [focus, getMarkers, hunt]);
   return (
     <div style={{ display: "none" }}>
       {status}-{focus}

@@ -15,7 +15,7 @@ if (!token) {
   store.dispatch({ type: WELCOME });
 }
 store.dispatch(deviceInit());
-store.dispatch({ type: SET_TOKEN, token });
+if (token) store.dispatch({ type: SET_TOKEN, token });
 
 const bytes = AES.decrypt(
   process.env.REACT_APP_MAP_KEY,
@@ -45,7 +45,6 @@ const HttpsRedirect = ({ disabled, children }) => {
 
   return children;
 };
-
 ReactDOM.render(
   <HttpsRedirect>
     <Provider store={store}>

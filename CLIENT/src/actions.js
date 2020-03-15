@@ -16,6 +16,8 @@ export const GET_MARKERS = "GET_MARKERS";
 export const MARKER_FOUND = "MARKER_FOUND";
 export const UPDATE_MAP = "UPDATE_MAP";
 export const NEW_MARKER = "NEW_MARKER";
+export const HUNT_COMPLETED = "HUNT_COMPLETED";
+export const RESET = "RESET";
 
 export const CONNECTING = "CONNECTING";
 export const CONNECTED = "CONNECTED";
@@ -23,9 +25,11 @@ export const LISTEN_TO = "LISTEN_TO";
 export const SOCKET_MESSAGE = "SOCKET_MESSAGE";
 
 export const ERROR = "ERROR";
+export const CLEAR_ERRORS = "CLEAR_ERRORS";
 export const BAD_TOKEN = "BAD_TOKEN";
 export const RESPONSE = "RESPONSE";
 export const DEVICE_NOT_FOUND = "DEVICE_NOT_FOUND";
+export const UNAUTHORIZED = "UNAUTHORIZED";
 
 export const FOUND = "FOUND";
 export const SEND_CODE = "SEND_CODE";
@@ -96,9 +100,16 @@ export const newToken = () => {
   };
 };
 
+export const unauthorized = () => {
+  return async (dispatch, getState) => {
+    console.log("fuck");
+  };
+};
+
 export const logOut = () => {
   return async dispatch => {
-    localStorage.setItem("token", "");
+    // localStorage.setItem("token", "");
+    localStorage.removeItem("token");
     dispatch({ type: LOGOUT });
   };
 };
@@ -122,7 +133,8 @@ export const connectSocket = () => {
     socket.on("error", error => dispatch({ type: ERROR, error }));
     socket.on("found", found => dispatch({ type: FOUND, name: found }));
     socket.on("markers", markers => {
-      if (!markers.success) return dispatch({ type: ERROR, error: BAD_TOKEN });
+      if (!markers.success)
+        return dispatch({ type: ERROR, error: UNAUTHORIZED });
       dispatch({ type: MAP_INIT, markers });
     });
     dispatch({ type: CONNECTED, socket });

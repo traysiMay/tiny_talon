@@ -4,9 +4,13 @@ import MapView from "./MapView";
 import WinView from "./WinView";
 import { Route } from "react-router-dom";
 import Chodal from "./Chodal";
+import { UNAUTHORIZED } from "../../actions";
 
-const MainView = ({ completed, history, match, name }) => {
+const MainView = ({ completed, history, match, error, name }) => {
   const { hunt } = match.params;
+  if (error === UNAUTHORIZED) {
+    history.push("/");
+  }
   return (
     <div>
       {completed && <WinView name={name} />}
@@ -23,7 +27,11 @@ const MainView = ({ completed, history, match, name }) => {
   );
 };
 
-const mapStateToProps = ({ map: { completed, name } }) => ({ completed, name });
+const mapStateToProps = ({ map: { completed, name }, device: { error } }) => ({
+  completed,
+  error,
+  name
+});
 
 const mapDispatchToProps = dispatch => ({});
 

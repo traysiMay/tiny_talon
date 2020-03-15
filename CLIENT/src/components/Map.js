@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import GoogleMapReact from "google-map-react";
 import { MapContainer } from "../styles/styles";
 import RaptorMarker from "../markers/RaptorMarker";
@@ -16,7 +16,7 @@ const pewpew = {
 };
 
 const Map = ({ history, hunt, mapKey, markers, markersFound, places }) => {
-  const [userLocation, setUserLocation] = useState();
+  // const [userLocation, setUserLocation] = useState();
   useEffect(() => {
     const startTime = Date.now();
     let frame;
@@ -34,12 +34,12 @@ const Map = ({ history, hunt, mapKey, markers, markersFound, places }) => {
     animate();
   }, [markers]);
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(p => {
-      const { latitude: lat, longitude: lng } = p.coords;
-      setUserLocation({ lat, lng });
-    });
-  }, []);
+  // useEffect(() => {
+  //   navigator.geolocation.getCurrentPosition(p => {
+  //     const { latitude: lat, longitude: lng } = p.coords;
+  //     setUserLocation({ lat, lng });
+  //   });
+  // }, []);
 
   if (markers.length === 0) {
     return (
@@ -52,7 +52,8 @@ const Map = ({ history, hunt, mapKey, markers, markersFound, places }) => {
   return (
     <MapContainer>
       <GoogleMapReact
-        defaultCenter={userLocation ? userLocation : places.ppark}
+        // defaultCenter={userLocation ? userLocation : places.ppark}
+        defaultCenter={pewpew}
         center={pewpew}
         defaultZoom={15}
         bootstrapURLKeys={{ key: mapKey }}

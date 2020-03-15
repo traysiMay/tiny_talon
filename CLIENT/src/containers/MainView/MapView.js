@@ -60,7 +60,8 @@ const MapView = ({
 };
 
 const mapStateToProps = ({
-  map: { mapKey, markers, markersFound, places },
+  device: { mapKey },
+  map: { markers, markersFound, places },
   socket: { connected }
 }) => ({
   connected,

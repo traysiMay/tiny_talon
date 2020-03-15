@@ -17,6 +17,7 @@ function App({ hash, status, token, loading, welcome }) {
   if ((status === DEVICE_NOT_REGISTERED && !hash) || !token) {
     return <Registration hash={hash} token={token} status={status} />;
   }
+
   return (
     <>
       <Switch>

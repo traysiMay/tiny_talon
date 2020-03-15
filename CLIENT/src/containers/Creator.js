@@ -57,7 +57,8 @@ const Creator = ({
 };
 
 const mapStateToProps = ({
-  map: { mapKey, markers },
+  device: { mapKey },
+  map: { markers },
   socket: { connected, socket }
 }) => ({
   connected,
@@ -65,7 +66,7 @@ const mapStateToProps = ({
   markers,
   socket
 });
-const mapDipstachToProps = dispatch => ({
+const mapDispatchToProps = dispatch => ({
   connectToSocket: () => dispatch(connectSocket()),
   getMarkers: series => dispatch(getMarkersBySeries(series)),
   joinSeries: series => dispatch(joinRoom(series)),
@@ -74,4 +75,4 @@ const mapDipstachToProps = dispatch => ({
   dispatch
 });
 
-export default connect(mapStateToProps, mapDipstachToProps)(Creator);
+export default connect(mapStateToProps, mapDispatchToProps)(Creator);

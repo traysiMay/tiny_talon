@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Lottie from "react-lottie";
 import animationData from "../../animations/SMILE.json";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
 const H1 = styled.h1`
   text-align: center;
@@ -13,14 +14,16 @@ const Paragraph = styled.div`
   font-size: 2rem;
 `;
 
-const WinView = ({ name }) => {
+const WinView = ({ name, reset }) => {
   console.log(name);
 
   useEffect(() => {
     document
       .getElementsByTagName("svg")[0]
       .setAttribute("viewBox", "0 -200 1080 1080");
-  }, []);
+
+    return () => reset();
+  }, [reset]);
   return (
     <div>
       <div style={{ height: 200 }}>
@@ -37,4 +40,8 @@ const WinView = ({ name }) => {
     </div>
   );
 };
-export default WinView;
+
+const mapDispatchToProps = dispatch => ({
+  reset: () => dispatch({ type: "RESET" })
+});
+export default connect(null, mapDispatchToProps)(WinView);

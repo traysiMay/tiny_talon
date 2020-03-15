@@ -14,7 +14,7 @@ export const fetchOptions = (method, token, body) => ({
 export const handleResponse = response => {
   if (response.status !== 200) {
     return response.json().then(error => {
-      console.log(error);
+      console.log(error.error);
       throw new Error(error.error);
     });
   }

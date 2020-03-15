@@ -18,12 +18,13 @@ export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 80%;
+  width: 88%;
   max-width: 900px;
-  margin: auto;
+  margin: 3% auto;
+  border: 1px solid black;
   div {
-    margin: 4% auto;
-    border-bottom: 4px dotted black;
+    margin: 1% auto;
+    /* border-bottom: 4px dotted black; */
     padding: 3%;
     width: 80%;
   }
@@ -42,13 +43,13 @@ export const ButtonContainer = styled.div`
 
 export const Input = styled.input`
   text-align: center;
-  font-size: 22px;
   font-family: Arial;
   border: 2px black solid;
   height: 56px;
   box-shadow: 9px 10px black;
   width: 79%;
   max-width: 430px;
+  font-size: 1rem;
 `;
 
 export const Button = styled.button`

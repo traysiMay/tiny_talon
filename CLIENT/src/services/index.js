@@ -14,6 +14,10 @@ export const tRequest = (endPoint, headerData, dispatch) => {
           token
         });
       }
+      if (data.message === "new_device_created") {
+        console.log(data.token);
+        dispatch({ type: SET_TOKEN, token: data.token });
+      }
       dispatch({
         type: RESPONSE,
         response: data.message
@@ -43,6 +47,17 @@ export const getAllSeries = () => {
   return fetch(`${process.env.REACT_APP_SERVER}/${endPoint}`, options)
     .then(handleResponse)
     .then(data => data);
+};
+
+export const getAllUserSeries = dispatch => {
+  const endPoint = "all_user_series";
+  const token = localStorage.getItem("token");
+  const options = fetchOptions("GET", token, null);
+  console.log(options);
+  return fetch(`${process.env.REACT_APP_SERVER}/${endPoint}`, options)
+    .then(handleResponse)
+    .then(data => data)
+    .catch(error => handleError(error, dispatch));
 };
 
 export const createHunt = async ({ seriesId, email }) => {
