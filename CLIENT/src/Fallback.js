@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { UNAUTHORIZED } from "./actions";
 import { getAllUserSeries } from "./services";
+import Smiler from "./graphics/Smiler";
 
 const Container = styled.div`
   display: grid;
@@ -34,6 +35,7 @@ const HuntParagraph = styled(Paragraph)`
     color: white;
     padding: 0.5rem;
     border-bottom: 2px solid white;
+    cursor: pointer;
   }
 `;
 
@@ -60,8 +62,12 @@ const errorMessage = error => {
 
 const Fallback = ({ clearErrors, email, error, getAllUserSeries, history }) => {
   const [availableSeries, setAvailableSeries] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getAllUserSeries().then(setAvailableSeries);
+    getAllUserSeries().then(series => {
+      setLoading(false);
+      setAvailableSeries(series);
+    });
   }, [getAllUserSeries]);
 
   useEffect(() => {
@@ -70,6 +76,7 @@ const Fallback = ({ clearErrors, email, error, getAllUserSeries, history }) => {
       .setAttribute("viewBox", "0 -300 1080 1080");
   }, []);
   const eMessage = errorMessage(error);
+
   return (
     <div>
       <div style={{ height: 110 }}>
@@ -77,27 +84,30 @@ const Fallback = ({ clearErrors, email, error, getAllUserSeries, history }) => {
       </div>
       <Container>
         <H1>hi {email.split("@")[0]}!</H1>
+        {loading && <Smiler />}
         {eMessage && <ErrorMessage>{eMessage}</ErrorMessage>}
-        <HuntParagraph>
-          <h3>Here are your available hunts</h3>
-          {availableSeries && availableSeries.length > 0 ? (
-            availableSeries.map(s => (
-              <div
-                onClick={() => {
-                  clearErrors();
-                  history.push(`/map/${s.id}`);
-                }}
-                key={s.id}
-              >
-                {s.name}
+        {!loading && (
+          <HuntParagraph>
+            <h3>Here are your available hunts</h3>
+            {availableSeries && availableSeries.length > 0 ? (
+              availableSeries.map(s => (
+                <div
+                  onClick={() => {
+                    clearErrors();
+                    history.push(`/map/${s.id}`);
+                  }}
+                  key={s.id}
+                >
+                  {s.name}
+                </div>
+              ))
+            ) : (
+              <div style={{ background: "red" }}>
+                there are no hunts for you :(
               </div>
-            ))
-          ) : (
-            <div style={{ background: "red" }}>
-              there are no hunts for you :(
-            </div>
-          )}
-        </HuntParagraph>
+            )}
+          </HuntParagraph>
+        )}
       </Container>
     </div>
   );

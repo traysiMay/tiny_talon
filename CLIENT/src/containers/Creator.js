@@ -12,6 +12,7 @@ import {
 import Series from "../components/Series";
 import Hunt from "../components/Hunt";
 import Message from "../components/Message";
+import JwtDecode from "jwt-decode";
 
 const SERIES = "SERIES";
 const MAP = "MAP";
@@ -25,7 +26,8 @@ const Creator = ({
   mapKey,
   markers,
   socket,
-  getMarkers
+  getMarkers,
+  token
 }) => {
   const [scene, setScene] = useState(SERIES);
   const [selectedSeries, setSelectedSeries] = useState();
@@ -36,6 +38,12 @@ const Creator = ({
       listenToErrors();
     }
   }, [connectToSocket, connected, listenToErrors]);
+
+  const { email } = JwtDecode(token);
+  console.log(email);
+  if (email !== "teh@raptor.pizza" && email !== "arielklevecz@gmail.com") {
+    return <div>no</div>;
+  }
   return (
     <div>
       <Message>
@@ -67,7 +75,7 @@ const Creator = ({
 };
 
 const mapStateToProps = ({
-  device: { mapKey },
+  device: { mapKey, token },
   map: { markers },
   socket: { connected, socket, message }
 }) => ({
@@ -75,7 +83,8 @@ const mapStateToProps = ({
   mapKey,
   markers,
   message,
-  socket
+  socket,
+  token
 });
 const mapDispatchToProps = dispatch => ({
   connectToSocket: () => dispatch(connectSocket()),
