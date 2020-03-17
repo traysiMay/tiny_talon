@@ -1,4 +1,4 @@
-import { SET_TOKEN, RESPONSE } from "../actions";
+import { SET_TOKEN, RESPONSE, dDelay } from "../actions";
 import { handleError, handleResponse, fetchOptions } from "./handles";
 
 // there could be a request thunk that delegates dispatches based on the response message
@@ -39,11 +39,24 @@ export const getToken = (dispatch, hash) => {
     .catch(error => handleError(error, dispatch));
 };
 
+export const seriesReady = (dispatch, id) => {
+  const endPoint = "series_ready";
+  const token = localStorage.getItem("token");
+  const options = fetchOptions("POST", token, { id });
+  dispatch({ type: "MAP_LOADING" });
+  fetch(`${process.env.REACT_APP_SERVER}/${endPoint}`, options)
+    .then(handleResponse)
+    .then(data => {
+      const { ready } = data;
+      if (ready) dispatch({ type: "MAP_READY" });
+      dispatch(dDelay("MAP_DONE", 1000));
+    })
+    .catch(error => handleError(error, dispatch));
+};
 export const getAllSeries = () => {
   const endPoint = "all_series";
   const token = localStorage.getItem("token");
   const options = fetchOptions("GET", token, null);
-  console.log(options);
   return fetch(`${process.env.REACT_APP_SERVER}/${endPoint}`, options)
     .then(handleResponse)
     .then(data => data);
@@ -53,7 +66,6 @@ export const getAllUserSeries = dispatch => {
   const endPoint = "all_user_series";
   const token = localStorage.getItem("token");
   const options = fetchOptions("GET", token, null);
-  console.log(options);
   return fetch(`${process.env.REACT_APP_SERVER}/${endPoint}`, options)
     .then(handleResponse)
     .then(data => data)
@@ -88,4 +100,18 @@ export const createMarker = async marker => {
   fetch(`${process.env.REACT_APP_SERVER}/${endPoint}`, options)
     .then(handleResponse)
     .then(data => console.log(data));
+};
+
+export const getPlace = async hunt => {
+  const endPoint = "get_place";
+  const token = localStorage.getItem("token");
+  const options = fetchOptions("POST", token, { id: hunt });
+  const place = await fetch(
+    `${process.env.REACT_APP_SERVER}/${endPoint}`,
+    options
+  )
+    .then(handleResponse)
+    .then(data => data)
+    .catch(error => console.log(error));
+  return place;
 };

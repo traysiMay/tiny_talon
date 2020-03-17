@@ -78,6 +78,12 @@ export const readyDelay = delay => {
   };
 };
 
+export const dDelay = (type, delay) => {
+  return dispatch => {
+    setTimeout(() => dispatch({ type }), delay);
+  };
+};
+
 export const registerDevice = email => {
   return async (dispatch, getState) => {
     const {
@@ -124,13 +130,17 @@ function socketWrap(hash) {
 }
 
 // MARKERS SHOULD HAVE ITS OWN MIDDLEWARE
+// socket connection probably doesn't need to include these listeners
+// and they could be moved into the general listener scheme
 export const connectSocket = () => {
   return async (dispatch, getState) => {
     const {
       device: { hash }
     } = getState();
     const socket = await socketWrap(hash);
-    socket.on("error", error => dispatch({ type: ERROR, error }));
+    socket.on("error", error => {
+      dispatch({ type: ERROR, error });
+    });
     socket.on("found", found => dispatch({ type: FOUND, name: found }));
     socket.on("markers", markers => {
       if (!markers.success)
@@ -162,6 +172,9 @@ const listenDispatcher = (dispatch, topic, payload) => {
   if (topic === "code_response") {
     dispatch({ type: CODE_RESPONSE, payload });
   }
+  if (topic === "ready") {
+    dispatch({ type: "MAP_READY" });
+  }
   // ** not great
   if (payload === "you_win") {
     dispatch({ type: "HUNT_COMPLETED" });
@@ -170,7 +183,11 @@ const listenDispatcher = (dispatch, topic, payload) => {
 
 export const listenTo = topic => {
   return async (dispatch, getState) => {
-    getState().socket.socket.on(topic, message => {
+    const { listeners, socket } = getState().socket;
+    if (listeners.includes(topic)) {
+      return;
+    }
+    socket.on(topic, message => {
       listenDispatcher(dispatch, topic, message);
       dispatch(socketMessage(message));
     });
@@ -182,7 +199,7 @@ export const joinRoom = room => {
   const topic = "join";
   return async (dispatch, getState) => {
     getState().socket.socket.emit(topic, room);
-    // dispatch({ type: LISTEN_TO, topic });
+    dispatch({ type: LISTEN_TO, topic: `series_${room}` });
   };
 };
 // ------
@@ -222,5 +239,18 @@ export const emit = (emit, value) => {
     } else {
       socket.socket.emit(emit, value);
     }
+  };
+};
+
+export const stopListening = hunt => {
+  return async (dispatch, getState) => {
+    const {
+      socket: { socket }
+    } = getState();
+    socket.off();
+    socket.disconnect();
+    socket.emit("leave", hunt);
+    dispatch({ type: "CLEAR_LISTENERS" });
+    dispatch({ type: "DISCONNECT" });
   };
 };

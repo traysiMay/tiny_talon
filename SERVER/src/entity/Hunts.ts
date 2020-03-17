@@ -16,11 +16,17 @@ export class Hunts {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ default: 1 })
+  phase: number;
+
   @Column({ default: false })
   completed: boolean;
 
   @Column("simple-array", { default: "" })
   marker_map: string[];
+
+  @Column("timestamp", { default: null })
+  completed_at: Date;
 
   @ManyToOne(type => Series)
   @JoinColumn({ name: "series_id" })

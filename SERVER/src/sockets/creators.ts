@@ -19,8 +19,17 @@ export const markerCreator = async ({
   newMarker.lat = lat;
   newMarker.lng = lng;
 
-  await markerRepo.save(newMarker);
-
+  try {
+    await markerRepo.save(newMarker);
+  } catch (error) {
+    let message;
+    if (error.message.includes("duplicate")) {
+      message = "DUPLICATE_HASH";
+    } else {
+      message = error.message;
+    }
+    return new Error(message);
+  }
   // ** inefficient, but whatever?
   const seriesRepo = getRepository(Series);
   const updatedSeries = await seriesRepo.findOne({ id: series });

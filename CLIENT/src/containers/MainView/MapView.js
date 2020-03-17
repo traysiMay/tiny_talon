@@ -10,9 +10,12 @@ import {
 import Status from "../Status";
 import Map from "../../components/Map";
 import Logout from "../../components/Logout";
+import WinView from "./WinView";
+import Loading from "../../animations/Loading";
 
 // when the map socket connects it needs to update it's marker map
 const MapView = ({
+  completed,
   connected,
   connectToSocket,
   getMarkers,
@@ -23,16 +26,19 @@ const MapView = ({
   listenToMarkerFound,
   listenToNewMarker,
   listenToWin,
+  name,
+  loading,
   mapKey,
   markers,
   markersFound,
-  places
+  places,
+  reset
 }) => {
-  useEffect(() => {
-    if (connected) return;
-    connectToSocket();
-    //eslint-disable-next-line
-  }, [connectToSocket]);
+  // useEffect(() => {
+  //   if (connected) return;
+  //   connectToSocket();
+  //   //eslint-disable-next-line
+  // }, [connectToSocket]);
 
   useEffect(() => {
     if (!connected) return;
@@ -40,9 +46,11 @@ const MapView = ({
     listenToMarkerFound();
     listenToNewMarker();
     listenToWin();
-    joinSeries(hunt);
+    // joinSeries(hunt);
     //eslint-disable-next-line
   }, [connected, getMarkers]);
+  if (loading) return <Loading message="to the hunt we go.." />;
+  if (completed) return <WinView name={name} hunt={hunt} />;
   return (
     <div>
       <Status hunt={hunt} />
@@ -54,6 +62,7 @@ const MapView = ({
         markers={markers}
         markersFound={markersFound}
         places={places}
+        reset={reset}
       />
     </div>
   );
@@ -61,10 +70,12 @@ const MapView = ({
 
 const mapStateToProps = ({
   device: { mapKey },
-  map: { markers, markersFound, places },
+  map: { completed, markers, markersFound, loading, places },
   socket: { connected }
 }) => ({
+  completed,
   connected,
+  loading,
   mapKey,
   markers,
   markersFound,
@@ -73,11 +84,12 @@ const mapStateToProps = ({
 const mapDipstachToProps = dispatch => ({
   connectToSocket: () => dispatch(connectSocket()),
   getMarkers: hunt => dispatch(getMarkers(hunt)),
-  joinSeries: hunt => dispatch(joinRoom(hunt)),
+  // joinSeries: hunt => dispatch(joinRoom(hunt)),
   logout: () => dispatch(logOut()),
   listenToNewMarker: () => dispatch(listenTo("new_marker")),
   listenToMarkerFound: () => dispatch(listenTo("marker_found")),
   listenToWin: () => dispatch(listenTo("win")),
+  reset: () => dispatch({ type: "RESET" }),
   dispatch
 });
 

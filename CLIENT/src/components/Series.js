@@ -30,7 +30,7 @@ const Select = styled.select`
   font-size: 18px;
 `;
 
-const Series = ({ setScene, setSelectedSeries }) => {
+const Series = ({ setScene, setSelectedSeries, socket }) => {
   const [values, setValues] = useState({ name: "", cat: "", description: "" });
   const [toggle, setToggle] = useState(false);
   const vals = useRef({ name: "", cat: "", description: "" });
@@ -128,6 +128,14 @@ const Series = ({ setScene, setSelectedSeries }) => {
         }}
       >
         Select
+      </Button>
+      <Button
+        style={{ margin: "auto", display: "block" }}
+        onClick={() => {
+          socket.emit("hunt_ready", optionValue);
+        }}
+      >
+        READY
       </Button>
     </Container>
   );

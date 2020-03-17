@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { GET_MARKERS } from "../actions";
 
 const Status = ({ getMarkers, hunt, status }) => {
-  const [focus, setFocus] = useState(false);
+  const [focus, setFocus] = useState(null);
 
   useEffect(() => {
     if (focus) {

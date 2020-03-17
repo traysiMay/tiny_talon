@@ -33,6 +33,7 @@ const HuntParagraph = styled(Paragraph)`
     background: black;
     color: white;
     padding: 0.5rem;
+    border-bottom: 2px solid white;
   }
 `;
 
@@ -40,20 +41,25 @@ const ErrorMessage = styled.div`
   background: red;
   color: white;
   padding: 11px;
+  margin-top: 0.7rem;
 `;
 
 const errorMessage = error => {
   switch (error) {
     case UNAUTHORIZED:
       return "hmm you aren't authorized for whatever you tried to do";
+    case "NOT_FOUND":
+      return "hmm that hunt doesn't exist?";
     default:
-      return error;
+      return null;
   }
 };
 
+// if you want listeners here, you will have to decouple the connect socket from the mapview
+// the connect socket includes some of the listeners that force the disconnect when the map is dismounted
+
 const Fallback = ({ clearErrors, email, error, getAllUserSeries, history }) => {
   const [availableSeries, setAvailableSeries] = useState([]);
-
   useEffect(() => {
     getAllUserSeries().then(setAvailableSeries);
   }, [getAllUserSeries]);
@@ -63,6 +69,7 @@ const Fallback = ({ clearErrors, email, error, getAllUserSeries, history }) => {
       .getElementsByTagName("svg")[0]
       .setAttribute("viewBox", "0 -300 1080 1080");
   }, []);
+  const eMessage = errorMessage(error);
   return (
     <div>
       <div style={{ height: 110 }}>
@@ -70,7 +77,7 @@ const Fallback = ({ clearErrors, email, error, getAllUserSeries, history }) => {
       </div>
       <Container>
         <H1>hi {email.split("@")[0]}!</H1>
-        {error && <ErrorMessage>{errorMessage(error)}</ErrorMessage>}
+        {eMessage && <ErrorMessage>{eMessage}</ErrorMessage>}
         <HuntParagraph>
           <h3>Here are your available hunts</h3>
           {availableSeries && availableSeries.length > 0 ? (

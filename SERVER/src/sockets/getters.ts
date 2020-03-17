@@ -35,6 +35,7 @@ export const getRaptorsMarkers = async (token, id) => {
   let completed = false;
   let success = false;
   let name = "";
+  let ready = false;
 
   if (hunt) {
     markerMap = hunt.marker_map;
@@ -42,6 +43,7 @@ export const getRaptorsMarkers = async (token, id) => {
     name = hunt.series.name;
     completed = hunt.completed;
     success = true;
+    ready = hunt.series.init;
   } else {
     const seriesRepo = getRepository(Series);
     const series = await seriesRepo
@@ -59,7 +61,8 @@ export const getRaptorsMarkers = async (token, id) => {
       markerMap = hunt.marker_map;
       name = series.name;
       success = true;
+      ready = series.init;
     }
   }
-  return { markers, markerMap, name, completed, success };
+  return { markers, markerMap, name, completed, ready, success };
 };

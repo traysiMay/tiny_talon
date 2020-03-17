@@ -9,9 +9,29 @@ export enum CodeMessage {
   WIN = "you win!"
 }
 
-export const codeReducer = async (code, jwtID) => {
+const huntByMarkerId = async (marker, jwtID) => {
+  console.log(marker);
+  const {
+    code: { input, id }
+  } = marker;
+  console.log(id);
   const huntsRepo = getRepository(Hunts);
-  let hunt, series;
+  const hunt = await huntsRepo
+    .createQueryBuilder("hunts")
+    .leftJoinAndSelect("hunts.series", "series")
+    .leftJoinAndSelect("series.markers", "markers")
+    .leftJoinAndSelect("hunts.emails", "emails")
+    .where("markers.id = :markerId", { markerId: id })
+    .andWhere("markers.hash = :markerHash", { markerHash: input })
+    .andWhere("emails.id = :eId", { eId: jwtID })
+    .getOne();
+
+  return hunt;
+};
+
+const huntByMarkerHash = async (code, jwtID) => {
+  const huntsRepo = getRepository(Hunts);
+  let hunt;
   hunt = await huntsRepo
     .createQueryBuilder("hunts")
     .leftJoinAndSelect("hunts.series", "series")
@@ -23,7 +43,7 @@ export const codeReducer = async (code, jwtID) => {
 
   if (!hunt) {
     const seriesRepo = getRepository(Series);
-    series = await seriesRepo
+    const series = await seriesRepo
       .createQueryBuilder("series")
       .leftJoinAndSelect("series.markers", "markers")
       .where("markers.hash = :code", { code })
@@ -39,6 +59,21 @@ export const codeReducer = async (code, jwtID) => {
     } else {
       return { message: CodeMessage.NOT_FOUND, id: 0 };
     }
+  }
+  return hunt;
+};
+
+export const codeReducer = async (code, jwtID) => {
+  let hunt;
+  const huntsRepo = getRepository(Hunts);
+
+  // This could be bad or not.
+  // if the code is sent from the map it has the marker id applied to it
+  // and so it is an object
+  if (code instanceof Object) {
+    hunt = await huntByMarkerId(code, jwtID);
+  } else {
+    hunt = await huntByMarkerHash(code, jwtID);
   }
 
   const {
@@ -61,6 +96,7 @@ export const codeReducer = async (code, jwtID) => {
   if (markerMap.length === num_markers) {
     message = CodeMessage.WIN;
     hunt.completed = true;
+    hunt.completed_at = new Date();
     await huntsRepo.save(hunt);
   }
   const { completed } = hunt;

@@ -25,6 +25,11 @@ const Overlay = styled.div`
   }
 `;
 
+const sf = {
+  lat: 37.78126372769892,
+  lng: -122.41344338335298
+};
+
 const pewpew = {
   lat: 40.716323,
   lng: -73.989691
@@ -85,7 +90,7 @@ const CMap = ({ mapKey, markers, series, setScene, socket, getMarkers }) => {
             <SquareButton onClick={() => setScene("SERIES")}>back</SquareButton>
           </Overlay>
           <GoogleMapReact
-            defaultCenter={pewpew}
+            defaultCenter={sf}
             defaultZoom={17}
             bootstrapURLKeys={{ key: mapKey }}
             options={{ styles: whiteMap }}
@@ -100,11 +105,10 @@ const CMap = ({ mapKey, markers, series, setScene, socket, getMarkers }) => {
               setMarker(marker);
             }}
             onChildClick={(e, p) => {
-              console.log(e);
+              console.log(p);
             }}
           >
             {markers.map(marker => {
-              console.log(marker);
               return (
                 <RaptorMarker
                   g={200}

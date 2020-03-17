@@ -19,6 +19,9 @@ export class Series {
   @Column()
   description?: string;
 
+  @Column({ default: false })
+  init: boolean;
+
   // personal, hunt, global
   @Column({ type: "enum", enum: SeriesType, default: SeriesType.HUNT })
   type: SeriesType;

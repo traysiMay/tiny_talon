@@ -11,6 +11,7 @@ const routes = Router();
 
 const authDevice = async (req, res) => {
   const { device } = req.body;
+  console.log(device);
   const deviceRepo = getRepository(Devices);
   const devices = await deviceRepo.findOne({ where: { hash: device } });
   if (!devices) {
@@ -109,6 +110,15 @@ const getAllUserSeries = async (req, res) => {
   return res.send(globalAndUsers);
 };
 
+const seriesReady = async (req, res) => {
+  const { id } = req.body;
+  const seriesRepo = getRepository(Series);
+  const series = await seriesRepo.findOne(id);
+  if (!series) return res.status(404).send({ error: "NOT_FOUND" });
+  const { init: ready } = series;
+  res.send({ ready });
+};
+
 const sendSeries = async (req, res) => {
   const { cat, description, name } = req.body;
   const seriesRepo = getRepository(Series);
@@ -151,6 +161,29 @@ const createHunt = async (req, res) => {
   return res.send({ message: "yay" });
 };
 
+const getPlace = async (req, res) => {
+  const { id } = req.body;
+  const { id: userId } = res.locals.jwtInfo;
+  const huntRepo = getRepository(Hunts);
+  const hunts = await huntRepo
+    .createQueryBuilder("hunts")
+    .leftJoin("hunts.series", "series")
+    .leftJoinAndSelect("hunts.emails", "emails")
+    .where("series.id = :id", { id })
+    .orderBy({ completed_at: "ASC" })
+    .getMany();
+  const place = hunts.reduce(
+    (ac, cv) => {
+      if (cv.emails.id === userId) {
+        return { place: ac.outof + 1, outof: ac.outof + 1 };
+      }
+      return { ...ac, outof: ac.outof + 1 };
+    },
+    { place: 0, outof: 0 }
+  );
+  return res.send({ place });
+};
+
 const tokenToReq = (req, res, next) => {
   const token = req.headers.authorization.split("Bearer ")[1];
   let jwtInfo;
@@ -166,6 +199,8 @@ const tokenToReq = (req, res, next) => {
 
 routes.get("/all_series", getAllSeries);
 routes.get("/all_user_series", [tokenToReq], getAllUserSeries);
+routes.post("/get_place", tokenToReq, getPlace);
+routes.post("/series_ready", seriesReady);
 routes.post("/auth_device", authDevice);
 routes.post("/register_device", registerDevice);
 routes.post("/new_token", newToken);

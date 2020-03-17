@@ -13,7 +13,7 @@ import Fallback from "./Fallback";
 
 function App({ hash, status, token, loading, welcome }) {
   if (welcome) return <Loading fill={"yellow"} message={"welcome!"} />;
-  if (loading) return <Loading message={"loading ..."} />;
+  if (loading) return <Loading message={"syncing..."} />;
   if ((status === DEVICE_NOT_REGISTERED && !hash) || !token) {
     return <Registration hash={hash} token={token} status={status} />;
   }

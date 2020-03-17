@@ -31,6 +31,8 @@ const socket = (state = socketState, action) => {
     case LISTEN_TO:
       const { topic } = action;
       return { ...state, listeners: [...state.listeners, topic] };
+    case "CLEAR_LISTENERS":
+      return { ...state, listeners: [] };
     case SOCKET_MESSAGE:
       const { message } = action;
       return { ...state, message };
@@ -41,6 +43,8 @@ const socket = (state = socketState, action) => {
         codeResponse: payload.message,
         seriesId: payload.seriesId
       };
+    case "DISCONNECT":
+      return { ...state, status: "disconnected", connected: false };
     default:
       return state;
   }

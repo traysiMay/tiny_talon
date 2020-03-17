@@ -5,17 +5,25 @@ import RaptorMarker from "../markers/RaptorMarker";
 import whiteMap from "../styles/whiteMap.json";
 import Smiler from "../graphics/Smiler";
 
-// const sf = {
-//   lat: 37.78126372769892,
-//   lng: -122.41344338335298
-// };
+const sf = {
+  lat: 37.78126372769892,
+  lng: -122.41344338335298
+};
 
 const pewpew = {
   lat: 40.716323,
   lng: -73.989691
 };
 
-const Map = ({ history, hunt, mapKey, markers, markersFound, places }) => {
+const Map = ({
+  history,
+  hunt,
+  mapKey,
+  markers,
+  markersFound,
+  places,
+  reset
+}) => {
   // const [userLocation, setUserLocation] = useState();
   useEffect(() => {
     const startTime = Date.now();
@@ -33,7 +41,12 @@ const Map = ({ history, hunt, mapKey, markers, markersFound, places }) => {
 
     animate();
   }, [markers]);
-
+  // useEffect(() => {
+  //   return () => {
+  //     reset();
+  //     console.log("WAHT");
+  //   };
+  // }, []);
   // useEffect(() => {
   //   navigator.geolocation.getCurrentPosition(p => {
   //     const { latitude: lat, longitude: lng } = p.coords;
@@ -48,18 +61,18 @@ const Map = ({ history, hunt, mapKey, markers, markersFound, places }) => {
       </div>
     );
   }
-
   return (
     <MapContainer>
       <GoogleMapReact
         // defaultCenter={userLocation ? userLocation : places.ppark}
-        defaultCenter={pewpew}
-        center={pewpew}
+        defaultCenter={sf}
+        center={sf}
         defaultZoom={15}
         bootstrapURLKeys={{ key: mapKey }}
         options={{ styles: whiteMap }}
-        onChildClick={p => {
-          history.push(`/map/${hunt}/pop/${p}`);
+        onChildClick={(id, data) => {
+          if (data.found) return;
+          history.push(`/map/${hunt}/pop/${id}`);
         }}
       >
         {markers.map((m, i) => {
@@ -67,6 +80,7 @@ const Map = ({ history, hunt, mapKey, markers, markersFound, places }) => {
             <RaptorMarker
               key={m.id}
               id={m.hash}
+              type={m.type}
               found={markersFound.includes(`${m.id}`)}
               lat={m.lat}
               lng={m.lng}

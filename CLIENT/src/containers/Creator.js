@@ -11,6 +11,7 @@ import {
 } from "../actions";
 import Series from "../components/Series";
 import Hunt from "../components/Hunt";
+import Message from "../components/Message";
 
 const SERIES = "SERIES";
 const MAP = "MAP";
@@ -18,6 +19,8 @@ const MAP = "MAP";
 const Creator = ({
   connected,
   connectToSocket,
+  message,
+  listenToErrors,
   logout,
   mapKey,
   markers,
@@ -26,20 +29,27 @@ const Creator = ({
 }) => {
   const [scene, setScene] = useState(SERIES);
   const [selectedSeries, setSelectedSeries] = useState();
-
   useEffect(() => {
     if (!connected) {
       connectToSocket();
+    } else {
+      listenToErrors();
     }
-  }, [connectToSocket, connected]);
+  }, [connectToSocket, connected, listenToErrors]);
   return (
     <div>
-      {selectedSeries}
+      <Message>
+        {selectedSeries}-{message.error}
+      </Message>
       <Logout logout={logout} />
       {scene === SERIES && (
         <div>
           <Hunt />
-          <Series setScene={setScene} setSelectedSeries={setSelectedSeries} />
+          <Series
+            setScene={setScene}
+            setSelectedSeries={setSelectedSeries}
+            socket={socket}
+          />
         </div>
       )}
       {scene === MAP && (
@@ -59,11 +69,12 @@ const Creator = ({
 const mapStateToProps = ({
   device: { mapKey },
   map: { markers },
-  socket: { connected, socket }
+  socket: { connected, socket, message }
 }) => ({
   connected,
   mapKey,
   markers,
+  message,
   socket
 });
 const mapDispatchToProps = dispatch => ({
@@ -71,6 +82,7 @@ const mapDispatchToProps = dispatch => ({
   getMarkers: series => dispatch(getMarkersBySeries(series)),
   joinSeries: series => dispatch(joinRoom(series)),
   listenToNewMarker: () => dispatch(listenTo("new_marker")),
+  listenToErrors: () => dispatch(listenTo("create_error")),
   logout: () => dispatch(logOut()),
   dispatch
 });

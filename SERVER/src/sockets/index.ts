@@ -19,12 +19,20 @@ const sockets = async socket => {
   socket.on("join", async room => {
     socket.join(`series_${room}`);
   });
-  // *****
 
+  socket.on("leave", async room => {
+    socket.leave(`series_${room}`);
+  });
+  // *****
+  socket.on("hunt_ready", async series => {
+    const seriesRepo = getRepository(Series);
+    const rSeries = await seriesRepo.findOne(series);
+    rSeries.init = true;
+    seriesRepo.save(rSeries);
+    ws.in(`series_${series}`).emit("ready", true);
+  });
   // ** SENDING A CODE **
   socket.on("code", async code => {
-    console.log("SENDING CODE");
-
     const { id, message, markerMap, completed } = await codeReducer(
       code,
       decoded.id
@@ -48,10 +56,12 @@ const sockets = async socket => {
     ws.in(decoded.id).emit("marker_found", markerMap);
   });
   // *****
-
   // ** CREATING A MARKER **
   socket.on("create_marker", async ({ marker, series }) => {
     const newMarker = await markerCreator({ ...marker, series });
+    if (newMarker instanceof Error) {
+      return socket.emit("create_error", { error: newMarker.message });
+    }
     ws.in(`series_${series}`).emit("new_marker", newMarker);
   });
   // *****
@@ -63,6 +73,7 @@ const sockets = async socket => {
       markerMap,
       name,
       completed,
+      ready,
       success
     } = await getRaptorsMarkers(socket.handshake.query.token, hunt);
     await socket.emit("markers", {
@@ -70,6 +81,7 @@ const sockets = async socket => {
       markerMap,
       name,
       completed,
+      ready,
       success
     });
   });

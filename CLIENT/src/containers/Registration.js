@@ -28,7 +28,7 @@ const Registration = ({ getToken, hash, registerDevice, status, token }) => {
     });
     // eslint-disable-next-line
   }, []);
-  if (!hash) return <Loading />;
+  if (!hash) return <Loading message="registering device..." />;
 
   if (status === DEVICE_NOT_REGISTERED) {
     const handleChange = e => (email.current = e.target.value);

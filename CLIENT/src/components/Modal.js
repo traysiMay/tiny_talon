@@ -13,7 +13,7 @@ const modalStyle = {
 };
 const Modal = ({ children, onClick }) => {
   return createPortal(
-    <div style={modalStyle} onClick={onClick}>
+    <div id="modal-container" style={modalStyle} onClick={onClick}>
       {children}
     </div>,
     document.getElementById("modal_root")

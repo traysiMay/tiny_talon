@@ -19,9 +19,9 @@ export const ButtonContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 88%;
-  max-width: 900px;
+  max-width: 400px;
+  max-height: 777px;
   margin: 3% auto;
-  border: 1px solid black;
   div {
     margin: 1% auto;
     /* border-bottom: 4px dotted black; */
@@ -49,7 +49,7 @@ export const Input = styled.input`
   box-shadow: 9px 10px black;
   width: 79%;
   max-width: 430px;
-  font-size: 1rem;
+  font-size: 1.5rem;
 `;
 
 export const Button = styled.button`
