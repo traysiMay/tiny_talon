@@ -17,7 +17,7 @@ const Registration = ({ getToken, hash, registerDevice, status, token }) => {
       setError("This email is invalid...");
       return;
     }
-    registerDevice(email.current);
+    registerDevice(email.current.toLowerCase());
   };
 
   useEffect(() => {

@@ -41,8 +41,8 @@ const authDevice = async (req, res) => {
 };
 
 const registerDevice = async (req, res) => {
-  const { email, hash } = req.body;
-
+  let { email, hash } = req.body;
+  email = email.toLowerCase();
   const emailRepo = getRepository(Emails);
   let registeredEmail = await emailRepo.findOne({ where: { email } });
 

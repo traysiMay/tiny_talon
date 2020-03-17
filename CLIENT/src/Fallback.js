@@ -36,6 +36,7 @@ const HuntParagraph = styled(Paragraph)`
     padding: 0.5rem;
     border-bottom: 2px solid white;
     cursor: pointer;
+    text-transform: capitalize;
   }
 `;
 
