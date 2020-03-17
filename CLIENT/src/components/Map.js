@@ -53,7 +53,7 @@ const Map = ({
   //     setUserLocation({ lat, lng });
   //   });
   // }, []);
-
+  console.log(markers);
   if (markers.length === 0) {
     return (
       <div>
@@ -79,7 +79,7 @@ const Map = ({
           return (
             <RaptorMarker
               key={m.id}
-              id={m.hash}
+              id={m.name + m.id}
               type={m.type}
               found={markersFound.includes(`${m.id}`)}
               lat={m.lat}

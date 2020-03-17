@@ -106,12 +106,6 @@ export const newToken = () => {
   };
 };
 
-export const unauthorized = () => {
-  return async (dispatch, getState) => {
-    console.log("fuck");
-  };
-};
-
 export const logOut = () => {
   return async dispatch => {
     // localStorage.setItem("token", "");

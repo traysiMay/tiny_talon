@@ -97,7 +97,6 @@ const Scanning = ({ message, scanTainer, seriesId }) => {
       document.body.style.background = "white";
     };
   }, [message, scanTainer]);
-  console.log(seriesId);
   return (
     <Container>
       <ScanContainer ref={scanTainer}>

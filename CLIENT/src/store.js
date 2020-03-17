@@ -5,8 +5,11 @@ import { ERROR, BAD_TOKEN, DEVICE_NOT_FOUND, deviceInit } from "./actions";
 
 const peelError = ({ getState, dispatch }) => {
   return next => action => {
-    console.log(action);
-    console.log(getState());
+    if (process.env.NODE_ENV === "development") {
+      console.log(action);
+      console.log(getState());
+    }
+
     if (action.type === ERROR) {
       // should this be error or message?
       switch (action.error) {

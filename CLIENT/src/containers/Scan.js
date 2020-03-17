@@ -32,7 +32,6 @@ const Scan = ({
     listenToCodeResponse();
     listenToMarkers();
   }, [connected, listenToWin, listenToCodeResponse, listenToMarkers]);
-  console.log(codeResponse);
   return (
     <div style={{ height: "90%" }}>
       {!meepo ? (

@@ -15,7 +15,6 @@ export const tRequest = (endPoint, headerData, dispatch) => {
         });
       }
       if (data.message === "new_device_created") {
-        console.log(data.token);
         dispatch({ type: SET_TOKEN, token: data.token });
       }
       dispatch({
@@ -111,7 +110,6 @@ export const getPlace = async hunt => {
     options
   )
     .then(handleResponse)
-    .then(data => data)
-    .catch(error => console.log(error));
+    .then(data => data);
   return place;
 };

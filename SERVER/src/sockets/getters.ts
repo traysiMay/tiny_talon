@@ -64,5 +64,10 @@ export const getRaptorsMarkers = async (token, id) => {
       ready = series.init;
     }
   }
+
+  markers = markers.map(m => {
+    return { ...m, hash: 0x0 };
+  });
+
   return { markers, markerMap, name, completed, ready, success };
 };
