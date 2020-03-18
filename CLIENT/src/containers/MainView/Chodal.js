@@ -41,7 +41,8 @@ const Chodal = ({ history, markers, match, sendCode }) => {
   };
 
   const sendIt = () => {
-    sendCode({ input, id: m.id });
+    const inputClean = input.replace(/\s/g, "").toLowerCase();
+    sendCode({ input: inputClean, id: m.id });
     retract();
   };
 

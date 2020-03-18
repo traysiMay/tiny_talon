@@ -246,5 +246,6 @@ export const stopListening = hunt => {
     socket.emit("leave", hunt);
     dispatch({ type: "CLEAR_LISTENERS" });
     dispatch({ type: "DISCONNECT" });
+    dispatch({ type: RESET });
   };
 };

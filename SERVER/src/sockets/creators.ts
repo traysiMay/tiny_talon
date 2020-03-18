@@ -1,6 +1,7 @@
 import { Markers } from "../entity/Markers";
 import { getRepository } from "typeorm";
 import { Series } from "../entity/Series";
+import { sanitizeInput } from "./utils";
 
 export const markerCreator = async ({
   name,
@@ -13,7 +14,7 @@ export const markerCreator = async ({
   const markerRepo = getRepository(Markers);
   const newMarker = new Markers();
   newMarker.name = name;
-  newMarker.hash = hash;
+  newMarker.hash = sanitizeInput(hash);
   newMarker.description = details;
   newMarker.series = series;
   newMarker.lat = lat;
@@ -39,7 +40,7 @@ export const markerCreator = async ({
     .where("series.id = :series", { series })
     .getCount();
   updatedSeries.num_markers = markerCount;
-  seriesRepo.save(updatedSeries);
+  await seriesRepo.save(updatedSeries);
 
   return newMarker;
 };

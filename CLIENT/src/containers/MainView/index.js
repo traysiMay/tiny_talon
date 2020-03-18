@@ -38,7 +38,7 @@ const MainView = ({
     if (connected) return;
     connectToSocket();
     //eslint-disable-next-line
-  }, [connectToSocket]);
+  }, [connectToSocket, connect]);
 
   useEffect(() => {
     seriesReady(dispatch, hunt);

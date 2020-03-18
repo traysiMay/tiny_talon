@@ -89,7 +89,6 @@ const getAllSeries = async (_, res) => {
 };
 
 const getAllUserSeries = async (req, res) => {
-  console.log("henlo");
   const { id } = res.locals.jwtInfo;
   const seriesRepo = getRepository(Series);
   const globalAndUsers = await seriesRepo

@@ -1,7 +1,7 @@
 import { getRepository } from "typeorm";
 import { Hunts } from "../entity/Hunts";
 import { Series, SeriesType } from "../entity/Series";
-
+import { sanitizeInput } from "./utils";
 export enum CodeMessage {
   NOT_FOUND = "that ain't right",
   ALREADY_FOUND = "you already found this one!",
@@ -12,9 +12,9 @@ export enum CodeMessage {
 const huntByMarkerId = async (marker, jwtID) => {
   console.log(marker);
   const {
-    code: { input, id }
+    code: { input: rawInput, id }
   } = marker;
-  console.log(id);
+  const input = sanitizeInput(rawInput);
   const huntsRepo = getRepository(Hunts);
   const hunt = await huntsRepo
     .createQueryBuilder("hunts")
@@ -29,7 +29,8 @@ const huntByMarkerId = async (marker, jwtID) => {
   return hunt;
 };
 
-const huntByMarkerHash = async (code, jwtID) => {
+const huntByMarkerHash = async (rawCode, jwtID) => {
+  const code = sanitizeInput(rawCode);
   const huntsRepo = getRepository(Hunts);
   let hunt;
   hunt = await huntsRepo
@@ -57,7 +58,7 @@ const huntByMarkerHash = async (code, jwtID) => {
       const huntRepo = getRepository(Hunts);
       await huntRepo.save(hunt);
     } else {
-      return { message: CodeMessage.NOT_FOUND, id: 0 };
+      return null;
     }
   }
   return hunt;
@@ -74,6 +75,15 @@ export const codeReducer = async (code, jwtID) => {
     hunt = await huntByMarkerId(code, jwtID);
   } else {
     hunt = await huntByMarkerHash(code, jwtID);
+  }
+
+  if (!hunt) {
+    return {
+      completed: false,
+      id: 0,
+      message: CodeMessage.NOT_FOUND,
+      markerMap: []
+    };
   }
 
   const {
