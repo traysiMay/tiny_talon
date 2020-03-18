@@ -14,6 +14,7 @@ const ModalMessage = styled.div`
   max-height: ${props => `${props.maxHeight}px`};
   overflow: hidden;
   transition: max-height 1s, background 1s;
+  font-size: ${window.innerWidth > 600 ? "40px" : "1rem"};
 `;
 
 const Chodal = ({ history, markers, match, sendCode }) => {
