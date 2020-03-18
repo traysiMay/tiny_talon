@@ -29,10 +29,9 @@ const Chodal = ({ history, markers, match, sendCode }) => {
   }, []);
 
   const m = markers.find(m => m.id === parseInt(match.params.marker));
-
   if (!m) {
     history.goBack();
-    window.location = "/map/" + 13;
+    window.location = "/map/" + window.location.pathname.split("/")[2];
   }
 
   const handleChange = e => setInput(e.target.value);
