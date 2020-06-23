@@ -2,7 +2,7 @@ import "reflect-metadata";
 const path = require("path");
 require("dotenv").config(
   process.env.NODE_ENV === "development" && {
-    path: path.resolve(__dirname, "../.env.development")
+    path: path.resolve(__dirname, "../.env.development"),
   }
 );
 
@@ -28,7 +28,7 @@ app.use(session({ secret: process.env.SSACRET }));
 app.use(
   cors({
     origin: process.env.CLIENT,
-    credentials: true
+    credentials: true,
   })
 );
 
@@ -48,5 +48,5 @@ app.use(
 
   app.use("/", routes);
 
-  server.listen(4000);
+  server.listen(process.env.PORT);
 })();
