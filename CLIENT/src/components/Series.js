@@ -59,14 +59,14 @@ const Series = ({ setScene, setSelectedSeries, socket }) => {
   }, [values]);
 
   useEffect(() => {
-    window.addEventListener("keydown", e => {
+    window.addEventListener("keydown", (e) => {
       if (e.keyCode === 13) {
         submit();
       }
     });
   }, []);
 
-  const handleChange = e =>
+  const handleChange = (e) =>
     setValues({ ...values, [e.target.name]: e.target.value });
 
   const submit = async () => {
@@ -107,12 +107,12 @@ const Series = ({ setScene, setSelectedSeries, socket }) => {
 
       <Select
         value={optionValue}
-        onChange={e => {
+        onChange={(e) => {
           setOptionValue(e.target.value);
           setSelectedSeries(e.target.value);
         }}
       >
-        {series.map(s => {
+        {series.map((s) => {
           return (
             <option key={s.name} name={s.name} value={s.id}>
               {s.name}
@@ -136,6 +136,14 @@ const Series = ({ setScene, setSelectedSeries, socket }) => {
         }}
       >
         READY
+      </Button>
+      <Button
+        style={{ margin: "auto", display: "block" }}
+        onClick={() => {
+          socket.emit("hunt_archive", optionValue);
+        }}
+      >
+        ARCHIVE
       </Button>
     </Container>
   );

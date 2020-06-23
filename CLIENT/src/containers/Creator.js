@@ -7,7 +7,7 @@ import {
   connectSocket,
   listenTo,
   joinRoom,
-  getMarkersBySeries
+  getMarkersBySeries,
 } from "../actions";
 import Series from "../components/Series";
 import Hunt from "../components/Hunt";
@@ -27,7 +27,7 @@ const Creator = ({
   markers,
   socket,
   getMarkers,
-  token
+  token,
 }) => {
   const [scene, setScene] = useState(SERIES);
   const [selectedSeries, setSelectedSeries] = useState();
@@ -40,10 +40,9 @@ const Creator = ({
   }, [connectToSocket, connected, listenToErrors]);
 
   const { email } = JwtDecode(token);
-  console.log(email);
-  if (email !== "teh@raptor.pizza" && email !== "arielklevecz@gmail.com") {
-    return <div>no</div>;
-  }
+  // if (email !== "teh@raptor.pizza" && email !== "arielklevecz@gmail.com") {
+  //   return <div>no</div>;
+  // }
   return (
     <div>
       <Message>
@@ -77,23 +76,23 @@ const Creator = ({
 const mapStateToProps = ({
   device: { mapKey, token },
   map: { markers },
-  socket: { connected, socket, message }
+  socket: { connected, socket, message },
 }) => ({
   connected,
   mapKey,
   markers,
   message,
   socket,
-  token
+  token,
 });
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   connectToSocket: () => dispatch(connectSocket()),
-  getMarkers: series => dispatch(getMarkersBySeries(series)),
-  joinSeries: series => dispatch(joinRoom(series)),
+  getMarkers: (series) => dispatch(getMarkersBySeries(series)),
+  joinSeries: (series) => dispatch(joinRoom(series)),
   listenToNewMarker: () => dispatch(listenTo("new_marker")),
   listenToErrors: () => dispatch(listenTo("create_error")),
   logout: () => dispatch(logOut()),
-  dispatch
+  dispatch,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Creator);

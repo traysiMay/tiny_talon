@@ -35,6 +35,11 @@ const pewpew = {
   lng: -73.989691
 };
 
+const ny = {
+  lat: 40.703741,
+  lng: -73.931124
+};
+
 const CMap = ({ mapKey, markers, series, setScene, socket, getMarkers }) => {
   const [userLocation, setUserLocation] = useState();
   const [marker, setMarker] = useState([]);
@@ -90,8 +95,8 @@ const CMap = ({ mapKey, markers, series, setScene, socket, getMarkers }) => {
             <SquareButton onClick={() => setScene("SERIES")}>back</SquareButton>
           </Overlay>
           <GoogleMapReact
-            defaultCenter={sf}
-            defaultZoom={17}
+            defaultCenter={ny}
+            defaultZoom={15}
             bootstrapURLKeys={{ key: mapKey }}
             options={{ styles: whiteMap }}
             onClick={e => {

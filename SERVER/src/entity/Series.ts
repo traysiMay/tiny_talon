@@ -5,7 +5,7 @@ import { Hunts } from "./Hunts";
 export enum SeriesType {
   HUNT = "hunt",
   PERSONAL = "personal",
-  GLOBAL = "global"
+  GLOBAL = "global",
 }
 
 @Entity()
@@ -29,15 +29,12 @@ export class Series {
   @Column({ nullable: true })
   num_markers: number;
 
-  @OneToMany(
-    type => Hunts,
-    hunts => hunts.series
-  )
+  @Column({ default: false })
+  archived: boolean;
+
+  @OneToMany((type) => Hunts, (hunts) => hunts.series)
   hunts: Hunts[];
 
-  @OneToMany(
-    type => Markers,
-    markers => markers.series
-  )
+  @OneToMany((type) => Markers, (markers) => markers.series)
   markers: Markers[];
 }

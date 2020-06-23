@@ -18,17 +18,7 @@ import io from "socket.io";
 import jwt from "jsonwebtoken";
 import routes from "./routes";
 import sockets from "./sockets";
-/*
-OTHER USER CENTRIC STUFF
-:: CONNECT DEVICE TO GAME OBJECTS
-:: GAME OBJECTS DEFINE WHAT A USER HAS FOUND
-:: GAME OBJECTS DEFINE GAME STATE FOR A GIVEN HUNT
 
-EVENTS
-:: USER FINDS OBJECT
-:: USER FINDS ALL OBJECTS
-:: USER GETS THEIR OBJECTS - E.G. UPDATE VS LOAD STATE
-*/
 const app = express();
 const server = http.createServer(app);
 export const ws = io(server);

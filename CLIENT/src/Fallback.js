@@ -47,7 +47,7 @@ const ErrorMessage = styled.div`
   margin-top: 0.7rem;
 `;
 
-const errorMessage = error => {
+const errorMessage = (error) => {
   switch (error) {
     case UNAUTHORIZED:
       return "hmm you aren't authorized for whatever you tried to do";
@@ -65,7 +65,7 @@ const Fallback = ({ clearErrors, email, error, getAllUserSeries, history }) => {
   const [availableSeries, setAvailableSeries] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getAllUserSeries().then(series => {
+    getAllUserSeries().then((series) => {
       setLoading(false);
       setAvailableSeries(series);
     });
@@ -77,7 +77,6 @@ const Fallback = ({ clearErrors, email, error, getAllUserSeries, history }) => {
       .setAttribute("viewBox", "0 -300 1080 1080");
   }, []);
   const eMessage = errorMessage(error);
-
   return (
     <div>
       <div style={{ height: 110 }}>
@@ -88,26 +87,52 @@ const Fallback = ({ clearErrors, email, error, getAllUserSeries, history }) => {
         {loading && <Smiler />}
         {eMessage && <ErrorMessage>{eMessage}</ErrorMessage>}
         {!loading && (
-          <HuntParagraph>
-            <h3>Here are your available hunts</h3>
-            {availableSeries && availableSeries.length > 0 ? (
-              availableSeries.map(s => (
-                <div
-                  onClick={() => {
-                    clearErrors();
-                    history.push(`/map/${s.id}`);
-                  }}
-                  key={s.id}
-                >
-                  {s.name}
+          <div>
+            <HuntParagraph>
+              <h3>Hunts</h3>
+              {availableSeries && availableSeries.length > 0 ? (
+                availableSeries
+                  .filter((s) => !s.archived)
+                  .map((s) => (
+                    <div
+                      onClick={() => {
+                        clearErrors();
+                        history.push(`/map/${s.id}`);
+                      }}
+                      key={s.id}
+                    >
+                      {s.name}
+                    </div>
+                  ))
+              ) : (
+                <div style={{ background: "red" }}>
+                  there are no hunts for you :(
                 </div>
-              ))
-            ) : (
-              <div style={{ background: "red" }}>
-                there are no hunts for you :(
-              </div>
-            )}
-          </HuntParagraph>
+              )}
+            </HuntParagraph>
+            <HuntParagraph>
+              <h3>Archive</h3>
+              {availableSeries && availableSeries.length > 0 ? (
+                availableSeries
+                  .filter((s) => s.archived)
+                  .map((s) => (
+                    <div
+                      onClick={() => {
+                        clearErrors();
+                        history.push(`/map/${s.id}`);
+                      }}
+                      key={s.id}
+                    >
+                      {s.name}
+                    </div>
+                  ))
+              ) : (
+                <div style={{ background: "red" }}>
+                  Hmm nothing in the archive
+                </div>
+              )}
+            </HuntParagraph>
+          </div>
         )}
       </Container>
     </div>
@@ -115,8 +140,8 @@ const Fallback = ({ clearErrors, email, error, getAllUserSeries, history }) => {
 };
 
 const mapStateToProps = ({ device: { email, error } }) => ({ email, error });
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   clearErrors: () => dispatch({ type: "CLEAR_ERRORS" }),
-  getAllUserSeries: () => getAllUserSeries(dispatch)
+  getAllUserSeries: () => getAllUserSeries(dispatch),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Fallback);

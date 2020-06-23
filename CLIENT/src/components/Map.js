@@ -7,12 +7,22 @@ import Smiler from "../graphics/Smiler";
 
 const sf = {
   lat: 37.78126372769892,
-  lng: -122.41344338335298
+  lng: -122.41344338335298,
 };
 
 const pewpew = {
   lat: 40.716323,
-  lng: -73.989691
+  lng: -73.989691,
+};
+
+const ny = {
+  lat: 40.703741,
+  lng: -73.931124,
+};
+
+const la = {
+  lat: 34.079952,
+  lng: -118.269773,
 };
 
 const Map = ({
@@ -22,7 +32,7 @@ const Map = ({
   markers,
   markersFound,
   places,
-  reset
+  reset,
 }) => {
   // const [userLocation, setUserLocation] = useState();
   useEffect(() => {
@@ -53,7 +63,7 @@ const Map = ({
   //     setUserLocation({ lat, lng });
   //   });
   // }, []);
-  console.log(markers);
+
   if (markers.length === 0) {
     return (
       <div>
@@ -61,12 +71,28 @@ const Map = ({
       </div>
     );
   }
+
+  const getCenter = () => {
+    switch (hunt) {
+      case "3":
+        return sf;
+      case "4":
+        return ny;
+      case "5":
+        return la;
+      default:
+        return sf;
+    }
+  };
+
+  const center = getCenter();
+
   return (
     <MapContainer>
       <GoogleMapReact
         // defaultCenter={userLocation ? userLocation : places.ppark}
-        defaultCenter={sf}
-        center={sf}
+        defaultCenter={center}
+        center={center}
         defaultZoom={15}
         bootstrapURLKeys={{ key: mapKey }}
         options={{ styles: whiteMap }}

@@ -6,7 +6,7 @@ import { getRaptorsMarkers, getRaptorsBySeries } from "./getters";
 import { markerCreator } from "./creators";
 import { codeReducer, CodeMessage } from "./reducers";
 
-const sockets = async socket => {
+const sockets = async (socket) => {
   console.log("a user has connected");
   const decoded = jwt.verify(socket.handshake.query.token, process.env.SACRET);
 
@@ -16,23 +16,30 @@ const sockets = async socket => {
 
   // ** JOIN SERIES ROOM
   // DO THEY NEED TO LEAVE OTHER ROOMS?
-  socket.on("join", async room => {
+  socket.on("join", async (room) => {
     socket.join(`series_${room}`);
   });
 
-  socket.on("leave", async room => {
+  socket.on("leave", async (room) => {
     socket.leave(`series_${room}`);
   });
   // *****
-  socket.on("hunt_ready", async series => {
+  socket.on("hunt_ready", async (series) => {
     const seriesRepo = getRepository(Series);
     const rSeries = await seriesRepo.findOne(series);
     rSeries.init = true;
     seriesRepo.save(rSeries);
     ws.in(`series_${series}`).emit("ready", true);
   });
+
+  socket.on("hunt_archive", async (series) => {
+    const seriesRepo = getRepository(Series);
+    const rSeries = await seriesRepo.findOne(series);
+    rSeries.archived = true;
+    seriesRepo.save(rSeries);
+  });
   // ** SENDING A CODE **
-  socket.on("code", async code => {
+  socket.on("code", async (code) => {
     const { id, message, markerMap, completed } = await codeReducer(
       code,
       decoded.id
@@ -43,7 +50,7 @@ const sockets = async socket => {
     ) {
       return socket.emit("code_response", {
         message,
-        seriesId: id
+        seriesId: id,
       });
     }
     if (message === CodeMessage.WIN) {
@@ -67,14 +74,14 @@ const sockets = async socket => {
   // *****
 
   // ** GETTING MARKERS **
-  socket.on("get_markers", async hunt => {
+  socket.on("get_markers", async (hunt) => {
     const {
       markers,
       markerMap,
       name,
       completed,
       ready,
-      success
+      success,
     } = await getRaptorsMarkers(socket.handshake.query.token, hunt);
     await socket.emit("markers", {
       markers,
@@ -82,11 +89,11 @@ const sockets = async socket => {
       name,
       completed,
       ready,
-      success
+      success,
     });
   });
 
-  socket.on("get_markers_by_series", async series => {
+  socket.on("get_markers_by_series", async (series) => {
     const { markers } = await getRaptorsBySeries(series);
     socket.emit("markers", { markers, success: true });
   });
