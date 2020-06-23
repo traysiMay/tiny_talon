@@ -2,20 +2,23 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { GET_MARKERS } from "../actions";
 
-const Status = ({ getMarkers, status }) => {
-  const [focus, setFocus] = useState("lala");
+const Status = ({ getMarkers, hunt, status }) => {
+  const [focus, setFocus] = useState(null);
 
   useEffect(() => {
-    window.addEventListener("focus", () => setFocus("focus"));
-    window.addEventListener("blur", () => setFocus("nofucs"));
-  }, []);
-
-  useEffect(() => {
-    if (focus === "focus") {
-      getMarkers();
+    if (focus) {
+      getMarkers(hunt);
     }
-  }, [focus, getMarkers]);
-
+    const toggleFocus = () => {
+      setFocus(!focus);
+    };
+    window.addEventListener("focus", toggleFocus, false);
+    window.addEventListener("blur", toggleFocus, false);
+    return () => {
+      window.removeEventListener("focus", toggleFocus, false);
+      window.removeEventListener("blur", toggleFocus, false);
+    };
+  }, [focus, getMarkers, hunt]);
   return (
     <div style={{ display: "none" }}>
       {status}-{focus}
@@ -25,7 +28,7 @@ const Status = ({ getMarkers, status }) => {
 
 const mapStateToProps = state => state.socket;
 const mapDispatchToProps = dispatch => ({
-  getMarkers: () => dispatch({ type: GET_MARKERS })
+  getMarkers: hunt => dispatch({ type: GET_MARKERS, hunt })
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Status);

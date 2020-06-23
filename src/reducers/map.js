@@ -1,4 +1,10 @@
-import { MAP_INIT, MAP_KEY } from "../actions";
+import {
+  MAP_INIT,
+  MARKER_FOUND,
+  NEW_MARKER,
+  HUNT_COMPLETED,
+  RESET
+} from "../actions";
 
 const ppark = {
   lat: 40.66257,
@@ -7,18 +13,45 @@ const ppark = {
 
 const mapState = {
   places: { ppark },
-  mapKey: "",
-  markers: []
+  markers: [],
+  markersFound: [],
+  name: "",
+  completed: false,
+  ready: false,
+  loading: true
 };
 
 const map = (state = mapState, action) => {
   switch (action.type) {
     case MAP_INIT:
-      const { markers } = action;
-      return { ...state, markers };
-    case MAP_KEY:
-      const { mapKey } = action;
-      return { ...state, mapKey };
+      const {
+        markers: { completed, markers, markerMap, name, ready }
+      } = action;
+      return {
+        ...state,
+        completed,
+        markers,
+        markersFound: markerMap,
+        name,
+        ready,
+        loading: false
+      };
+    case "MAP_READY":
+      return { ...state, ready: true };
+    case MARKER_FOUND:
+      const { markersFound } = action;
+      return { ...state, markersFound };
+    case NEW_MARKER:
+      const { newMarker } = action;
+      return { ...state, markers: [...state.markers, newMarker] };
+    case HUNT_COMPLETED:
+      return { ...state, completed: true };
+    case RESET:
+      return mapState;
+    case "MAP_LOADING":
+      return { ...state, loading: true };
+    case "MAP_DONE":
+      return { ...state, loading: false };
     default:
       return state;
   }

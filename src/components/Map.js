@@ -5,7 +5,36 @@ import RaptorMarker from "../markers/RaptorMarker";
 import whiteMap from "../styles/whiteMap.json";
 import Smiler from "../graphics/Smiler";
 
-const Map = ({ history, mapKey, markers, places }) => {
+const sf = {
+  lat: 37.78126372769892,
+  lng: -122.41344338335298,
+};
+
+const pewpew = {
+  lat: 40.716323,
+  lng: -73.989691,
+};
+
+const ny = {
+  lat: 40.703741,
+  lng: -73.931124,
+};
+
+const la = {
+  lat: 34.079952,
+  lng: -118.269773,
+};
+
+const Map = ({
+  history,
+  hunt,
+  mapKey,
+  markers,
+  markersFound,
+  places,
+  reset,
+}) => {
+  // const [userLocation, setUserLocation] = useState();
   useEffect(() => {
     const startTime = Date.now();
     let frame;
@@ -22,6 +51,18 @@ const Map = ({ history, mapKey, markers, places }) => {
 
     animate();
   }, [markers]);
+  // useEffect(() => {
+  //   return () => {
+  //     reset();
+  //     console.log("WAHT");
+  //   };
+  // }, []);
+  // useEffect(() => {
+  //   navigator.geolocation.getCurrentPosition(p => {
+  //     const { latitude: lat, longitude: lng } = p.coords;
+  //     setUserLocation({ lat, lng });
+  //   });
+  // }, []);
 
   if (markers.length === 0) {
     return (
@@ -30,23 +71,43 @@ const Map = ({ history, mapKey, markers, places }) => {
       </div>
     );
   }
+
+  const getCenter = () => {
+    switch (hunt) {
+      case "3":
+        return sf;
+      case "4":
+        return ny;
+      case "5":
+        return la;
+      default:
+        return sf;
+    }
+  };
+
+  const center = getCenter();
+
   return (
     <MapContainer>
       <GoogleMapReact
-        defaultCenter={places.ppark}
-        defaultZoom={17}
+        // defaultCenter={userLocation ? userLocation : places.ppark}
+        defaultCenter={center}
+        center={center}
+        defaultZoom={15}
         bootstrapURLKeys={{ key: mapKey }}
         options={{ styles: whiteMap }}
-        onChildClick={p => {
-          history.push(`/pop/${p}`);
+        onChildClick={(id, data) => {
+          if (data.found) return;
+          history.push(`/map/${hunt}/pop/${id}`);
         }}
       >
-        {markers.map(m => {
+        {markers.map((m, i) => {
           return (
             <RaptorMarker
-              key={m.hash}
-              id={m.hash}
-              found={m.found}
+              key={m.id}
+              id={m.name + m.id}
+              type={m.type}
+              found={markersFound.includes(`${m.id}`)}
               lat={m.lat}
               lng={m.lng}
             />

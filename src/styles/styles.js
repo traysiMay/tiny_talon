@@ -5,7 +5,7 @@ export const ScanContainer = styled.div`
   background: white;
   border: 1px solid black;
   color: black;
-  padding: 8%;
+  padding: 19px;
   font-family: Arial;
   font-weight: bold;
   font-size: 2.4rem;
@@ -18,12 +18,13 @@ export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 80%;
-  max-width: 900px;
-  margin: auto;
+  width: 88%;
+  max-width: 400px;
+  max-height: 777px;
+  margin: 3% auto;
   div {
-    margin: 4% auto;
-    border-bottom: 4px dotted black;
+    margin: 1% auto;
+    /* border-bottom: 4px dotted black; */
     padding: 3%;
     width: 80%;
   }
@@ -39,15 +40,16 @@ export const ButtonContainer = styled.div`
     justify-content: flex-start;
   }
 `;
+
 export const Input = styled.input`
   text-align: center;
-  font-size: 22px;
   font-family: Arial;
   border: 2px black solid;
   height: 56px;
   box-shadow: 9px 10px black;
   width: 79%;
   max-width: 430px;
+  font-size: 1.5rem;
 `;
 
 export const Button = styled.button`
@@ -60,6 +62,13 @@ export const Button = styled.button`
   background: white;
   box-shadow: -5px 3px black;
   line-height: 122px;
+`;
+
+export const SquareButton = styled.button`
+  background: white;
+  color: black;
+  border: 2px solid white;
+  margin: 4px;
 `;
 
 export const MapContainer = styled.div`

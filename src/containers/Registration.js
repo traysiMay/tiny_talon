@@ -17,7 +17,7 @@ const Registration = ({ getToken, hash, registerDevice, status, token }) => {
       setError("This email is invalid...");
       return;
     }
-    registerDevice(email.current);
+    registerDevice(email.current.toLowerCase());
   };
 
   useEffect(() => {
@@ -28,16 +28,23 @@ const Registration = ({ getToken, hash, registerDevice, status, token }) => {
     });
     // eslint-disable-next-line
   }, []);
-
-  if (!hash) return <Loading />;
+  if (!hash) return <Loading message="registering device..." />;
 
   if (status === DEVICE_NOT_REGISTERED) {
     const handleChange = e => (email.current = e.target.value);
     return (
       <ButtonContainer>
-        <Smiler style={{ width: "35%", margin: "0 auto" }} />
+        <div style={{ borderBottom: "none" }}>
+          <Smiler
+            style={{
+              margin: "0 auto",
+              display: "block",
+              width: "35%"
+            }}
+          />
+        </div>
         <div>hmm I don't recognize this device...</div>
-        <div>please sync it to your email</div>{" "}
+        <div>please sync it to your email</div>
         <div
           style={{
             color: "#f36060",
@@ -50,7 +57,7 @@ const Registration = ({ getToken, hash, registerDevice, status, token }) => {
           {error}
         </div>
         <Input onChange={handleChange} name="email" placeholder="email..." />
-        <Button onClick={register}>Register</Button>
+        <Button onClick={register}>Sync</Button>
       </ButtonContainer>
     );
   }
@@ -58,7 +65,16 @@ const Registration = ({ getToken, hash, registerDevice, status, token }) => {
   if (!token) {
     return (
       <ButtonContainer>
-        <Smiler style={{ width: "35%", margin: "0 auto", fill: "#3ef3ff" }} />
+        <div style={{ borderBottom: "none" }}>
+          <Smiler
+            style={{
+              display: "block",
+              width: "35%",
+              margin: "0 auto",
+              fill: "#3ef3ff"
+            }}
+          />
+        </div>
         <div style={{ border: "2px solid black" }}>
           <div>oh boy! welcome back :)</div>
           <div>you are looking quite nice today</div>

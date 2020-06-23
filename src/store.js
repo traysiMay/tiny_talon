@@ -1,17 +1,25 @@
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import reducers from "./reducers";
-import { ERROR, BAD_TOKEN } from "./actions";
+import { ERROR, BAD_TOKEN, DEVICE_NOT_FOUND, deviceInit } from "./actions";
 
 const peelError = ({ getState, dispatch }) => {
   return next => action => {
-    console.log(action);
-    console.log(getState());
+    if (process.env.NODE_ENV === "development") {
+      console.log(action);
+      console.log(getState());
+    }
+
     if (action.type === ERROR) {
       // should this be error or message?
       switch (action.error) {
         case BAD_TOKEN:
+        case "USER_NOT_FOUND":
           localStorage.removeItem("token");
+          window.location.href = "/";
+          break;
+        case DEVICE_NOT_FOUND:
+          dispatch(deviceInit());
           break;
         default:
       }

@@ -8,7 +8,7 @@ export const fetchOptions = (method, token, body) => ({
         Authorization: `Bearer ${token}`
       }
     : { "Content-Type": "application/json" },
-  body: JSON.stringify({ ...body })
+  body: method === "POST" ? JSON.stringify({ ...body }) : null
 });
 
 export const handleResponse = response => {
@@ -22,5 +22,5 @@ export const handleResponse = response => {
 
 export const handleError = (error, dispatch) => {
   const { message } = error;
-  dispatch({ type: ERROR, message });
+  dispatch({ type: ERROR, error: message });
 };

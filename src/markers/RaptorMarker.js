@@ -19,7 +19,8 @@ const greatPlaceStyle = {
   fontSize: 16,
   fontWeight: "bold",
   //   padding: 4,
-  cursor: "pointer"
+  cursor: "pointer",
+  userSelect: "none"
 };
 
 const greatPlaceStyleHover = {
@@ -28,15 +29,15 @@ const greatPlaceStyleHover = {
   //   color: "#f44336"
 };
 
-const RaptorMarker = ({ found }) => {
-  const [bg, setBg] = useState("rgb(200,0,0)");
+const RaptorMarker = ({ found, r = 200, g = 0, b = 0 }) => {
+  const [bg, setBg] = useState(`rgb(${r},${g},${b})`);
   useEffect(() => {
     const startTime = Date.now();
     let frame;
     const animate = () => {
       const diff = Date.now() - startTime;
       const r = 200 + 40 * Math.sin(diff * 0.01);
-      const color = `rgb(${Math.floor(r)},0,0)`;
+      const color = `rgb(${Math.floor(r)},${g},${b})`;
       setBg(color);
       if (!found) {
         frame = requestAnimationFrame(animate);
@@ -46,9 +47,10 @@ const RaptorMarker = ({ found }) => {
     };
     animate();
     return () => cancelAnimationFrame(frame);
+    //eslint-disable-next-line
   }, [found]);
   return (
-    <div style={greatPlaceStyleHover}>
+    <div style={greatPlaceStyleHover} onPointerDown={console.log}>
       <Raptor
         bg={found ? "#7ffdcb" : bg}
         fill={`${found ? "#FF0000" : "#FFFFFF"}`}
