@@ -79,3 +79,10 @@ export const MapContainer = styled.div`
   height: 100vh;
   width: 100%;
 `;
+
+export const ThankLine = styled.div`
+  margin: auto;
+  font-size: 3rem;
+  width: 70%;
+  text-align: center;
+`;

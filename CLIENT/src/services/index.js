@@ -130,7 +130,7 @@ export const createRsvp = async (seriesId) => {
   const endPoint = "create_rsvp";
   const token = localStorage.getItem("token");
   const options = fetchOptions("POST", token, { seriesId });
-  fetch(`${process.env.REACT_APP_SERVER}/${endPoint}`, options)
+  return fetch(`${process.env.REACT_APP_SERVER}/${endPoint}`, options)
     .then(handleResponse)
     .then((data) => data);
 };

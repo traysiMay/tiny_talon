@@ -207,7 +207,12 @@ const createRsvp = async (req, res) => {
   const rsvp = new Rsvps();
   rsvp.email = id;
   rsvp.series = seriesId;
-  rsvpRepo.save(rsvp);
+  try {
+    await rsvpRepo.save(rsvp);
+  } catch (error) {
+    if (error.constraint === "UQ_RSVP_SERIES")
+      return res.send({ error: "already_signed_up" });
+  }
   return res.send({ success: true });
 };
 

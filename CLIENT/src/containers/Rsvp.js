@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, ButtonContainer } from "../styles/styles";
+import { Button, ButtonContainer, ThankLine } from "../styles/styles";
 import Smiler from "../graphics/Smiler";
 import { connect } from "react-redux";
 import { getSeries, createRsvp, releaseDevice } from "../services";
@@ -7,8 +7,19 @@ import { logOut, deviceInit } from "../actions";
 
 const Rsvp = ({ deviceAuth, email, logout, match }) => {
   const [seriesName, setSeriesName] = useState("");
+  const [response, setResponse] = useState("");
   const rsvp = () => {
-    createRsvp(match.params.seriesId).then(console.log);
+    createRsvp(match.params.seriesId).then((data) => {
+      if (data.success) {
+        return setResponse("Thanks for signing up!");
+      }
+      if (data.error === "already_signed_up") {
+        return setResponse("Looks like you are already signed up!");
+      }
+      if (data.error) {
+        return setResponse("Oh dear these seems to be an error :(");
+      }
+    });
   };
   const handleClick = () => {
     releaseDevice().then((data) => {
@@ -26,6 +37,21 @@ const Rsvp = ({ deviceAuth, email, logout, match }) => {
       setSeriesName(data.name);
     });
   }, []);
+
+  if (response) {
+    return (
+      <div style={{ borderBottom: "none" }}>
+        <Smiler
+          style={{
+            margin: "0 auto",
+            display: "block",
+            width: "35%",
+          }}
+        />
+        <ThankLine>{response}</ThankLine>
+      </div>
+    );
+  }
   return (
     <ButtonContainer>
       <div style={{ borderBottom: "none" }}>
@@ -37,8 +63,12 @@ const Rsvp = ({ deviceAuth, email, logout, match }) => {
           }}
         />
       </div>
-      <div>Hello! I have your emails as {email}</div>
-      <div>You would like to RSVP for {seriesName}?</div>
+      <div>
+        Hello! I have your emails as <b>{email}</b>
+      </div>
+      <div>
+        You would like to RSVP for <i>{seriesName}</i>?
+      </div>
       <div
         style={{
           color: "#f36060",
