@@ -35,7 +35,11 @@ export const ButtonContainer = styled.div`
     align-self: center;
     padding: 0;
   }
-
+  .alt-center {
+    color: #fc8888;
+    text-align: center;
+    cursor: pointer;
+  }
   @media only screen and (min-width: 700px) {
     justify-content: flex-start;
   }

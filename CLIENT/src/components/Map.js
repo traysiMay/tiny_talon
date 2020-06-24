@@ -25,6 +25,11 @@ const la = {
   lng: -118.269773,
 };
 
+const la2 = {
+  lat: 34.041662314344194,
+  lng: -118.236226156283,
+};
+
 const Map = ({
   history,
   hunt,
@@ -80,6 +85,8 @@ const Map = ({
         return ny;
       case "5":
         return la;
+      case "6":
+        return la2;
       default:
         return sf;
     }

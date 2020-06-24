@@ -6,6 +6,8 @@ import { Emails } from "../entity/Emails";
 import { Markers } from "../entity/Markers";
 import { Series } from "../entity/Series";
 import { Hunts } from "../entity/Hunts";
+import { Rsvps } from "../entity/Rsvps";
+import { release } from "os";
 
 const routes = Router();
 
@@ -65,21 +67,36 @@ const registerDevice = async (req, res) => {
   return res.send({ message: "new_device_created", token });
 };
 
+const releaseDevice = async (req, res) => {
+  const { hash, id } = res.locals.jwtInfo;
+  const deviceRepo = getRepository(Devices);
+  const device = await deviceRepo.findOne({ where: { hash, emailId: id } });
+  await deviceRepo.delete(device);
+  res.send({ success: true });
+};
+
 const newToken = async (req, res) => {
   const { hash } = req.body;
   const deviceRepo = getRepository(Devices);
   const device = await deviceRepo.findOne({
     where: { hash },
-    relations: ["email"]
+    relations: ["email"],
   });
   if (device) {
     const {
-      email: { email, id }
+      email: { email, id },
     } = device;
     const token = jwt.sign({ email, hash, id }, process.env.SACRET);
     return res.send({ token });
   }
   return res.status(500).send({ error: "DEVICE_NOT_FOUND" });
+};
+
+const getSeries = async (req, res) => {
+  const seriesId = req.query.seriesId;
+  const seriesRepo = getRepository(Series);
+  const series = await seriesRepo.findOne(seriesId);
+  res.send(series);
 };
 
 const getAllSeries = async (_, res) => {
@@ -183,6 +200,17 @@ const getPlace = async (req, res) => {
   return res.send({ place });
 };
 
+const createRsvp = async (req, res) => {
+  const { id } = res.locals.jwtInfo;
+  const { seriesId } = req.body;
+  const rsvpRepo = getRepository(Rsvps);
+  const rsvp = new Rsvps();
+  rsvp.email = id;
+  rsvp.series = seriesId;
+  rsvpRepo.save(rsvp);
+  return res.send({ success: true });
+};
+
 const tokenToReq = (req, res, next) => {
   const token = req.headers.authorization.split("Bearer ")[1];
   let jwtInfo;
@@ -196,6 +224,7 @@ const tokenToReq = (req, res, next) => {
   next();
 };
 
+routes.get("/get_series", getSeries);
 routes.get("/all_series", getAllSeries);
 routes.get("/all_user_series", [tokenToReq], getAllUserSeries);
 routes.post("/get_place", tokenToReq, getPlace);
@@ -206,5 +235,7 @@ routes.post("/new_token", newToken);
 routes.post("/send_series", sendSeries);
 routes.post("/create_marker", createMarker);
 routes.post("/create_hunt", createHunt);
+routes.post("/create_rsvp", [tokenToReq], createRsvp);
+routes.delete("/release_device", [tokenToReq], releaseDevice);
 
 export default routes;
