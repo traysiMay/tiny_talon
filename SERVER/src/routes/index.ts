@@ -7,13 +7,11 @@ import { Markers } from "../entity/Markers";
 import { Series } from "../entity/Series";
 import { Hunts } from "../entity/Hunts";
 import { Rsvps } from "../entity/Rsvps";
-import { release } from "os";
 
 const routes = Router();
 
 const authDevice = async (req, res) => {
   const { device } = req.body;
-  console.log(device);
   const deviceRepo = getRepository(Devices);
   const devices = await deviceRepo.findOne({ where: { hash: device } });
   if (!devices) {
