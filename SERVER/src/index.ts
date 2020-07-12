@@ -27,7 +27,8 @@ app.use(bodyParser.json());
 app.use(session({ secret: process.env.SSACRET }));
 app.use(
   cors({
-    origin: process.env.CLIENT,
+    // origin: process.env.CLIENT,
+    origin: "*",
     credentials: true,
   })
 );

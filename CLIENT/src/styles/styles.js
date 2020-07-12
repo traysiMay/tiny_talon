@@ -61,11 +61,11 @@ export const Button = styled.button`
   height: 8rem;
   border-radius: 50%;
   border: 2px solid #000000;
-  font-size: 1.6rem;
+  font-size: 1.3rem;
+  font-weight: 600;
   cursor: pointer;
   background: white;
   box-shadow: -5px 3px black;
-  line-height: 122px;
 `;
 
 export const SquareButton = styled.button`
