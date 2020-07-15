@@ -10,6 +10,7 @@ import { DEVICE_NOT_REGISTERED } from "./statuses";
 import Loading from "./animations/Loading";
 import Creator from "./containers/Creator";
 import Fallback from "./Fallback";
+import Rsvp from "./containers/Rsvp";
 
 function App({ hash, status, token, loading, welcome }) {
   if (welcome) return <Loading fill={"yellow"} message={"welcome!"} />;
@@ -25,6 +26,7 @@ function App({ hash, status, token, loading, welcome }) {
         <Route path="/code/:code" component={Scan} />
         <Route path="/creator" component={Creator} />
         <Route path="/map/:hunt" component={MainView} />
+        <Route path="/rsvp/:seriesId" component={Rsvp} />
         <Route path="/" component={Fallback} />
       </Switch>
     </>
@@ -33,18 +35,18 @@ function App({ hash, status, token, loading, welcome }) {
 
 const mapStateToProps = ({
   device: { error, hash, status, token },
-  ui: { loading, welcome }
+  ui: { loading, welcome },
 }) => ({
   error,
   hash,
   loading,
   status,
   token,
-  welcome
+  welcome,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   getToken: () => dispatch(newToken()),
-  registerDevice: () => dispatch(registerDevice())
+  registerDevice: () => dispatch(registerDevice()),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(App);

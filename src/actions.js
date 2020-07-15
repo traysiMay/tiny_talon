@@ -39,9 +39,9 @@ export const deviceInit = () => {
   return async (dispatch, getState) => {
     dispatch({ type: LOADING });
     if (window.requestIdleCallback) {
-      requestIdleCallback(function() {
-        Fingerprint2.get(async function(components) {
-          var values = components.map(function(component) {
+      requestIdleCallback(function () {
+        Fingerprint2.get(async function (components) {
+          var values = components.map(function (component) {
             return component.value;
           });
           const device = Fingerprint2.x64hash128(values.join(""), 31);
@@ -53,9 +53,9 @@ export const deviceInit = () => {
         });
       });
     } else {
-      setTimeout(function() {
-        Fingerprint2.get(async function(components) {
-          var values = components.map(function(component) {
+      setTimeout(function () {
+        Fingerprint2.get(async function (components) {
+          var values = components.map(function (component) {
             return component.value;
           });
           const device = Fingerprint2.x64hash128(values.join(""), 31);
@@ -72,22 +72,22 @@ export const deviceInit = () => {
 
 export const authenticateDevice = () => {};
 
-export const readyDelay = delay => {
-  return dispatch => {
+export const readyDelay = (delay) => {
+  return (dispatch) => {
     setTimeout(() => dispatch({ type: READY }), delay);
   };
 };
 
 export const dDelay = (type, delay) => {
-  return dispatch => {
+  return (dispatch) => {
     setTimeout(() => dispatch({ type }), delay);
   };
 };
 
-export const registerDevice = email => {
+export const registerDevice = (email) => {
   return async (dispatch, getState) => {
     const {
-      device: { hash }
+      device: { hash },
     } = getState();
     tRequest("register_device", { email, hash }, dispatch);
     dispatch({ type: LOADING });
@@ -98,7 +98,7 @@ export const registerDevice = email => {
 export const newToken = () => {
   return async (dispatch, getState) => {
     const {
-      device: { hash }
+      device: { hash },
     } = getState();
     getToken(dispatch, hash);
     dispatch({ type: LOADING });
@@ -107,8 +107,7 @@ export const newToken = () => {
 };
 
 export const logOut = () => {
-  return async dispatch => {
-    // localStorage.setItem("token", "");
+  return async (dispatch) => {
     localStorage.removeItem("token");
     dispatch({ type: LOGOUT });
   };
@@ -129,14 +128,14 @@ function socketWrap(hash) {
 export const connectSocket = () => {
   return async (dispatch, getState) => {
     const {
-      device: { hash }
+      device: { hash },
     } = getState();
     const socket = await socketWrap(hash);
-    socket.on("error", error => {
+    socket.on("error", (error) => {
       dispatch({ type: ERROR, error });
     });
-    socket.on("found", found => dispatch({ type: FOUND, name: found }));
-    socket.on("markers", markers => {
+    socket.on("found", (found) => dispatch({ type: FOUND, name: found }));
+    socket.on("markers", (markers) => {
       if (!markers.success)
         return dispatch({ type: ERROR, error: UNAUTHORIZED });
       dispatch({ type: MAP_INIT, markers });
@@ -147,8 +146,8 @@ export const connectSocket = () => {
 
 // ** CONSOLIDATE OR SPLIT UP THE DIFFERENT BETWEEN LISTENERS ON SOCKET CONNECTION
 // AND SOCKET CONNECTIONS that are handled by the listendispatcher
-export const socketMessage = message => {
-  return dispatch => {
+export const socketMessage = (message) => {
+  return (dispatch) => {
     dispatch({ type: SOCKET_MESSAGE, message });
   };
 };
@@ -175,13 +174,13 @@ const listenDispatcher = (dispatch, topic, payload) => {
   }
 };
 
-export const listenTo = topic => {
+export const listenTo = (topic) => {
   return async (dispatch, getState) => {
     const { listeners, socket } = getState().socket;
     if (listeners.includes(topic)) {
       return;
     }
-    socket.on(topic, message => {
+    socket.on(topic, (message) => {
       listenDispatcher(dispatch, topic, message);
       dispatch(socketMessage(message));
     });
@@ -189,7 +188,7 @@ export const listenTo = topic => {
   };
 };
 
-export const joinRoom = room => {
+export const joinRoom = (room) => {
   const topic = "join";
   return async (dispatch, getState) => {
     getState().socket.socket.emit(topic, room);
@@ -198,13 +197,13 @@ export const joinRoom = room => {
 };
 // ------
 // GET MARKERS SENDS THE SOCKET EVENT TO REQUEST MARKERS
-export const getMarkers = hunt => {
-  return async dispatch => {
+export const getMarkers = (hunt) => {
+  return async (dispatch) => {
     dispatch({ type: GET_MARKERS, hunt });
   };
 };
 
-export const getMarkersBySeries = series => {
+export const getMarkersBySeries = (series) => {
   return async (dispatch, getState) => {
     getState().socket.socket.emit("get_markers_by_series", series);
   };
@@ -213,10 +212,10 @@ export const getMarkersBySeries = series => {
 export const connectSocketThenEmit = (emit, value) => {
   return async (dispatch, getState) => {
     const {
-      device: { hash }
+      device: { hash },
     } = getState();
     const socket = await socketWrap(hash);
-    socket.on("error", error => dispatch({ type: ERROR, error }));
+    socket.on("error", (error) => dispatch({ type: ERROR, error }));
     dispatch({ type: CONNECTED, socket });
     if (socket) {
       socket.emit(emit, value);
@@ -236,10 +235,10 @@ export const emit = (emit, value) => {
   };
 };
 
-export const stopListening = hunt => {
+export const stopListening = (hunt) => {
   return async (dispatch, getState) => {
     const {
-      socket: { socket }
+      socket: { socket },
     } = getState();
     socket.off();
     socket.disconnect();

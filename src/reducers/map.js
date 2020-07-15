@@ -3,12 +3,12 @@ import {
   MARKER_FOUND,
   NEW_MARKER,
   HUNT_COMPLETED,
-  RESET
+  RESET,
 } from "../actions";
 
 const ppark = {
   lat: 40.66257,
-  lng: -73.968564
+  lng: -73.968564,
 };
 
 const mapState = {
@@ -18,14 +18,16 @@ const mapState = {
   name: "",
   completed: false,
   ready: false,
-  loading: true
+  loading: true,
+  lat: "",
+  lng: "",
 };
 
 const map = (state = mapState, action) => {
   switch (action.type) {
     case MAP_INIT:
       const {
-        markers: { completed, markers, markerMap, name, ready }
+        markers: { completed, markers, markerMap, name, ready, lat, lng },
       } = action;
       return {
         ...state,
@@ -34,7 +36,9 @@ const map = (state = mapState, action) => {
         markersFound: markerMap,
         name,
         ready,
-        loading: false
+        lat,
+        lng,
+        loading: false,
       };
     case "MAP_READY":
       return { ...state, ready: true };

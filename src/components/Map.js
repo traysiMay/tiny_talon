@@ -25,6 +25,11 @@ const la = {
   lng: -118.269773,
 };
 
+const la2 = {
+  lat: 34.041662314344194,
+  lng: -118.236226156283,
+};
+
 const Map = ({
   history,
   hunt,
@@ -33,6 +38,8 @@ const Map = ({
   markersFound,
   places,
   reset,
+  lat,
+  lng,
 }) => {
   // const [userLocation, setUserLocation] = useState();
   useEffect(() => {
@@ -80,18 +87,20 @@ const Map = ({
         return ny;
       case "5":
         return la;
+      case "6":
+        return la2;
       default:
         return sf;
     }
   };
 
-  const center = getCenter();
-
+  const center =
+    lat === "999"
+      ? getCenter()
+      : { lat: parseFloat(lat), lng: parseFloat(lng) };
   return (
     <MapContainer>
       <GoogleMapReact
-        // defaultCenter={userLocation ? userLocation : places.ppark}
-        defaultCenter={center}
         center={center}
         defaultZoom={15}
         bootstrapURLKeys={{ key: mapKey }}

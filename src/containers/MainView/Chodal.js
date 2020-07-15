@@ -7,14 +7,14 @@ import { emit } from "../../actions";
 
 const ModalMessage = styled.div`
   margin: auto;
-  background: ${props => props.background};
+  background: ${(props) => props.background};
   width: 80%;
   display: block;
   padding: 1rem;
-  max-height: ${props => `${props.maxHeight}px`};
+  max-height: ${(props) => `${props.maxHeight}px`};
   overflow: hidden;
   transition: max-height 1s, background 1s;
-  font-size: ${window.innerWidth > 600 ? "40px" : "1rem"};
+  font-size: ${window.innerWidth > 600 ? "40px" : "1.5rem"};
 `;
 
 const Chodal = ({ history, markers, match, sendCode }) => {
@@ -22,21 +22,20 @@ const Chodal = ({ history, markers, match, sendCode }) => {
   const [background, setBackground] = useState("red");
   const [input, setInput] = useState("");
   const inputRef = useRef();
-
-  useEffect(() => {
-    setMaxHeight(1000);
-    inputRef.current.focus();
-  }, []);
-
-  const m = markers.find(m => m.id === parseInt(match.params.marker));
+  const m = markers.find((m) => m.id === parseInt(match.params.marker));
   if (!m) {
     history.goBack();
     window.location = "/map/" + window.location.pathname.split("/")[2];
   }
 
-  const handleChange = e => setInput(e.target.value);
+  useEffect(() => {
+    setMaxHeight(1000);
+    if (m.type.includes("input")) inputRef.current.focus();
+  }, []);
 
-  const keyPressed = e => {
+  const handleChange = (e) => setInput(e.target.value);
+
+  const keyPressed = (e) => {
     if (e.key === "Enter") sendIt();
   };
 
@@ -55,7 +54,7 @@ const Chodal = ({ history, markers, match, sendCode }) => {
   if (m.length === 0) return <div>wtf</div>;
   return (
     <Modal
-      onClick={e => {
+      onClick={(e) => {
         if (e.target.id === "modal-container") {
           retract();
         }
@@ -90,7 +89,7 @@ const Chodal = ({ history, markers, match, sendCode }) => {
   );
 };
 const mapStateToProps = ({ map: { markers } }) => ({ markers });
-const mapDispatchToProps = dispatch => ({
-  sendCode: code => dispatch(emit("code", { code }))
+const mapDispatchToProps = (dispatch) => ({
+  sendCode: (code) => dispatch(emit("code", { code })),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Chodal);

@@ -1,12 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import {
-  connectSocket,
-  getMarkers,
-  logOut,
-  listenTo,
-  joinRoom
-} from "../../actions";
+import { connectSocket, getMarkers, logOut, listenTo } from "../../actions";
 import Status from "../Status";
 import Map from "../../components/Map";
 import Logout from "../../components/Logout";
@@ -17,11 +11,9 @@ import Loading from "../../animations/Loading";
 const MapView = ({
   completed,
   connected,
-  connectToSocket,
   getMarkers,
   history,
   hunt,
-  joinSeries,
   logout,
   listenToMarkerFound,
   listenToNewMarker,
@@ -32,21 +24,16 @@ const MapView = ({
   markers,
   markersFound,
   places,
-  reset
+  reset,
+  lat,
+  lng,
 }) => {
-  // useEffect(() => {
-  //   if (connected) return;
-  //   connectToSocket();
-  //   //eslint-disable-next-line
-  // }, [connectToSocket]);
-
   useEffect(() => {
     if (!connected) return;
     getMarkers(hunt);
     listenToMarkerFound();
     listenToNewMarker();
     listenToWin();
-    // joinSeries(hunt);
     //eslint-disable-next-line
   }, [connected, getMarkers]);
   if (loading) return <Loading message="to the hunt we go.." />;
@@ -56,6 +43,8 @@ const MapView = ({
       <Status hunt={hunt} />
       <Logout logout={logout} />
       <Map
+        lat={lat}
+        lng={lng}
         history={history}
         hunt={hunt}
         mapKey={mapKey}
@@ -70,8 +59,8 @@ const MapView = ({
 
 const mapStateToProps = ({
   device: { mapKey },
-  map: { completed, markers, markersFound, loading, places },
-  socket: { connected }
+  map: { completed, markers, markersFound, loading, places, lat, lng },
+  socket: { connected },
 }) => ({
   completed,
   connected,
@@ -79,18 +68,19 @@ const mapStateToProps = ({
   mapKey,
   markers,
   markersFound,
-  places
+  places,
+  lat,
+  lng,
 });
-const mapDipstachToProps = dispatch => ({
+const mapDipstachToProps = (dispatch) => ({
   connectToSocket: () => dispatch(connectSocket()),
-  getMarkers: hunt => dispatch(getMarkers(hunt)),
-  // joinSeries: hunt => dispatch(joinRoom(hunt)),
+  getMarkers: (hunt) => dispatch(getMarkers(hunt)),
   logout: () => dispatch(logOut()),
   listenToNewMarker: () => dispatch(listenTo("new_marker")),
   listenToMarkerFound: () => dispatch(listenTo("marker_found")),
   listenToWin: () => dispatch(listenTo("win")),
   reset: () => dispatch({ type: "RESET" }),
-  dispatch
+  dispatch,
 });
 
 export default connect(mapStateToProps, mapDipstachToProps)(MapView);

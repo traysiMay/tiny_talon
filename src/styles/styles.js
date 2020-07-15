@@ -35,7 +35,11 @@ export const ButtonContainer = styled.div`
     align-self: center;
     padding: 0;
   }
-
+  .alt-center {
+    color: #fc8888;
+    text-align: center;
+    cursor: pointer;
+  }
   @media only screen and (min-width: 700px) {
     justify-content: flex-start;
   }
@@ -57,11 +61,11 @@ export const Button = styled.button`
   height: 8rem;
   border-radius: 50%;
   border: 2px solid #000000;
-  font-size: 1.6rem;
+  font-size: 1.3rem;
+  font-weight: 600;
   cursor: pointer;
   background: white;
   box-shadow: -5px 3px black;
-  line-height: 122px;
 `;
 
 export const SquareButton = styled.button`
@@ -74,4 +78,11 @@ export const SquareButton = styled.button`
 export const MapContainer = styled.div`
   height: 100vh;
   width: 100%;
+`;
+
+export const ThankLine = styled.div`
+  margin: auto;
+  font-size: 3rem;
+  width: 70%;
+  text-align: center;
 `;
