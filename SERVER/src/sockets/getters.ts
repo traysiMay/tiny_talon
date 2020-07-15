@@ -24,9 +24,10 @@ export const getRaptorsMarkers = async (token, id) => {
     parseInt(id);
     checkSeries = await seriesRepo.findOne(id);
   } catch (err) {
-    checkSeries = await seriesRepo.findOne({
-      where: { name: id.toLowerCase() },
-    });
+    checkSeries = await seriesRepo
+      .createQueryBuilder()
+      .where("LOWER(name) = LOWER(:name)", { name: id })
+      .getOne();
   }
   const seriesId = checkSeries.id;
   const { lat, lng } = checkSeries;

@@ -23,7 +23,6 @@ const authDevice = async (req, res) => {
       return res.status(401).send({ error: "no_auth_header" });
     }
     const token = req.headers.authorization.split(" ")[1];
-    console.log(token);
     if (token === "null") {
       return res.status(401).send({ error: "no_token" });
     }
@@ -132,8 +131,10 @@ const seriesReady = async (req, res) => {
     parseInt(id);
     series = await seriesRepo.findOne(id);
   } catch (err) {
-    series = await seriesRepo.findOne({ where: { name: id.toLowerCase() } });
-    console.log(series);
+    series = await seriesRepo
+      .createQueryBuilder()
+      .where("LOWER(name) = LOWER(:name)", { name: id })
+      .getOne();
   }
   if (!series) return res.status(404).send({ error: "NOT_FOUND" });
   const { init: ready } = series;
