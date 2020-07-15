@@ -1,15 +1,16 @@
 import { Markers } from "../entity/Markers";
 import { getRepository } from "typeorm";
 import { Series } from "../entity/Series";
-import { sanitizeInput } from "./utils";
+import { sanitizeInput, getMarkerTypes } from "./utils";
 
 export const markerCreator = async ({
+  markerTypes,
   name,
   hash,
   details,
   lat,
   lng,
-  series
+  series,
 }) => {
   const markerRepo = getRepository(Markers);
   const newMarker = new Markers();
@@ -19,7 +20,10 @@ export const markerCreator = async ({
   newMarker.series = series;
   newMarker.lat = lat;
   newMarker.lng = lng;
-
+  newMarker.type = getMarkerTypes(markerTypes);
+  if (newMarker.type instanceof Error) {
+    return newMarker.type;
+  }
   try {
     await markerRepo.save(newMarker);
   } catch (error) {

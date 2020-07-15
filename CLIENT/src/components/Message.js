@@ -13,7 +13,7 @@ const Container = styled.div`
   padding: 0.5rem;
   opacity: 0.5;
 `;
-const Message = ({ children }) => {
-  return <Container>{children}</Container>;
+const Message = ({ children, top }) => {
+  return <Container style={{ top }}>{children}</Container>;
 };
 export default Message;

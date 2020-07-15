@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { getRepository } from "typeorm";
 import { Markers } from "../entity/Markers";
 
-export const getRaptorsBySeries = async id => {
+export const getRaptorsBySeries = async (id) => {
   const markerRepo = getRepository(Markers);
   const markers = await markerRepo
     .createQueryBuilder("markers")
@@ -17,6 +17,19 @@ export const getRaptorsBySeries = async id => {
 export const getRaptorsMarkers = async (token, id) => {
   // GET THE HUNT.ID FROM THE URL?? OR IN THE BODY??
   const decoded = jwt.verify(token, process.env.SACRET);
+
+  const seriesRepo = await getRepository(Series);
+  let checkSeries;
+  try {
+    parseInt(id);
+    checkSeries = await seriesRepo.findOne(id);
+  } catch (err) {
+    checkSeries = await seriesRepo.findOne({
+      where: { name: id.toLowerCase() },
+    });
+  }
+  const seriesId = checkSeries.id;
+  const { lat, lng } = checkSeries;
   // it's a decent start
   // it at least should be structured where if they are already hunting
   // there is the smallest query time
@@ -26,7 +39,7 @@ export const getRaptorsMarkers = async (token, id) => {
     .leftJoinAndSelect("hunts.series", "series")
     .leftJoinAndSelect("series.markers", "markers")
     .leftJoinAndSelect("hunts.emails", "emails")
-    .where("series.id = :sid", { sid: id })
+    .where("series.id = :sid", { sid: seriesId })
     .andWhere("emails.id = :eid", { eid: decoded.id })
     .getOne();
 
@@ -65,9 +78,9 @@ export const getRaptorsMarkers = async (token, id) => {
     }
   }
 
-  markers = markers.map(m => {
+  markers = markers.map((m) => {
     return { ...m, hash: 0x0 };
   });
 
-  return { markers, markerMap, name, completed, ready, success };
+  return { markers, markerMap, name, completed, ready, success, lat, lng };
 };

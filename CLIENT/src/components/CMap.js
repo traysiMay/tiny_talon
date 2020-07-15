@@ -27,38 +27,59 @@ const Overlay = styled.div`
 
 const sf = {
   lat: 37.78126372769892,
-  lng: -122.41344338335298
+  lng: -122.41344338335298,
 };
 
 const pewpew = {
   lat: 40.716323,
-  lng: -73.989691
+  lng: -73.989691,
 };
 
 const ny = {
   lat: 40.703741,
-  lng: -73.931124
+  lng: -73.931124,
 };
 
-const CMap = ({ mapKey, markers, series, setScene, socket, getMarkers }) => {
+const midway = {
+  lat: 37.749514,
+  lng: -122.386036,
+};
+
+const mapCoords = {
+  SF: sf,
+  NYC: ny,
+  MIDWAY: midway,
+};
+
+const CMap = ({
+  mapCenter,
+  mapKey,
+  markers,
+  series,
+  setScene,
+  socket,
+  getMarkers,
+  setSeriesCenter,
+}) => {
   const [userLocation, setUserLocation] = useState();
   const [marker, setMarker] = useState([]);
   const [info, setInfo] = useState({
     name: "",
     hash: "",
-    details: ""
+    details: "",
+    markerTypes: [],
   });
 
   useEffect(() => {
     getMarkers(series);
-    navigator.geolocation.getCurrentPosition(p => {
+    navigator.geolocation.getCurrentPosition((p) => {
       const { latitude: lat, longitude: lng } = p.coords;
       setUserLocation({ lat, lng });
     });
     //eslint-disable-next-line
   }, []);
 
-  const handleChange = e =>
+  const handleChange = (e) =>
     setInfo({ ...info, [e.target.name]: e.target.value });
 
   const submitMarker = () => {
@@ -67,7 +88,7 @@ const CMap = ({ mapKey, markers, series, setScene, socket, getMarkers }) => {
     // info.lng = marker.lng;
     const payload = {
       marker: { ...info, lat: marker.lat, lng: marker.lng },
-      series
+      series,
     };
     socket.emit("create_marker", payload);
     getMarkers(series);
@@ -81,7 +102,7 @@ const CMap = ({ mapKey, markers, series, setScene, socket, getMarkers }) => {
       ) : (
         <Fragment>
           <Overlay>
-            {Object.keys(info).map(i => {
+            {Object.keys(info).map((i) => {
               return (
                 <input
                   key={i}
@@ -95,25 +116,27 @@ const CMap = ({ mapKey, markers, series, setScene, socket, getMarkers }) => {
             <SquareButton onClick={() => setScene("SERIES")}>back</SquareButton>
           </Overlay>
           <GoogleMapReact
+            center={mapCoords[mapCenter]}
             defaultCenter={ny}
             defaultZoom={15}
             bootstrapURLKeys={{ key: mapKey }}
             options={{ styles: whiteMap }}
-            onClick={e => {
+            onClick={(e) => {
               const marker = {
                 key: "frog",
                 id: "frog",
                 found: false,
                 lat: e.lat,
-                lng: e.lng
+                lng: e.lng,
               };
               setMarker(marker);
+              setSeriesCenter({ lat: e.lat, lng: e.lng });
             }}
             onChildClick={(e, p) => {
               console.log(p);
             }}
           >
-            {markers.map(marker => {
+            {markers.map((marker) => {
               return (
                 <RaptorMarker
                   g={200}

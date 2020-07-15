@@ -127,7 +127,14 @@ const getAllUserSeries = async (req, res) => {
 const seriesReady = async (req, res) => {
   const { id } = req.body;
   const seriesRepo = getRepository(Series);
-  const series = await seriesRepo.findOne(id);
+  let series;
+  try {
+    parseInt(id);
+    series = await seriesRepo.findOne(id);
+  } catch (err) {
+    series = await seriesRepo.findOne({ where: { name: id.toLowerCase() } });
+    console.log(series);
+  }
   if (!series) return res.status(404).send({ error: "NOT_FOUND" });
   const { init: ready } = series;
   res.send({ ready });

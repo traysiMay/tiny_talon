@@ -16,6 +16,12 @@ export class Series {
   @Column()
   name: string;
 
+  @Column({ default: "999" })
+  lat: string;
+
+  @Column({ default: "999" })
+  lng: string;
+
   @Column()
   description?: string;
 

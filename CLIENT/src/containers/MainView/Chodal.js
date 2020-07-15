@@ -22,17 +22,16 @@ const Chodal = ({ history, markers, match, sendCode }) => {
   const [background, setBackground] = useState("red");
   const [input, setInput] = useState("");
   const inputRef = useRef();
-
-  useEffect(() => {
-    setMaxHeight(1000);
-    inputRef.current.focus();
-  }, []);
-
   const m = markers.find((m) => m.id === parseInt(match.params.marker));
   if (!m) {
     history.goBack();
     window.location = "/map/" + window.location.pathname.split("/")[2];
   }
+
+  useEffect(() => {
+    setMaxHeight(1000);
+    if (m.type.includes("input")) inputRef.current.focus();
+  }, []);
 
   const handleChange = (e) => setInput(e.target.value);
 

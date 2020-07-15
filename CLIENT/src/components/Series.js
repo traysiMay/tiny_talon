@@ -23,7 +23,7 @@ const Container = styled.div`
   }
 `;
 
-const Select = styled.select`
+export const Select = styled.select`
   margin: 2rem;
   width: 200px;
   height: 47px;
@@ -83,10 +83,10 @@ const Series = ({ setScene, setSelectedSeries, socket }) => {
     <Container>
       <div>Series</div>
       <div
-        style={{ fontSize: "2rem", color: "red" }}
+        style={{ fontSize: "2rem", color: "red", cursor: "pointer" }}
         onClick={() => setToggle(!toggle)}
       >
-        switch
+        New
       </div>
       {toggle && (
         <div>

@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import MapView from "./MapView";
-import WinView from "./WinView";
 import { Route } from "react-router-dom";
 import Chodal from "./Chodal";
 import {
@@ -9,14 +8,13 @@ import {
   listenTo,
   connectSocket,
   joinRoom,
-  stopListening
+  stopListening,
 } from "../../actions";
 import { seriesReady } from "../../services";
 import NotReady from "../../components/NoReady";
 import Loading from "../../animations/Loading";
 
 const MainView = ({
-  completed,
   connected,
   connectToSocket,
   dispatch,
@@ -28,7 +26,7 @@ const MainView = ({
   error,
   name,
   ready,
-  stopListening
+  stopListening,
 }) => {
   const { hunt } = match.params;
   if (error === UNAUTHORIZED || error === "NOT_FOUND") {
@@ -76,22 +74,22 @@ const MainView = ({
 const mapStateToProps = ({
   map: { completed, name, ready, loading },
   device: { error },
-  socket: { connected }
+  socket: { connected },
 }) => ({
   completed,
   connected,
   error,
   loading,
   name,
-  ready
+  ready,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   connectToSocket: () => dispatch(connectSocket()),
   listenToReady: () => dispatch(listenTo("ready")),
-  joinSeries: hunt => dispatch(joinRoom(hunt)),
-  stopListening: hunt => dispatch(stopListening(hunt)),
-  dispatch
+  joinSeries: (hunt) => dispatch(joinRoom(hunt)),
+  stopListening: (hunt) => dispatch(stopListening(hunt)),
+  dispatch,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainView);

@@ -5,6 +5,7 @@ import { Series } from "../entity/Series";
 import { getRaptorsMarkers, getRaptorsBySeries } from "./getters";
 import { markerCreator } from "./creators";
 import { codeReducer, CodeMessage } from "./reducers";
+import { setSeriesCenter } from "./setters";
 
 const sockets = async (socket) => {
   console.log("a user has connected");
@@ -73,7 +74,14 @@ const sockets = async (socket) => {
   });
   // *****
 
+  // ** SETTING SERIES CENTER **
+  socket.on("set_series_center", async ({ center, series }) => {
+    const success = await setSeriesCenter(center, series);
+    socket.emit("create_response", { message: success });
+  });
+
   // ** GETTING MARKERS **
+  // THERE IS AN API REQUEST THAT CHECKS IF THE HUNT IS READY WITH SOME REDUNDANCY
   socket.on("get_markers", async (hunt) => {
     const {
       markers,
@@ -82,6 +90,8 @@ const sockets = async (socket) => {
       completed,
       ready,
       success,
+      lat,
+      lng,
     } = await getRaptorsMarkers(socket.handshake.query.token, hunt);
     await socket.emit("markers", {
       markers,
@@ -90,6 +100,8 @@ const sockets = async (socket) => {
       completed,
       ready,
       success,
+      lat,
+      lng,
     });
   });
 

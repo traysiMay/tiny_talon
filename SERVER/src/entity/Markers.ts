@@ -3,7 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  Unique
+  Unique,
 } from "typeorm";
 import { Series } from "./Series";
 
@@ -12,10 +12,10 @@ import { Series } from "./Series";
 // THAT CAN EITHER HAVE RIDDLES OR MARKERS
 // i.e. a riddle does not need a location in theory
 
-enum ClueType {
+export enum ClueType {
   QR = "qr",
   INPUT = "input",
-  RIDDLE = "riddle"
+  RIDDLE = "riddle",
 }
 
 @Entity()
@@ -36,7 +36,7 @@ export class Markers {
   @Column({
     type: "simple-array",
     enum: ClueType,
-    default: `${ClueType.QR},${ClueType.INPUT}`
+    default: [`${ClueType.QR},${ClueType.INPUT}`],
   })
   type: ClueType[];
 
@@ -46,6 +46,6 @@ export class Markers {
   @Column()
   lng: string;
 
-  @ManyToOne(type => Series)
+  @ManyToOne((type) => Series)
   series: Series;
 }
