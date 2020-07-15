@@ -26,7 +26,7 @@ export const getRaptorsMarkers = async (token, id) => {
   } catch (err) {
     checkSeries = await seriesRepo
       .createQueryBuilder()
-      .where("LOWER(name) = LOWER(:name)", { name: id })
+      .where("LOWER(name) = LOWER(:name)", { name: id.split("-").join(" ") })
       .getOne();
   }
   const seriesId = checkSeries.id;

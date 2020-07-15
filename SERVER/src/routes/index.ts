@@ -133,7 +133,7 @@ const seriesReady = async (req, res) => {
   } catch (err) {
     series = await seriesRepo
       .createQueryBuilder()
-      .where("LOWER(name) = LOWER(:name)", { name: id })
+      .where("LOWER(name) = LOWER(:name)", { name: id.split("-").join(" ") })
       .getOne();
   }
   if (!series) return res.status(404).send({ error: "NOT_FOUND" });
