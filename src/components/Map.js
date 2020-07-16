@@ -106,7 +106,9 @@ const Map = ({
         bootstrapURLKeys={{ key: mapKey }}
         options={{ styles: whiteMap }}
         onChildClick={(id, data) => {
-          if (data.found) return;
+          if (data.found) {
+            return alert("This one has already been found.");
+          }
           history.push(`/map/${hunt}/pop/${id}`);
         }}
       >
