@@ -111,6 +111,7 @@ const getAllUserSeries = async (req, res) => {
     .leftJoinAndSelect("hunts.emails", "emails")
     .where("emails.id = :id", { id })
     .orWhere("series.type = 'global'")
+    .orWhere("series.type = 'unified'")
     .getMany();
 
   if (globalAndUsers.length === 0) {
@@ -148,7 +149,19 @@ const sendSeries = async (req, res) => {
   series.type = cat;
   series.description = description;
   series.name = name;
+
   await seriesRepo.save(series);
+
+  if (cat === "unified") {
+    const emailRepo = getRepository(Emails);
+    const huntRepo = getRepository(Hunts);
+    const unifiedEmail = await emailRepo.findOne({ where: { email: "9999" } });
+    const hunt = new Hunts();
+    hunt.emails = unifiedEmail;
+    hunt.series = series;
+    hunt.marker_map = [];
+    await huntRepo.save(hunt);
+  }
   res.send({ message: "SUCCESS" });
 };
 

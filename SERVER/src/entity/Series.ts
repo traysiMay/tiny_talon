@@ -6,6 +6,7 @@ export enum SeriesType {
   HUNT = "hunt",
   PERSONAL = "personal",
   GLOBAL = "global",
+  UNIFIED = "unified",
 }
 
 @Entity()

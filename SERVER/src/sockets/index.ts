@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { getRepository } from "typeorm";
+import { getRepository, Migration } from "typeorm";
 import { ws } from "../index";
 import { Series } from "../entity/Series";
 import { getRaptorsMarkers, getRaptorsBySeries } from "./getters";
@@ -41,10 +41,11 @@ const sockets = async (socket) => {
   });
   // ** SENDING A CODE **
   socket.on("code", async (code) => {
-    const { id, message, markerMap, completed } = await codeReducer(
+    const { id, message, markerMap, completed, unified } = await codeReducer(
       code,
       decoded.id
     );
+
     if (
       message === CodeMessage.NOT_FOUND ||
       message === CodeMessage.ALREADY_FOUND
@@ -61,7 +62,11 @@ const sockets = async (socket) => {
 
     socket.emit("code_response", { completed, message, seriesId: id });
     // or completed could run through here
-    ws.in(decoded.id).emit("marker_found", markerMap);
+    if (!unified) {
+      ws.in(decoded.id).emit("marker_found", markerMap);
+    } else {
+      ws.in(`series_${id}`).emit("marker_found", markerMap);
+    }
   });
   // *****
   // ** CREATING A MARKER **

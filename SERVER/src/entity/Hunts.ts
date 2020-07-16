@@ -5,7 +5,7 @@ import {
   ManyToOne,
   Unique,
   OneToOne,
-  JoinColumn
+  JoinColumn,
 } from "typeorm";
 import { Series } from "./Series";
 import { Emails } from "./Emails";
@@ -28,12 +28,12 @@ export class Hunts {
   @Column("timestamp", { default: null })
   completed_at: Date;
 
-  @ManyToOne(type => Series)
+  @ManyToOne((type) => Series)
   @JoinColumn({ name: "series_id" })
   series: Series;
   // optional?
   // or a key for public like 9999
-  @ManyToOne(type => Emails)
+  @ManyToOne((type) => Emails, { nullable: true })
   @JoinColumn({ name: "emails_id" })
   emails: Emails;
 }

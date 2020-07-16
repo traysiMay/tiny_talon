@@ -65,12 +65,28 @@ export const getRaptorsMarkers = async (token, id) => {
       .leftJoinAndSelect("series.markers", "markers")
       .where("series.id = :id", { id })
       .getOne();
+
     if (series && series.type === SeriesType.GLOBAL) {
       const hunt = new Hunts();
       hunt.emails = decoded.id;
       hunt.series = series;
       const huntRepo = getRepository(Hunts);
       await huntRepo.save(hunt);
+      markers = series.markers;
+      markerMap = hunt.marker_map;
+      name = series.name;
+      success = true;
+      ready = series.init;
+    }
+
+    if (series && series.type === SeriesType.UNIFIED) {
+      const hunt = await huntsRepo
+        .createQueryBuilder("hunts")
+        .leftJoinAndSelect("hunts.series", "series")
+        .leftJoinAndSelect("series.markers", "markers")
+        .leftJoinAndSelect("hunts.emails", "emails")
+        .where("emails.email = :email", { email: "9999" })
+        .getOne();
       markers = series.markers;
       markerMap = hunt.marker_map;
       name = series.name;

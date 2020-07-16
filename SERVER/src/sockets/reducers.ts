@@ -4,15 +4,14 @@ import { Series, SeriesType } from "../entity/Series";
 import { sanitizeInput } from "./utils";
 export enum CodeMessage {
   NOT_FOUND = "that ain't right",
-  ALREADY_FOUND = "you already found this one!",
+  ALREADY_FOUND = "sorry! this one has already been found.",
   NEW_FOUND = "cool find!",
-  WIN = "you win!"
+  WIN = "you win!",
 }
 
 const huntByMarkerId = async (marker, jwtID) => {
-  console.log(marker);
   const {
-    code: { input: rawInput, id }
+    code: { input: rawInput, id },
   } = marker;
   const input = sanitizeInput(rawInput);
   const huntsRepo = getRepository(Hunts);
@@ -50,13 +49,23 @@ const huntByMarkerHash = async (rawCode, jwtID) => {
       .where("markers.hash = :code", { code })
       .getOne();
 
+    // if UNIFIED then return the only hunt for the UNIFIED SERIES (akin to the email id of the personal)
+
     if (series && series.type === SeriesType.GLOBAL) {
       hunt = new Hunts();
       hunt.emails = jwtID;
       hunt.series = series;
       hunt.completed = false;
-      const huntRepo = getRepository(Hunts);
-      await huntRepo.save(hunt);
+      await huntsRepo.save(hunt);
+    } else if (series && series.type === SeriesType.UNIFIED) {
+      hunt = await huntsRepo
+        .createQueryBuilder("hunts")
+        .leftJoinAndSelect("hunts.series", "series")
+        .leftJoinAndSelect("series.markers", "markers")
+        .leftJoinAndSelect("hunts.emails", "emails")
+        .where("markers.hash = :hash", { hash: code })
+        .andWhere("emails.email = :email", { email: "9999" })
+        .getOne();
     } else {
       return null;
     }
@@ -82,13 +91,13 @@ export const codeReducer = async (code, jwtID) => {
       completed: false,
       id: 0,
       message: CodeMessage.NOT_FOUND,
-      markerMap: []
+      markerMap: [],
     };
   }
 
   const {
-    series: { id, markers, num_markers },
-    marker_map
+    series: { id, markers, num_markers, type },
+    marker_map,
   } = hunt;
 
   if (marker_map.includes(`${markers[0].id}`)) {
@@ -102,13 +111,13 @@ export const codeReducer = async (code, jwtID) => {
   markerMap = [...marker_map, `${markers[0].id}`];
   hunt.marker_map = markerMap;
   await huntsRepo.save(hunt);
-
-  if (markerMap.length === num_markers) {
+  if (markerMap.length === num_markers && type !== "unified") {
     message = CodeMessage.WIN;
     hunt.completed = true;
     hunt.completed_at = new Date();
     await huntsRepo.save(hunt);
   }
   const { completed } = hunt;
-  return { completed, id, message, markerMap };
+  const unified = hunt.emails.email === "9999" ? true : false;
+  return { completed, id, message, markerMap, unified };
 };

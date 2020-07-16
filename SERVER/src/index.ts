@@ -6,7 +6,7 @@ require("dotenv").config(
   }
 );
 
-import { createConnection } from "typeorm";
+import { createConnection, getRepository } from "typeorm";
 
 import express from "express";
 import session from "express-session";
@@ -18,6 +18,7 @@ import io from "socket.io";
 import jwt from "jsonwebtoken";
 import routes from "./routes";
 import sockets from "./sockets";
+import { Emails } from "./entity/Emails";
 
 const app = express();
 const server = http.createServer(app);
@@ -35,6 +36,16 @@ app.use(
 
 (async () => {
   await createConnection();
+  const emailRepo = getRepository(Emails);
+  const unifiedEmailExists = await emailRepo.findOne({
+    where: { email: "9999" },
+  });
+  if (!unifiedEmailExists) {
+    const unifiedEmail = new Emails();
+    unifiedEmail.id = 9999;
+    unifiedEmail.email = "9999";
+    emailRepo.save(unifiedEmail);
+  }
 
   ws.use((socket, next) => {
     try {
