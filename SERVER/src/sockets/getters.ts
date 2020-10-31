@@ -85,7 +85,8 @@ export const getRaptorsMarkers = async (token, id) => {
         .leftJoinAndSelect("hunts.series", "series")
         .leftJoinAndSelect("series.markers", "markers")
         .leftJoinAndSelect("hunts.emails", "emails")
-        .where("emails.email = :email", { email: "9999" })
+        .where("series.id = :sid", { sid: series.id })
+        .andWhere("emails.email = :email", { email: "9999" })
         .getOne();
       markers = series.markers;
       markerMap = hunt.marker_map;

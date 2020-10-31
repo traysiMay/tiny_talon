@@ -22,15 +22,22 @@ const Chodal = ({ history, markers, match, sendCode }) => {
   const [background, setBackground] = useState("red");
   const [input, setInput] = useState("");
   const inputRef = useRef();
-  const m = markers.find((m) => m.id === parseInt(match.params.marker));
-  if (!m) {
-    history.goBack();
-    window.location = "/map/" + window.location.pathname.split("/")[2];
+  console.log('hi')
+  let customMessage = ""
+  let m
+  if (match.params.marker.includes('message=')) {
+    customMessage = match.params.marker.split('message=')[1]
+  } else {
+    m = markers.find((m) => m.id === parseInt(match.params.marker));
+    if (!m) {
+      history.goBack();
+      window.location = "/map/" + window.location.pathname.split("/")[2];
+    }
   }
-
+  console.log(customMessage)
   useEffect(() => {
     setMaxHeight(1000);
-    if (m.type.includes("input")) inputRef.current.focus();
+    if (!customMessage && m.type.includes("input")) inputRef.current.focus();
   }, []);
 
   const handleChange = (e) => setInput(e.target.value);
@@ -51,7 +58,7 @@ const Chodal = ({ history, markers, match, sendCode }) => {
     setTimeout(() => history.goBack(), 1000);
   };
 
-  if (m.length === 0) return <div>wtf</div>;
+  if (!customMessage && m.length === 0) return <div>wtf</div>;
   return (
     <Modal
       onClick={(e) => {
@@ -66,9 +73,9 @@ const Chodal = ({ history, markers, match, sendCode }) => {
         maxHeight={maxHeight}
       >
         <div style={{ pointerEvents: "none", textAlign: "center" }}>
-          {m.description}
+          {customMessage ? customMessage : m.description}
         </div>
-        {m.type.includes("input") && (
+        {!customMessage && m.type.includes("input") && (
           <div>
             <Input
               ref={inputRef}

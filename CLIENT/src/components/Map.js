@@ -107,7 +107,7 @@ const Map = ({
         options={{ styles: whiteMap }}
         onChildClick={(id, data) => {
           if (data.found) {
-            return alert("This one has already been found.");
+            return history.push(`/map/${hunt}/pop/message=Already Found!`)
           }
           history.push(`/map/${hunt}/pop/${id}`);
         }}
